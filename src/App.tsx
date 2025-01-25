@@ -1,35 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import CalculationCard from "./components/CalculationCard";
+import Header from "./components/Header";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+      <Header />
+      <main className="max-w-[1100px] mt-8 mx-auto">
+        <h1 className="text-3xl font-medium mb-2">
+          Calculate returns for your investment
+        </h1>
+        <p className="text-base">
+          Fuel your investment journey by placing your expectations upfront!
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <div className="flex gap-6 mt-4">
+          <CalculationCard />
+        </div>
+      </main>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
