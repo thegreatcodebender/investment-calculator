@@ -1,11 +1,15 @@
 import { PropsWithChildren } from "react";
 
-interface Card {
+interface CardProps {
   bgColor?: string;
   className?: string;
 }
 
-const Card = ({ bgColor, className, children }: PropsWithChildren<Card>) => {
+const Card = ({
+  bgColor,
+  className,
+  children,
+}: PropsWithChildren<CardProps>) => {
   return (
     <div
       className={`${bgColor ? bgColor : "bg-white"} ${

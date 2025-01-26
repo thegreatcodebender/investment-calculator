@@ -1,11 +1,11 @@
 import { PropsWithChildren } from "react";
-interface Tab {
+interface TabProps {
   children: string;
   isActive?: boolean;
   onClick?: () => void;
 }
 
-const Tab = ({ children, onClick, isActive }: PropsWithChildren<Tab>) => {
+const Tab = ({ children, onClick, isActive }: PropsWithChildren<TabProps>) => {
   return (
     <button
       className={`px-4 py-3 border-b-4 cursor-pointer ${
