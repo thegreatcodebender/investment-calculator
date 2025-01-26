@@ -4,6 +4,7 @@ export interface InputFieldProps {
   label: string;
   isLabelHidden?: boolean;
   containerClassName?: string;
+  inputClassName?: string;
   id: string;
   placeholder: string;
   value: string | number;
@@ -16,6 +17,7 @@ const InputField = ({
   label,
   isLabelHidden,
   containerClassName,
+  inputClassName,
   id,
   placeholder,
   value,
@@ -45,8 +47,8 @@ const InputField = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className={`${
-              errorText ? "border-red-500" : ""
+            className={`${errorText ? "border-red-500" : ""} ${
+              inputClassName ? inputClassName : ""
             } border-1 border-input-border rounded-sm font-medium px-3 py-2 ps-[26px] block mt-2 focus-visible:outline-primary`}
           />
         </div>

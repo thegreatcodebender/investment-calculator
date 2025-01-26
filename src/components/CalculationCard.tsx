@@ -13,7 +13,7 @@ const CalculationCard = () => {
       </nav>
       <div className="mt-6">
         <SliderWithInput
-          min={0}
+          min={1000}
           max={10000000}
           step={1000}
           label="Target amount"
@@ -22,7 +22,6 @@ const CalculationCard = () => {
           value={targetAmount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setTargetAmount(Number(e.target.value));
-            console.log(e.target.value);
           }}
           isRupee
         />
