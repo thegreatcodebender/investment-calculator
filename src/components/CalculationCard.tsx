@@ -5,6 +5,8 @@ import SliderWithInput from "./SliderWithInput";
 
 const CalculationCard = () => {
   const [targetAmount, setTargetAmount] = useState(1500000);
+  const [duration, setDuration] = useState(8);
+  const [interest, setInterest] = useState(10);
   return (
     <Card className="w-full min-lg:w-[60%]">
       <nav className="flex text-base font-medium" aria-label="I know my">
@@ -15,7 +17,7 @@ const CalculationCard = () => {
         <SliderWithInput
           min={1000}
           max={10000000}
-          step={1000}
+          step={500}
           label="Target amount"
           id="target-amount-input"
           placeholder="Target amount"
@@ -24,6 +26,33 @@ const CalculationCard = () => {
             setTargetAmount(Number(e.target.value));
           }}
           isRupee
+        />
+        <SliderWithInput
+          min={1}
+          max={60}
+          label="Duration"
+          id="duration-input"
+          placeholder="Duration"
+          value={duration}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setDuration(Number(e.target.value));
+          }}
+          containerClassName="mt-6"
+          isYear
+        />
+        <SliderWithInput
+          min={1}
+          max={30}
+          step={0.25}
+          label="Expected Interest Rate"
+          id="duration-input"
+          placeholder="Duration"
+          value={interest}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setInterest(Number(e.target.value));
+          }}
+          containerClassName="mt-6"
+          isPercent
         />
       </div>
     </Card>

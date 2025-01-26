@@ -6,7 +6,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="max-w-[1100px] mt-8 mx-auto">
+      <main className="max-w-[1100px] mt-8 mx-auto px-4">
         <h1 className="text-3xl font-medium mb-2">
           Calculate returns for your investment
         </h1>
