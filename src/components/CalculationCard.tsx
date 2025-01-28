@@ -2,17 +2,24 @@ import React, { useState } from "react";
 import Card from "./Card";
 import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
+import RadioGroup from "./RadioGroup";
+import { INVESTMENT_NATURE_LIST } from "../constants/investmentNature";
 
 const CalculationCard = () => {
   const [targetAmount, setTargetAmount] = useState(1500000);
   const [duration, setDuration] = useState(8);
   const [interest, setInterest] = useState(10);
+  const [investmentNature, setInvestmentNature] = useState(
+    INVESTMENT_NATURE_LIST[0]
+  );
   return (
     <Card className="w-full min-lg:w-[60%]">
+      {/* Tab navigation */}
       <nav className="flex text-base font-medium" aria-label="I know my">
         <Tab isActive>Target Amount</Tab>
         <Tab>Investment Amount</Tab>
       </nav>
+      {/* Input fields */}
       <div className="mt-6">
         <SliderWithInput
           min={1000}
@@ -53,6 +60,14 @@ const CalculationCard = () => {
           }}
           containerClassName="mt-6"
           isPercent
+        />
+        <RadioGroup
+          name="investment-nature"
+          selectedRadioLabel={investmentNature}
+          data={INVESTMENT_NATURE_LIST}
+          onChange={(label: string) => {
+            setInvestmentNature(label);
+          }}
         />
       </div>
     </Card>
