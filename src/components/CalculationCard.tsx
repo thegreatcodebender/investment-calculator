@@ -63,7 +63,9 @@ const CalculationCard = () => {
         />
         <RadioGroup
           name="investment-nature"
+          title="Investment Nature"
           selectedRadioLabel={investmentNature}
+          containerClassName="mt-6"
           data={INVESTMENT_NATURE_LIST}
           onChange={(label: string) => {
             setInvestmentNature(label);

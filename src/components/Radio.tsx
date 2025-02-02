@@ -18,16 +18,20 @@ const Radio = ({
   onChange,
 }: RadioProps) => {
   return (
-    <div className={containerClassName}>
-      <label htmlFor={id}>{label}</label>
+    <div
+      className={`relative not-last:max-md:mb-2 ${
+        containerClassName ? containerClassName : ""
+      }`}
+    >
       <input
         type="radio"
         name={name}
         id={id}
-        className={inputClassName}
+        className={`sr-only ${inputClassName ? inputClassName : ""}`}
         checked={isChecked}
         onChange={() => onChange(label)}
       />
+      <label htmlFor={id}>{label}</label>
     </div>
   );
 };
