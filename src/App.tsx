@@ -1,6 +1,7 @@
 import "./App.css";
 import CalculationCard from "./components/CalculationCard";
 import Header from "./components/Header";
+import ResultCard from "./components/ResultCard";
 
 const App = () => {
   return (
@@ -13,8 +14,9 @@ const App = () => {
         <p className="text-base">
           Fuel your investment journey by placing your expectations upfront!
         </p>
-        <div className="flex gap-6 mt-4">
+        <div className="min-lg:flex gap-6 mt-4">
           <CalculationCard />
+          <ResultCard />
         </div>
       </main>
     </>
