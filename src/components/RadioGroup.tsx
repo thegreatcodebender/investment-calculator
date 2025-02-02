@@ -17,11 +17,7 @@ const RadioGroup = ({
   onChange,
 }: RadioGroupProps) => {
   return (
-    <fieldset
-      className={`min-md:flex gap-4 ${
-        containerClassName ? containerClassName : ""
-      }`}
-    >
+    <fieldset className={`${containerClassName ? containerClassName : ""}`}>
       {title && (
         <legend className="text-sm uppercase font-semibold block mb-2">
           {title}

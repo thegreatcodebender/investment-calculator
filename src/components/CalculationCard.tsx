@@ -4,6 +4,7 @@ import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
 import { INVESTMENT_NATURE_LIST } from "../constants/investmentNature";
+import InputField from "./InputField";
 
 const CalculationCard = () => {
   const [targetAmount, setTargetAmount] = useState(1500000);
@@ -61,16 +62,25 @@ const CalculationCard = () => {
           containerClassName="mt-6"
           isPercent
         />
-        <RadioGroup
-          name="investment-nature"
-          title="Investment Nature"
-          selectedRadioLabel={investmentNature}
-          containerClassName="mt-6"
-          data={INVESTMENT_NATURE_LIST}
-          onChange={(label: string) => {
-            setInvestmentNature(label);
-          }}
-        />
+        <div className="min-sm:flex gap-14 mt-6">
+          <RadioGroup
+            name="investment-nature"
+            title="Investment Nature"
+            selectedRadioLabel={investmentNature}
+            data={INVESTMENT_NATURE_LIST}
+            onChange={(label: string) => {
+              setInvestmentNature(label);
+            }}
+          />
+          <InputField
+            label="Current age (optional)"
+            id="current-age"
+            value={""}
+            placeholder=""
+            containerClassName="max-sm:mt-6"
+            inputClassName="w-[64px]"
+          />
+        </div>
       </div>
     </Card>
   );

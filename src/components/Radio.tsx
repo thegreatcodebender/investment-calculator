@@ -19,7 +19,7 @@ const Radio = ({
 }: RadioProps) => {
   return (
     <div
-      className={`relative not-last:max-md:mb-2 ${
+      className={`not-last:mb-2 ${
         containerClassName ? containerClassName : ""
       }`}
     >
@@ -31,7 +31,9 @@ const Radio = ({
         checked={isChecked}
         onChange={() => onChange(label)}
       />
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className="relative">
+        {label}
+      </label>
     </div>
   );
 };
