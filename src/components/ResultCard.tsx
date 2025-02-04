@@ -47,11 +47,8 @@ const ResultCard = () => {
         {/* Legend */}
         <div className="flex flex-wrap gap-6 items-center justify-center mt-11 py-8">
           {pieData.map((pie) => (
-            <div>
-              <p
-                className="flex gap-2 items-center leading-none"
-                key={pie.title}
-              >
+            <div key={pie.title}>
+              <p className="flex gap-2 items-center leading-none">
                 <span
                   className="w-[20px] h-[20px] rounded-sm block"
                   style={{ backgroundColor: `${pie.fill}` }}

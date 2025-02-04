@@ -2,6 +2,7 @@ import "./App.css";
 import CalculationCard from "./components/CalculationCard";
 import Header from "./components/Header";
 import ResultCard from "./components/ResultCard";
+import { InvestmentProvider } from "./context/InvestmentContext";
 
 const App = () => {
   return (
@@ -15,8 +16,10 @@ const App = () => {
           Fuel your investment journey by placing your expectations upfront!
         </p>
         <div className="min-lg:flex gap-6 my-4">
-          <CalculationCard />
-          <ResultCard />
+          <InvestmentProvider>
+            <CalculationCard />
+            <ResultCard />
+          </InvestmentProvider>
         </div>
       </main>
     </>

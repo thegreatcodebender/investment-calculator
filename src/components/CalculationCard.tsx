@@ -5,14 +5,19 @@ import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
 import { INVESTMENT_NATURE_LIST } from "../constants/investmentNature";
 import InputField from "./InputField";
+import {
+  ActionType,
+  useInvestmentDispatch,
+  useInvestmentState,
+} from "../context/InvestmentContext";
 
 const CalculationCard = () => {
-  const [targetAmount, setTargetAmount] = useState(1500000);
-  const [duration, setDuration] = useState(8);
-  const [interest, setInterest] = useState(10);
-  const [investmentNature, setInvestmentNature] = useState(
-    INVESTMENT_NATURE_LIST[0]
-  );
+  const investmentState = useInvestmentState();
+  const dispatchInvestment = useInvestmentDispatch();
+  const targetAmount = investmentState.targetAmount;
+  const duration = investmentState.duration;
+  const interest = investmentState.interestRate;
+  const investmentNature = investmentState.investmentNature;
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
@@ -31,7 +36,10 @@ const CalculationCard = () => {
           placeholder="Target amount"
           value={targetAmount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setTargetAmount(Number(e.target.value));
+            dispatchInvestment({
+              type: ActionType.TargetAmount,
+              payload: Number(e.target.value),
+            });
           }}
           isRupee
         />
@@ -43,7 +51,10 @@ const CalculationCard = () => {
           placeholder="Duration"
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setDuration(Number(e.target.value));
+            dispatchInvestment({
+              type: ActionType.Duration,
+              payload: Number(e.target.value),
+            });
           }}
           containerClassName="mt-6"
           isYear
@@ -57,7 +68,10 @@ const CalculationCard = () => {
           placeholder="Duration"
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setInterest(Number(e.target.value));
+            dispatchInvestment({
+              type: ActionType.InterestRate,
+              payload: Number(e.target.value),
+            });
           }}
           containerClassName="mt-6"
           isPercent
@@ -69,7 +83,10 @@ const CalculationCard = () => {
             selectedRadioLabel={investmentNature}
             data={INVESTMENT_NATURE_LIST}
             onChange={(label: string) => {
-              setInvestmentNature(label);
+              dispatchInvestment({
+                type: ActionType.InvestmentNature,
+                payload: label,
+              });
             }}
           />
           <InputField
