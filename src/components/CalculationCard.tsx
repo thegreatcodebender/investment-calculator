@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
 import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
@@ -18,6 +18,7 @@ const CalculationCard = () => {
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
+  const age = investmentState.age;
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
@@ -92,10 +93,16 @@ const CalculationCard = () => {
           <InputField
             label="Current age (optional)"
             id="current-age"
-            value={""}
+            value={age !== -1 ? age : ""}
             placeholder=""
             containerClassName="max-sm:mt-6"
             inputClassName="w-[64px]"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              dispatchInvestment({
+                type: ActionType.Age,
+                payload: Number(e.target.value),
+              });
+            }}
           />
         </div>
       </div>

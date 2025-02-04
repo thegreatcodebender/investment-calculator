@@ -27,7 +27,7 @@ const initialState = {
   duration: 8,
   interestRate: 10,
   investmentNature: INVESTMENT_NATURE_LIST[0],
-  age: 0,
+  age: -1,
 };
 
 const investmentReducer = (state: State, action: Action) => {

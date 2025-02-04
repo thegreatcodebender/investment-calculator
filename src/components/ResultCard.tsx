@@ -3,12 +3,13 @@ import Card from "./Card";
 import { RupeeIcon } from "./Icons";
 import { useState } from "react";
 import { Button } from "./Button";
+import { useInvestmentState } from "../context/InvestmentContext";
+import { getMonthlyContribution } from "../utils/calculations";
 
 const ResultCard = () => {
   const [resultTitle, setResultTitle] = useState(
     "Required Monthly Contribution"
   );
-  const [resultVal, setResultVal] = useState(5430);
   const [projectedAge, setProjectedAge] = useState(32);
   const pieData = [
     {
@@ -18,6 +19,13 @@ const ResultCard = () => {
     },
     { title: "Returns", value: 348413, fill: "var(--color-accent-purple)" },
   ];
+  const investmentState = useInvestmentState();
+  const targetAmount = investmentState.targetAmount;
+  const duration = investmentState.duration;
+  const interest = investmentState.interestRate;
+  const investmentNature = investmentState.investmentNature;
+  const age = investmentState.age;
+  const resultVal = getMonthlyContribution(targetAmount, duration, interest);
 
   return (
     <Card
