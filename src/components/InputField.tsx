@@ -1,4 +1,5 @@
 import rupeeIcon from "../assets/images/rupee.svg";
+import { amountINRWithComma } from "../utils/display";
 
 export interface InputFieldProps {
   label: string;
@@ -58,7 +59,7 @@ const InputField = ({
               id={id}
               name={id}
               placeholder={placeholder}
-              value={value}
+              value={amountINRWithComma(Number(value))}
               onChange={onChange}
               className={`${errorText ? "border-red-500" : ""} ${
                 inputClassName ? inputClassName : ""

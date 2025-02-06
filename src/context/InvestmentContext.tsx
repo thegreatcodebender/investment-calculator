@@ -33,7 +33,8 @@ const initialState = {
 const investmentReducer = (state: State, action: Action) => {
   switch (action.type) {
     case ActionType.TargetAmount:
-      return { ...state, targetAmount: action.payload };
+      const amount = Number(action.payload.replace(/[^0-9.-]+/g, ""));
+      return { ...state, targetAmount: amount };
     case ActionType.Duration:
       return { ...state, duration: action.payload };
     case ActionType.InterestRate:

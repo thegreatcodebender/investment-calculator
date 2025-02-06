@@ -39,7 +39,7 @@ const CalculationCard = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             dispatchInvestment({
               type: ActionType.TargetAmount,
-              payload: Number(e.target.value),
+              payload: e.target.value,
             });
           }}
           isRupee
@@ -62,7 +62,7 @@ const CalculationCard = () => {
         />
         <SliderWithInput
           min={1}
-          max={30}
+          max={20}
           step={0.25}
           label="Expected Interest Rate"
           id="duration-input"

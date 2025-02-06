@@ -5,16 +5,18 @@
  * @param {number} interestRate Interest rate in percentage
  * @returns {number} Monthly contribution
  */
-export const getMonthlyContribution = (
+export const calculateInvestmentMonthly = (
   targetAmount: number,
   duration: number,
   interestRate: number
-): number => {
+): { contribution: number; totalInvestment: number; totalInterest: number } => {
   const monthlyInterest = interestRate / 12 / 100;
   const monthsCount = duration * 12;
-  const result =
+  const contribution =
     (targetAmount * monthlyInterest) /
     ((1 + monthlyInterest) ** monthsCount - 1);
-
-  return Math.round(result);
+  const contributionRounded = Math.round(contribution);
+  const totalInvestment = Math.round(contribution * monthsCount);
+  const totalInterest = targetAmount - totalInvestment;
+  return { contribution: contributionRounded, totalInvestment, totalInterest };
 };

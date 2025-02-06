@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { omitFirstWord } from "../utils/numberToWords";
+import { omitFirstWord } from "../utils/display";
 import { RupeeIcon } from "./Icons";
 import InputField, { InputFieldProps } from "./InputField";
 import { ToWords } from "to-words";

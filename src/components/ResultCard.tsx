@@ -4,28 +4,42 @@ import { RupeeIcon } from "./Icons";
 import { useState } from "react";
 import { Button } from "./Button";
 import { useInvestmentState } from "../context/InvestmentContext";
-import { getMonthlyContribution } from "../utils/calculations";
+import { calculateInvestmentMonthly } from "../utils/calculations";
 
 const ResultCard = () => {
   const [resultTitle, setResultTitle] = useState(
     "Required Monthly Contribution"
   );
-  const [projectedAge, setProjectedAge] = useState(32);
-  const pieData = [
-    {
-      title: "Total Investment",
-      value: 651587,
-      fill: "var(--color-accent-green)",
-    },
-    { title: "Returns", value: 348413, fill: "var(--color-accent-purple)" },
-  ];
+  const amountINRWithComma = (amount: number) => {
+    const withINR = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      currencyDisplay: "code",
+      maximumFractionDigits: 0,
+    }).format(amount);
+    return withINR.split("INR")[1].trim();
+  };
   const investmentState = useInvestmentState();
   const targetAmount = investmentState.targetAmount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
-  const resultVal = getMonthlyContribution(targetAmount, duration, interest);
+  const { contribution, totalInvestment, totalInterest } =
+    calculateInvestmentMonthly(targetAmount, duration, interest);
+  const projectedAge = age !== -1 ? age + duration : -1;
+  const pieData = [
+    {
+      title: "Total Investment",
+      value: totalInvestment,
+      fill: "var(--color-accent-green)",
+    },
+    {
+      title: "Returns",
+      value: totalInterest,
+      fill: "var(--color-accent-purple)",
+    },
+  ];
 
   return (
     <Card
@@ -65,7 +79,7 @@ const ResultCard = () => {
               </p>
               <p className="ps-7 flex gap-0.25 mt-2 items-center leading-none text-lg font-semibold">
                 <RupeeIcon className="h-3.25" />
-                {pie.value}
+                {amountINRWithComma(pie.value)}
               </p>
             </div>
           ))}
@@ -77,15 +91,17 @@ const ResultCard = () => {
           </h2>
           <p className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none">
             <RupeeIcon className="h-[18px]" />
-            {resultVal}
+            {amountINRWithComma(contribution)}
           </p>
         </div>
         {/* Sub text */}
-        <p className="px-8 text-xs mt-4">
-          You will achieve your target amount at the age of{" "}
-          <span className="font-semibold">{projectedAge}</span> if start
-          investing now!
-        </p>
+        {projectedAge !== -1 && (
+          <p className="px-8 text-xs mt-4">
+            You will achieve your target amount at the age of{" "}
+            <span className="font-semibold">{projectedAge}</span> if start
+            investing now!
+          </p>
+        )}
       </div>
       {/* Action button */}
       <div className="flex items-center justify-center mt-6">
