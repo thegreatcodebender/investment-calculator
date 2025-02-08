@@ -20,13 +20,13 @@ const ResultCard = () => {
     return withINR.split("INR")[1].trim();
   };
   const investmentState = useInvestmentState();
-  const targetAmount = investmentState.targetAmount;
+  const amount = investmentState.amount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const { contribution, totalInvestment, totalInterest } =
-    calculateInvestmentMonthly(targetAmount, duration, interest);
+    calculateInvestmentMonthly(amount, duration, interest);
   const projectedAge = age !== -1 ? age + duration : -1;
   const pieData = [
     {

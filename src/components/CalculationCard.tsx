@@ -3,7 +3,10 @@ import Card from "./Card";
 import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
-import { INVESTMENT_NATURE_LIST } from "../constants/investmentNature";
+import {
+  INVESTMENT_MODES,
+  INVESTMENT_NATURE_LIST,
+} from "../constants/investment";
 import InputField from "./InputField";
 import {
   ActionType,
@@ -14,17 +17,30 @@ import {
 const CalculationCard = () => {
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
-  const targetAmount = investmentState.targetAmount;
+  const amount = investmentState.amount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
+  const activeMode = investmentState.mode;
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
       <nav className="flex text-base font-medium" aria-label="I know my">
-        <Tab isActive>Target Amount</Tab>
-        <Tab>Investment Amount</Tab>
+        {INVESTMENT_MODES.map(({ title, defaultAmount }) => (
+          <Tab
+            isActive={activeMode.title === title}
+            key={title}
+            onClick={() =>
+              dispatchInvestment({
+                type: ActionType.Mode,
+                payload: { title, defaultAmount },
+              })
+            }
+          >
+            {title}
+          </Tab>
+        ))}
       </nav>
       {/* Input fields */}
       <div className="mt-6">
@@ -32,13 +48,13 @@ const CalculationCard = () => {
           min={1000}
           max={10000000}
           step={500}
-          label="Target amount"
+          label={activeMode.title}
           id="target-amount-input"
-          placeholder="Target amount"
-          value={targetAmount}
+          placeholder={activeMode.title}
+          value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             dispatchInvestment({
-              type: ActionType.TargetAmount,
+              type: ActionType.Amount,
               payload: e.target.value,
             });
           }}
@@ -63,7 +79,7 @@ const CalculationCard = () => {
         <SliderWithInput
           min={1}
           max={20}
-          step={0.25}
+          step={0.1}
           label="Expected Interest Rate"
           id="duration-input"
           placeholder="Duration"

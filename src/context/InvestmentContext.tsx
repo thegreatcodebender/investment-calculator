@@ -1,12 +1,16 @@
 import React, { createContext, ReactNode, useContext, useReducer } from "react";
-import { INVESTMENT_NATURE_LIST } from "../constants/investmentNature";
+import {
+  INVESTMENT_MODES,
+  INVESTMENT_NATURE_LIST,
+} from "../constants/investment";
 
 interface State {
-  targetAmount: number;
+  amount: number;
   duration: number;
   interestRate: number;
   investmentNature: string;
   age: number;
+  mode: { title: string; defaultAmount: number };
 }
 
 interface Action {
@@ -15,26 +19,28 @@ interface Action {
 }
 
 export enum ActionType {
-  TargetAmount = "SET_TARGET_AMOUNT",
+  Amount = "SET_TARGET_AMOUNT",
   Duration = "SET_DURATION",
   InterestRate = "SET_INTEREST_RATE",
   InvestmentNature = "SET_INVESTMENT_NATURE",
   Age = "SET_AGE",
+  Mode = "SET_MODE",
 }
 
 const initialState = {
-  targetAmount: 1500000,
+  amount: 1500000,
   duration: 8,
   interestRate: 10,
   investmentNature: INVESTMENT_NATURE_LIST[0],
   age: -1,
+  mode: INVESTMENT_MODES[0],
 };
 
 const investmentReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case ActionType.TargetAmount:
+    case ActionType.Amount:
       const amount = Number(action.payload.replace(/[^0-9.-]+/g, ""));
-      return { ...state, targetAmount: amount };
+      return { ...state, amount: amount };
     case ActionType.Duration:
       return { ...state, duration: action.payload };
     case ActionType.InterestRate:
@@ -43,6 +49,12 @@ const investmentReducer = (state: State, action: Action) => {
       return { ...state, investmentNature: action.payload };
     case ActionType.Age:
       return { ...state, age: action.payload };
+    case ActionType.Mode:
+      return {
+        ...state,
+        mode: action.payload,
+        amount: action.payload.defaultAmount,
+      };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
