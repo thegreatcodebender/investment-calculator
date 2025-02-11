@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { omitFirstWord } from "../utils/display";
 import { RupeeIcon } from "./Icons";
 import InputField, { InputFieldProps } from "./InputField";
@@ -11,10 +10,6 @@ interface SliderWithInputProps extends InputFieldProps {
   step?: number;
   id: string;
   isLabelHidden?: boolean;
-}
-
-interface SliderRef {
-  current: HTMLInputElement | null;
 }
 
 const SliderWithInput = ({
@@ -33,8 +28,6 @@ const SliderWithInput = ({
   errorText,
   onChange,
 }: SliderWithInputProps) => {
-  const [sliderWidth, setSliderWidth] = useState(0);
-  const sliderRef = useRef(null) as SliderRef;
   // ToWords instance for converting number to words
   const toWords = new ToWords({
     converterOptions: {
@@ -45,33 +38,7 @@ const SliderWithInput = ({
   // To handle slider input change and active track width
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange && onChange(e);
-    getActiveTrackWidth();
   };
-
-  // To get the active track width to be applied on tracker css variable
-  const getActiveTrackWidth = () => {
-    if (typeof inputValue === "number") {
-      const activeRatio = (inputValue - (inputValue % step)) / max;
-      console.log(inputValue % step);
-
-      const activeWidth = activeRatio * sliderWidth;
-      // console.log(activeWidth);
-      return activeWidth;
-    }
-  };
-
-  // To update slider width from node
-  const updateSliderWidth = () => {
-    if (sliderRef.current) setSliderWidth(sliderRef.current.offsetWidth);
-  };
-
-  useEffect(() => {
-    updateSliderWidth();
-    window.addEventListener("resize", updateSliderWidth);
-    return () => {
-      window.removeEventListener("resize", updateSliderWidth);
-    };
-  }, []);
 
   const getLegend = (legendValue: any) => {
     switch (true) {
@@ -132,13 +99,11 @@ const SliderWithInput = ({
           id={id + "-slider"}
           onChange={handleSliderChange}
           className="slider"
-          ref={sliderRef}
           style={
             {
-              // "--track-active-width": `${((inputValue / max) * 100).toFixed(
-              //   2
-              // )}%`,
-              "--track-active-width": `${getActiveTrackWidth()}px`,
+              "--track-active-width": `${
+                ((inputValue - min) / (max - min)) * 100
+              }%`,
             } as React.CSSProperties
           }
         />

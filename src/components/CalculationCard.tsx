@@ -79,10 +79,10 @@ const CalculationCard = () => {
         <SliderWithInput
           min={1}
           max={20}
-          step={0.1}
+          step={0.01}
           label="Expected Interest Rate"
-          id="duration-input"
-          placeholder="Duration"
+          id="interest-input"
+          placeholder="Annual Interest"
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             dispatchInvestment({
