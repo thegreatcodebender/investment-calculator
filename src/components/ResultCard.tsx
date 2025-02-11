@@ -4,12 +4,10 @@ import { RupeeIcon } from "./Icons";
 import { useState } from "react";
 import { Button } from "./Button";
 import { useInvestmentState } from "../context/InvestmentContext";
-import { calculateInvestmentMonthly } from "../utils/calculations";
+import { calculateInvestment } from "../utils/calculations";
+import { INVESTMENT_MODES } from "../constants/investment";
 
 const ResultCard = () => {
-  const [resultTitle, setResultTitle] = useState(
-    "Required Monthly Contribution"
-  );
   const amountINRWithComma = (amount: number) => {
     const withINR = new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -25,8 +23,23 @@ const ResultCard = () => {
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
-  const { contribution, totalInvestment, totalInterest } =
-    calculateInvestmentMonthly(amount, duration, interest);
+  const investmentMode = investmentState.mode;
+  const {
+    contribution,
+    totalInvestment,
+    totalInterest,
+    investmentAndInterestTotal,
+  } = calculateInvestment({
+    amount,
+    duration,
+    interestRate: interest,
+    investmentMode: investmentMode.title,
+    investmentNature,
+  });
+  const resultTitle =
+    investmentMode.title === INVESTMENT_MODES[0].title
+      ? "Required Monthly Contribution"
+      : "Total earnings";
   const projectedAge = age !== -1 ? age + duration : -1;
   const pieData = [
     {
@@ -91,7 +104,9 @@ const ResultCard = () => {
           </h2>
           <p className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none">
             <RupeeIcon className="h-[18px]" />
-            {amountINRWithComma(contribution)}
+            {contribution === -1
+              ? amountINRWithComma(investmentAndInterestTotal)
+              : amountINRWithComma(contribution)}
           </p>
         </div>
         {/* Sub text */}
