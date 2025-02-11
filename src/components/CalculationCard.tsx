@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "./Card";
 import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
@@ -13,8 +13,15 @@ import {
   useInvestmentDispatch,
   useInvestmentState,
 } from "../context/InvestmentContext";
+import { SLIDER_INPUT_METADATA } from "../constants/input";
+import { SLIDER_ERROR_MESSAGE } from "../constants/errors";
 
 const CalculationCard = () => {
+  const [errors, setErrors] = useState({
+    amount: "",
+    duration: "",
+    interestRate: "",
+  });
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount;
@@ -23,6 +30,88 @@ const CalculationCard = () => {
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const activeMode = investmentState.mode;
+
+  // To handle the input change
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    actionType: ActionType
+  ) => {
+    let isValid = true;
+    const inputVal = e.target.value;
+    const inputValFormatted = Number(inputVal.replace(/[^0-9.-]+/g, ""));
+
+    // if (isNaN(Number(inputVal))) {
+    //   return;
+    // }
+
+    switch (actionType) {
+      case ActionType.Amount:
+        if (
+          inputValFormatted < SLIDER_INPUT_METADATA.AMOUNT.min ||
+          inputValFormatted > SLIDER_INPUT_METADATA.AMOUNT.max
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            amount: SLIDER_ERROR_MESSAGE.AMOUNT.rangeError,
+          }));
+          isValid = false;
+          return;
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            amount: "",
+          }));
+          isValid = true;
+        }
+        break;
+      case ActionType.Duration:
+        if (
+          inputValFormatted < SLIDER_INPUT_METADATA.DURATION.min ||
+          inputValFormatted > SLIDER_INPUT_METADATA.DURATION.max
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            duration: SLIDER_ERROR_MESSAGE.DURATION.rangeError,
+          }));
+          isValid = false;
+          return;
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            duration: "",
+          }));
+          isValid = true;
+        }
+        break;
+      case ActionType.InterestRate:
+        if (
+          inputValFormatted < SLIDER_INPUT_METADATA.INTEREST_RATE.min ||
+          inputValFormatted > SLIDER_INPUT_METADATA.INTEREST_RATE.max
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            interestRate: SLIDER_ERROR_MESSAGE.INTEREST_RATE.rangeError,
+          }));
+          isValid = false;
+          return;
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            interestRate: "",
+          }));
+          isValid = true;
+        }
+        break;
+      default:
+        break;
+    }
+    if (isValid) {
+      dispatchInvestment({
+        type: actionType,
+        payload: inputValFormatted,
+      });
+    }
+  };
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
@@ -45,52 +134,47 @@ const CalculationCard = () => {
       {/* Input fields */}
       <div className="mt-6">
         <SliderWithInput
-          min={1000}
-          max={10000000}
-          step={500}
+          min={SLIDER_INPUT_METADATA.AMOUNT.min}
+          max={SLIDER_INPUT_METADATA.AMOUNT.max}
+          step={SLIDER_INPUT_METADATA.AMOUNT.step}
           label={activeMode.title}
-          id="target-amount-input"
+          id={SLIDER_INPUT_METADATA.AMOUNT.id}
           placeholder={activeMode.title}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            dispatchInvestment({
-              type: ActionType.Amount,
-              payload: e.target.value,
-            });
+            handleInputChange(e, ActionType.Amount);
           }}
+          errorText={errors.amount}
           isRupee
         />
         <SliderWithInput
-          min={1}
-          max={60}
+          min={SLIDER_INPUT_METADATA.DURATION.min}
+          max={SLIDER_INPUT_METADATA.DURATION.max}
+          step={SLIDER_INPUT_METADATA.DURATION.step}
           label="Duration"
-          id="duration-input"
+          id={SLIDER_INPUT_METADATA.DURATION.id}
           placeholder="Duration"
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            dispatchInvestment({
-              type: ActionType.Duration,
-              payload: Number(e.target.value),
-            });
+            handleInputChange(e, ActionType.Duration);
           }}
           containerClassName="mt-6"
+          errorText={errors.duration}
           isYear
         />
         <SliderWithInput
-          min={1}
-          max={20}
-          step={0.01}
+          min={SLIDER_INPUT_METADATA.INTEREST_RATE.min}
+          max={SLIDER_INPUT_METADATA.INTEREST_RATE.max}
+          step={SLIDER_INPUT_METADATA.INTEREST_RATE.step}
           label="Expected Interest Rate"
-          id="interest-input"
+          id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
           placeholder="Annual Interest"
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            dispatchInvestment({
-              type: ActionType.InterestRate,
-              payload: Number(e.target.value),
-            });
+            handleInputChange(e, ActionType.InterestRate);
           }}
           containerClassName="mt-6"
+          errorText={errors.interestRate}
           isPercent
         />
         <div className="min-sm:flex gap-14 mt-6">
