@@ -1,22 +1,16 @@
 import { Pie, PieChart, ResponsiveContainer } from "recharts";
 import Card from "./Card";
 import { RupeeIcon } from "./Icons";
-import { useState } from "react";
 import { Button } from "./Button";
 import { useInvestmentState } from "../context/InvestmentContext";
 import { calculateInvestment } from "../utils/calculations";
-import { INVESTMENT_MODES } from "../constants/investment";
+import {
+  INVESTMENT_MODES,
+  INVESTMENT_NATURE_LIST,
+} from "../constants/investment";
+import { amountINRWithComma } from "../utils/display";
 
 const ResultCard = () => {
-  const amountINRWithComma = (amount: number) => {
-    const withINR = new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      currencyDisplay: "code",
-      maximumFractionDigits: 0,
-    }).format(amount);
-    return withINR.split("INR")[1].trim();
-  };
   const investmentState = useInvestmentState();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -38,7 +32,11 @@ const ResultCard = () => {
   });
   const resultTitle =
     investmentMode.title === INVESTMENT_MODES[0].title
-      ? "Required Monthly Contribution"
+      ? `Required ${
+          investmentNature === INVESTMENT_NATURE_LIST[0]
+            ? INVESTMENT_NATURE_LIST[0]
+            : "One-time"
+        } Contribution`
       : "Total earnings";
   const projectedAge = age !== -1 ? age + duration : -1;
   const pieData = [
