@@ -39,7 +39,6 @@ export const calculateInvestment = ({
     totalInvestment = -1,
     totalInterest = -1,
     contributionRounded = -1,
-    totalInvestmentRounded = -1,
     investmentAndInterestTotal = -1;
   const monthlyInterest = interestRate / 12 / 100; // Monthly interest rate
   const monthsCount = duration * 12; // Total no of months
@@ -77,8 +76,6 @@ export const calculateInvestment = ({
       totalInterest = Math.round(investmentAndInterestTotal - totalInvestment);
       break;
   }
-  // Total investment amount
-  totalInvestmentRounded = Math.round(totalInvestment);
 
   return {
     contribution: contributionRounded,

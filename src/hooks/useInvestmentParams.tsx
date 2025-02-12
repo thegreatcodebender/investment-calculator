@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -26,7 +26,6 @@ type InvestmentModeShortName = (typeof investmentModeShortNames)[number];
 
 const useInvestmentParams = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount;
@@ -155,12 +154,8 @@ const useInvestmentParams = () => {
     }
 
     // Remove the params from browser address bar
-    navigate(".", { replace: true });
+    // navigate(".", { replace: true });
   }, []);
-
-  useEffect(() => {
-    // updateUrlParams();
-  }, [amount, duration, interest, investmentNature, age, activeMode]);
   return { getShareableLink };
 };
 
