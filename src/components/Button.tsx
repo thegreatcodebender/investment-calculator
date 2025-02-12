@@ -20,7 +20,7 @@ export const Button = ({
       : "border-1 border-primary text-primary hover:bg-primary hover:text-white";
   return (
     <button
-      className={`px-4.5 py-4 font-medium rounded-sm leading-none not-disabled:cursor-pointer ${btnTypeStyles} ${
+      className={`px-4.5 py-4 font-medium rounded-sm leading-none not-disabled:cursor-pointer hover:bg-accent-purple transition-all ease-in-out ${btnTypeStyles} ${
         className ? className : ""
       }`}
       onClick={onClick}

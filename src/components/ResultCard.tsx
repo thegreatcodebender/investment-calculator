@@ -11,8 +11,10 @@ import {
 import { amountINRWithComma } from "../utils/display";
 import useInvestmentParams from "../hooks/useInvestmentParams";
 import { copyToClipboard } from "../utils/nativeActions";
+import { useState } from "react";
 
 const ResultCard = () => {
+  const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const { getShareableLink } = useInvestmentParams();
   const investmentState = useInvestmentState();
   const amount = investmentState.amount;
@@ -54,6 +56,23 @@ const ResultCard = () => {
       fill: "var(--color-accent-purple)",
     },
   ];
+
+  let copyTextChangeTimeoutId: null | number = null;
+  /**
+   * Copy the shareable link to clipboard and show copied text for a short period
+   */
+  const handleCopyLink = async () => {
+    const isCopied = await copyToClipboard(getShareableLink());
+    if (isCopied) {
+      setCopyBtnText("Copied!");
+    }
+    if (copyTextChangeTimeoutId) {
+      clearTimeout(copyTextChangeTimeoutId);
+    }
+    copyTextChangeTimeoutId = setTimeout(() => {
+      setCopyBtnText("Copy Link");
+    }, 2000);
+  };
 
   return (
     <Card
@@ -121,11 +140,8 @@ const ResultCard = () => {
       </div>
       {/* Action button */}
       <div className="flex items-center justify-center mt-6">
-        <Button
-          btnType="primary"
-          onClick={() => copyToClipboard(getShareableLink())}
-        >
-          Copy Link
+        <Button btnType="primary" onClick={handleCopyLink}>
+          {copyBtnText}
         </Button>
       </div>
     </Card>
