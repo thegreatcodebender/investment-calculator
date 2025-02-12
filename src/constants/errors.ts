@@ -1,6 +1,6 @@
-import { SLIDER_INPUT_METADATA } from "./input";
+import { INPUT_FIELD_METADATA, SLIDER_INPUT_METADATA } from "./input";
 
-export const SLIDER_ERROR_MESSAGE = {
+export const INPUT_ERROR_MESSAGE = {
   AMOUNT: {
     rangeError: `Amount must be in the range ${SLIDER_INPUT_METADATA.AMOUNT.min} - ${SLIDER_INPUT_METADATA.AMOUNT.max} rupees.`,
   },
@@ -9,5 +9,8 @@ export const SLIDER_ERROR_MESSAGE = {
   },
   INTEREST_RATE: {
     rangeError: `Interest must be in the range ${SLIDER_INPUT_METADATA.INTEREST_RATE.min}% - ${SLIDER_INPUT_METADATA.INTEREST_RATE.max}%.`,
+  },
+  AGE: {
+    rangeError: `Age must be in the range ${INPUT_FIELD_METADATA.AGE.min} - ${INPUT_FIELD_METADATA.AGE.max}.`,
   },
 };

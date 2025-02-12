@@ -10,7 +10,7 @@ interface State {
   interestRate: number;
   investmentNature: string;
   age: number;
-  mode: { title: string; defaultAmount: number };
+  mode: { title: string; shortName: string; defaultAmount: number };
 }
 
 interface Action {
@@ -31,7 +31,7 @@ const initialState = {
   amount: 1500000,
   duration: 8,
   interestRate: 10,
-  investmentNature: INVESTMENT_NATURE_LIST[0],
+  investmentNature: INVESTMENT_NATURE_LIST[0].title,
   age: -1,
   mode: INVESTMENT_MODES[0],
 };

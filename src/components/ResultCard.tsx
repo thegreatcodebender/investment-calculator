@@ -9,8 +9,11 @@ import {
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
 import { amountINRWithComma } from "../utils/display";
+import useInvestmentParams from "../hooks/useInvestmentParams";
+import { copyToClipboard } from "../utils/nativeActions";
 
 const ResultCard = () => {
+  const { getShareableLink } = useInvestmentParams();
   const investmentState = useInvestmentState();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -33,8 +36,8 @@ const ResultCard = () => {
   const resultTitle =
     investmentMode.title === INVESTMENT_MODES[0].title
       ? `Required ${
-          investmentNature === INVESTMENT_NATURE_LIST[0]
-            ? INVESTMENT_NATURE_LIST[0]
+          investmentNature === INVESTMENT_NATURE_LIST[0].title
+            ? INVESTMENT_NATURE_LIST[0].title
             : "One-time"
         } Contribution`
       : "Total earnings";
@@ -118,7 +121,12 @@ const ResultCard = () => {
       </div>
       {/* Action button */}
       <div className="flex items-center justify-center mt-6">
-        <Button btnType="primary">Share as image</Button>
+        <Button
+          btnType="primary"
+          onClick={() => copyToClipboard(getShareableLink())}
+        >
+          Copy Link
+        </Button>
       </div>
     </Card>
   );

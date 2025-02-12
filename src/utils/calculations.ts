@@ -46,7 +46,7 @@ export const calculateInvestment = ({
   switch (investmentMode) {
     case INVESTMENT_MODES[0].title: // Case - Target amount
       const targetAmount = amount;
-      if (investmentNature === INVESTMENT_NATURE_LIST[0]) {
+      if (investmentNature === INVESTMENT_NATURE_LIST[0].title) {
         // Monthly contribution
         contribution = // Monthly contribution
           (targetAmount * monthlyInterest) /
@@ -64,7 +64,7 @@ export const calculateInvestment = ({
       break;
     case INVESTMENT_MODES[1].title: // Case - Periodic investment amount
       const investmentAmount = amount;
-      if (investmentNature === INVESTMENT_NATURE_LIST[0]) {
+      if (investmentNature === INVESTMENT_NATURE_LIST[0].title) {
         investmentAndInterestTotal = // Total earnings
           (investmentAmount * ((1 + monthlyInterest) ** monthsCount - 1)) /
           monthlyInterest;

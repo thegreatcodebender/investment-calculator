@@ -13,14 +13,19 @@ import {
   useInvestmentDispatch,
   useInvestmentState,
 } from "../context/InvestmentContext";
-import { SLIDER_INPUT_METADATA } from "../constants/input";
-import { SLIDER_ERROR_MESSAGE } from "../constants/errors";
+import {
+  INPUT_FIELD_METADATA,
+  SLIDER_INPUT_METADATA,
+} from "../constants/input";
+import { INPUT_ERROR_MESSAGE } from "../constants/errors";
+import { isValueInRange } from "../utils/validity";
 
 const CalculationCard = () => {
   const [errors, setErrors] = useState({
     amount: "",
     duration: "",
     interestRate: "",
+    age: "",
   });
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
@@ -46,60 +51,79 @@ const CalculationCard = () => {
 
     switch (actionType) {
       case ActionType.Amount:
-        if (
-          inputValFormatted < SLIDER_INPUT_METADATA.AMOUNT.min ||
-          inputValFormatted > SLIDER_INPUT_METADATA.AMOUNT.max
-        ) {
+        isValid = isValueInRange(
+          inputValFormatted,
+          SLIDER_INPUT_METADATA.AMOUNT.min,
+          SLIDER_INPUT_METADATA.AMOUNT.max
+        );
+        if (!isValid) {
           setErrors((prev) => ({
             ...prev,
-            amount: SLIDER_ERROR_MESSAGE.AMOUNT.rangeError,
+            amount: INPUT_ERROR_MESSAGE.AMOUNT.rangeError,
           }));
-          isValid = false;
           return;
         } else {
           setErrors((prev) => ({
             ...prev,
             amount: "",
           }));
-          isValid = true;
         }
         break;
       case ActionType.Duration:
-        if (
-          inputValFormatted < SLIDER_INPUT_METADATA.DURATION.min ||
-          inputValFormatted > SLIDER_INPUT_METADATA.DURATION.max
-        ) {
+        isValid = isValueInRange(
+          inputValFormatted,
+          SLIDER_INPUT_METADATA.DURATION.min,
+          SLIDER_INPUT_METADATA.DURATION.max
+        );
+        if (!isValid) {
           setErrors((prev) => ({
             ...prev,
-            duration: SLIDER_ERROR_MESSAGE.DURATION.rangeError,
+            duration: INPUT_ERROR_MESSAGE.DURATION.rangeError,
           }));
-          isValid = false;
           return;
         } else {
           setErrors((prev) => ({
             ...prev,
             duration: "",
           }));
-          isValid = true;
         }
         break;
       case ActionType.InterestRate:
-        if (
-          inputValFormatted < SLIDER_INPUT_METADATA.INTEREST_RATE.min ||
-          inputValFormatted > SLIDER_INPUT_METADATA.INTEREST_RATE.max
-        ) {
+        isValid = isValueInRange(
+          inputValFormatted,
+          SLIDER_INPUT_METADATA.INTEREST_RATE.min,
+          SLIDER_INPUT_METADATA.INTEREST_RATE.max
+        );
+        if (!isValid) {
           setErrors((prev) => ({
             ...prev,
-            interestRate: SLIDER_ERROR_MESSAGE.INTEREST_RATE.rangeError,
+            interestRate: INPUT_ERROR_MESSAGE.INTEREST_RATE.rangeError,
           }));
-          isValid = false;
           return;
         } else {
           setErrors((prev) => ({
             ...prev,
             interestRate: "",
           }));
-          isValid = true;
+        }
+        break;
+      case ActionType.Age:
+        isValid = isValueInRange(
+          inputValFormatted,
+          INPUT_FIELD_METADATA.AGE.min,
+          INPUT_FIELD_METADATA.AGE.max
+        );
+        if (!isValid) {
+          setErrors((prev) => ({
+            ...prev,
+            age: INPUT_ERROR_MESSAGE.AGE.rangeError,
+          }));
+          return;
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            age: "",
+          }));
         }
         break;
       default:
@@ -192,17 +216,15 @@ const CalculationCard = () => {
           />
           <InputField
             label="Current age (optional)"
-            id="current-age"
+            id={INPUT_FIELD_METADATA.AGE.id}
             value={age !== -1 ? age : ""}
             placeholder=""
             containerClassName="max-sm:mt-6"
             inputClassName="w-[64px]"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              dispatchInvestment({
-                type: ActionType.Age,
-                payload: Number(e.target.value),
-              });
+              handleInputChange(e, ActionType.Age);
             }}
+            errorText={errors.age}
           />
         </div>
       </div>

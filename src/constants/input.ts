@@ -18,3 +18,12 @@ export const SLIDER_INPUT_METADATA = {
     id: "interest-input",
   },
 };
+
+export const INPUT_FIELD_METADATA = {
+  AGE: {
+    min: 1,
+    max: 100,
+    id: "current-age",
+    default: -1,
+  },
+};
