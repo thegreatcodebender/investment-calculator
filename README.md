@@ -46,7 +46,7 @@ A powerful and user-friendly investment calculator that helps you plan your fina
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/investment-calculator.git
+git clone https://github.com/thegreatcodebender/investment-calculator.git
 
 # Navigate to project directory
 cd investment-calculator
