@@ -10,6 +10,17 @@
   --color-accent-purple: #7404D6;
   --color-primary-light: rgba(18, 251, 142, 0.2);
   --shadow-card: 0 0 25px rgba(0, 0, 0, 0.08);
+  --animate-tab-active: tab-active 300ms ease-in-out forwards;
+
+  @keyframes tab-active {
+    from {
+      border-color: transparent;
+    }
+
+    to {
+      border-color: unset;
+    }
+  }
 }
 
 @layer base {
@@ -29,102 +40,119 @@
     border-radius: 16px;
     position: relative;
     height: 4px;
+  }
 
-    &::-webkit-slider-runnable-track {
-      background: transparent;
-      border-radius: 16px;
-      z-index: 1;
-    }
+  .slider::-webkit-slider-runnable-track {
+    background: transparent;
+    border-radius: 16px;
+    z-index: 1;
+  }
 
-    &::-moz-range-track {
-      background: transparent;
-      border-radius: 16px;
-      z-index: 1;
-    }
+  .slider::-moz-range-track {
+    background: transparent;
+    border-radius: 16px;
+    z-index: 1;
+  }
 
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 15px;
-      width: 15px;
-      background-color: #fff;
-      border-radius: 50%;
-      border: 3px solid var(--color-primary);
-    }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 3px solid var(--color-primary);
+  }
 
-    &::-moz-range-thumb {
-      height: 15px;
-      width: 15px;
-      background-color: #fff;
-      border-radius: 50%;
-      border: 3px solid var(--color-primary);
-    }
+  .slider::-moz-range-thumb {
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 3px solid var(--color-primary);
+  }
 
-    &:before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      border-radius: 8px;
-      background: var(--color-slider-track);
-      background: linear-gradient(to right, var(--color-primary) var(--track-active-width), var(--color-slider-track) var(--track-active-width));
-      top: 50%;
-      transform: translateY(-50%);
-    }
+  .slider:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border-radius: 8px;
+    background: var(--color-slider-track);
+    background: linear-gradient(to right, var(--color-primary) var(--track-active-width), var(--color-slider-track) var(--track-active-width));
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-    &:focus-visible {
-      outline: 2px solid #000;
-      outline-offset: 6px;
-    }
+  .slider:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 6px;
   }
 }
 
+
 @layer components {
-  input[type="radio"] {
-    &+label {
-      padding-left: 32px;
-      min-height: 24px;
-      display: inline-block;
-      cursor: pointer;
-
-      &:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        aspect-ratio: 1;
-        border-radius: 50%;
-        border: 1px solid var(--color-input-border);
-      }
-    }
-
-    &:focus-visible+label:before {
-      outline: 2px solid #000;
-      outline-offset: 2px;
-    }
-
-    &:checked+label:after {
-      content: '';
-      position: absolute;
-      left: 4px;
-      top: 4px;
-      width: 16px;
-      background-color: var(--color-primary);
-      border-radius: 50%;
-      aspect-ratio: 1;
-      animation: scale-in 300ms ease-out forwards 1;
-    }
+  input[type="radio"]+label {
+    padding-left: 32px;
+    min-height: 24px;
+    display: inline-block;
+    cursor: pointer;
   }
 
-  @keyframes scale-in {
-    from {
-      scale: 0;
-    }
+  input[type="radio"]+label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid var(--color-input-border);
+  }
 
-    to {
-      scale: 1;
-    }
+
+  input[type="radio"]:focus-visible+label:before {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  input[type="radio"]:checked+label:after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 16px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    animation: scale-in 300ms ease-out forwards 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    scale: 0;
+  }
+
+  to {
+    scale: 1;
+  }
+}
+
+
+@layer components {
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 }

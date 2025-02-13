@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Card from "./Card";
-import Tab from "./Tab";
 import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
 import {
@@ -19,6 +18,7 @@ import {
 } from "../constants/input";
 import { INPUT_ERROR_MESSAGE } from "../constants/errors";
 import { isValueInRange } from "../utils/validity";
+import TabGroup from "./TabGroup";
 
 const CalculationCard = () => {
   const [errors, setErrors] = useState({
@@ -139,22 +139,16 @@ const CalculationCard = () => {
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
-      <nav className="flex text-base font-medium" aria-label="I know my">
-        {INVESTMENT_MODES.map(({ title, defaultAmount }) => (
-          <Tab
-            isActive={activeMode.title === title}
-            key={title}
-            onClick={() =>
-              dispatchInvestment({
-                type: ActionType.Mode,
-                payload: { title, defaultAmount },
-              })
-            }
-          >
-            {title}
-          </Tab>
-        ))}
-      </nav>
+      <TabGroup
+        data={INVESTMENT_MODES}
+        activeTab={activeMode.title}
+        onClick={(payload) =>
+          dispatchInvestment({
+            type: ActionType.Mode,
+            payload,
+          })
+        }
+      />
       {/* Input fields */}
       <div className="mt-6">
         <SliderWithInput
