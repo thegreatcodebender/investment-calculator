@@ -16,7 +16,7 @@ A powerful and user-friendly investment calculator that helps you plan your fina
 ### 🔗 Easy Sharing
 
 - Share your investment scenarios through URL parameters
-- Generate and download calculation results as images
+<!-- - Generate and download calculation results as images -->
 - Perfect for financial advisors and individuals planning their investments
 
 ### 💫 User Experience
@@ -32,8 +32,8 @@ A powerful and user-friendly investment calculator that helps you plan your fina
 - **Styling:** Tailwind CSS
 - **State Management:** Context API
 - **Charts:** Recharts
-- **Image Generation:** html-to-image
-<!-- - **Deployment:** [To be added] -->
+  <!-- - **Image Generation:** html-to-image -->
+  <!-- - **Deployment:** [To be added] -->
 
 ## 🚀 Getting Started
 
@@ -73,7 +73,7 @@ npm run dev
 
 3. View your results and share:
    - Copy the generated URL
-   - Download the result as an image
+   <!-- - Download the result as an image -->
 
 <!-- ## 📸 Screenshots -->
 
