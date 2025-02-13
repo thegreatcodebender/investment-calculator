@@ -101,9 +101,10 @@ const SliderWithInput = ({
           className="slider"
           style={
             {
-              "--track-active-width": `${
-                ((inputValue - min) / (max - min)) * 100
-              }%`,
+              "--track-active-width": `${(
+                ((inputValue - min) / (max - min)) *
+                100
+              ).toFixed(2)}%`,
             } as React.CSSProperties
           }
         />
@@ -114,7 +115,9 @@ const SliderWithInput = ({
           {getLegend(min)}
           {getLegend(max)}
         </div>
-        <label htmlFor={id + "-slider"} className="sr-only"></label>
+        <label htmlFor={id + "-slider"} className="sr-only">
+          {label}
+        </label>
       </div>
     </fieldset>
   );

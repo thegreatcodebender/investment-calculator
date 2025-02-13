@@ -64,7 +64,6 @@ const useInvestmentParams = () => {
   };
 
   useEffect(() => {
-    // http://localhost:5173/?amount=15000&duration=8&interest=10.5&nature=monthly&mode=target
     const params = Object.fromEntries(searchParams.entries());
     if (Object.keys(params).length > 0) {
       const paramAmount = Number(params.amount);
@@ -150,11 +149,11 @@ const useInvestmentParams = () => {
               : investmentModeObj?.defaultAmount,
           },
         });
+
+        // Remove query parameters and keep the subfolder path intact
+        window.history.replaceState({}, "", window.location.pathname);
       }
     }
-
-    // Remove the params from browser address bar
-    // navigate(".", { replace: true });
   }, []);
   return { getShareableLink };
 };

@@ -72,6 +72,17 @@
     border: 3px solid var(--color-primary);
   }
 
+  @media (max-width: 640px) {
+    .slider::-webkit-slider-thumb {
+      padding: 8px;
+      border-width: 3.5px;
+    }
+
+    .slider::-moz-range-thumb {
+      padding: 8px;
+    }
+  }
+
   .slider:before {
     content: "";
     position: absolute;
