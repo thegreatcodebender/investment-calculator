@@ -7,7 +7,7 @@ const Header = () => {
         <img
           src={logo}
           alt="Investment Calculator"
-          className="h-[44px] mx-auto"
+          className="h-[44px] max-md:h-[32px] mx-auto"
         />
       </div>
     </header>

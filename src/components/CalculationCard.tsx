@@ -142,10 +142,10 @@ const CalculationCard = () => {
       <TabGroup
         data={INVESTMENT_MODES}
         activeTab={activeMode.title}
-        onClick={(payload) =>
+        onClick={(modeObj) =>
           dispatchInvestment({
             type: ActionType.Mode,
-            payload,
+            payload: modeObj,
           })
         }
       />

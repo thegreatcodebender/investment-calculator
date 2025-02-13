@@ -6,52 +6,50 @@ import { useState } from "react";
 interface TabGroupProps {
   data: typeof INVESTMENT_MODES;
   activeTab: string;
-  onClick: ({
-    title,
-    defaultAmount,
-  }: {
-    title: string;
-    defaultAmount: number;
-  }) => void;
+  onClick: (modeObj: (typeof INVESTMENT_MODES)[0]) => void;
 }
 
 export type TabMap = Map<string, HTMLElement>;
 
 const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
-  const [isInitialAction, setIsInitialAction] = useState(true); // To prevent scrollIntoView from firing on page load
+  const [isScrollIntoViewActive, setIsScrollIntoViewActive] = useState(false); // To prevent scrollIntoView from firing on page load
   const isMobile = useIsMobile();
-
+  let timeoutId: number | null = null;
   /**
    * Invoke onClick function and activate `initialAction` state to enable `scrollIntoView`
    * @param {object} investmentModeParams - Title, Default Amount
    */
-  const handleClick = ({
-    title,
-    defaultAmount,
-  }: {
-    title: string;
-    defaultAmount: number;
-  }) => {
-    setIsInitialAction(false); // Activate to enable the scrollIntoView in mobile
-    onClick({ title, defaultAmount });
+  const handleClick = (modeObj: (typeof INVESTMENT_MODES)[0]) => {
+    setIsScrollIntoViewActive(true); // Activate to enable the scrollIntoView in mobile
+    onClick(modeObj);
+    // Prevent scrolling on rerenders
+    if (timeoutId) clearTimeout(timeoutId);
+    setTimeout(() => {
+      setIsScrollIntoViewActive(false);
+    }, 100);
   };
   return (
     <nav
       className="flex text-base font-medium overflow-x-auto no-scrollbar"
       aria-label="I know my"
     >
-      {data.map(({ title, defaultAmount }) => (
+      {data.map((modeObj) => (
         <Tab
-          isActive={activeTab === title}
-          key={title}
-          onClick={() => handleClick({ title, defaultAmount })}
+          isActive={activeTab === modeObj.title}
+          key={modeObj.title}
+          onClick={() => handleClick(modeObj)}
           refFn={(node: HTMLButtonElement) => {
-            if (activeTab === title && node && isMobile && !isInitialAction) {
+            if (
+              activeTab === modeObj.title &&
+              node &&
+              isMobile &&
+              isScrollIntoViewActive
+            ) {
               node.scrollIntoView({ behavior: "smooth", inline: "start" });
             }
           }}
         >
-          {title}
+          {modeObj.title}
         </Tab>
       ))}
     </nav>

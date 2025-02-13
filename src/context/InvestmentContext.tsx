@@ -49,6 +49,8 @@ const investmentReducer = (state: State, action: Action) => {
     case ActionType.Age:
       return { ...state, age: action.payload };
     case ActionType.Mode:
+      console.log(action);
+
       return {
         ...state,
         mode: action.payload,
