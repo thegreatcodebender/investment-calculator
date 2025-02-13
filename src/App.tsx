@@ -4,6 +4,7 @@ import CalculationCard from "./components/CalculationCard";
 import Header from "./components/Header";
 import ResultCard from "./components/ResultCard";
 import { InvestmentProvider } from "./context/InvestmentContext";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           </InvestmentProvider>
         </div>
       </main>
+      <Footer />
     </BrowserRouter>
   );
 };
