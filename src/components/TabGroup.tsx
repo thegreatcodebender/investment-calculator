@@ -17,7 +17,7 @@ const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
   let timeoutId: number | null = null;
   /**
    * Invoke onClick function and activate `initialAction` state to enable `scrollIntoView`
-   * @param {object} investmentModeParams - Title, Default Amount
+   * @param {typeof INVESTMENT_MODES[0]} modeObj - Title, Default Amount, Short name
    */
   const handleClick = (modeObj: (typeof INVESTMENT_MODES)[0]) => {
     setIsScrollIntoViewActive(true); // Activate to enable the scrollIntoView in mobile
