@@ -28,11 +28,11 @@ const useInvestmentParams = () => {
   const [searchParams] = useSearchParams();
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
-  const amount = investmentState.amount;
-  const duration = investmentState.duration;
-  const interest = investmentState.interestRate;
+  const amount = investmentState.amount.actualValue;
+  const duration = investmentState.duration.actualValue;
+  const interest = investmentState.interestRate.actualValue;
   const investmentNature = investmentState.investmentNature;
-  const age = investmentState.age;
+  const age = investmentState.age.actualValue;
   const activeMode = investmentState.mode;
 
   /**
@@ -80,7 +80,10 @@ const useInvestmentParams = () => {
       );
       // Update Amount
       if (isParamAmountInRange) {
-        dispatchInvestment({ type: ActionType.Amount, payload: paramAmount });
+        dispatchInvestment({
+          type: ActionType.Amount,
+          payload: { inputValue: paramAmount, actualValue: paramAmount },
+        });
       }
       if (
         isValueInRange(
@@ -91,7 +94,7 @@ const useInvestmentParams = () => {
       ) {
         dispatchInvestment({
           type: ActionType.Duration,
-          payload: paramDuration,
+          payload: { inputValue: paramDuration, actualValue: paramDuration },
         });
       }
       // Update Interest rate
@@ -104,7 +107,7 @@ const useInvestmentParams = () => {
       ) {
         dispatchInvestment({
           type: ActionType.InterestRate,
-          payload: paramInterest,
+          payload: { inputValue: paramInterest, actualValue: paramInterest },
         });
       }
       // Update Age
@@ -117,7 +120,7 @@ const useInvestmentParams = () => {
       ) {
         dispatchInvestment({
           type: ActionType.Age,
-          payload: paramAge,
+          payload: { inputValue: paramAge, actualValue: paramAge },
         });
       }
       // Update Investment Nature

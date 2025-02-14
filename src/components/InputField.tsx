@@ -33,7 +33,12 @@ const InputField = ({
   errorText,
   onChange,
 }: InputFieldProps) => {
-  const inputValue = typeof value === "object" ? value.inputValue : value; // Show the value.inputValue so that even if user types in unsupported format, it will be shown in the input field
+  const inputValue =
+    typeof value === "object"
+      ? value.inputValue === -1
+        ? ""
+        : value.inputValue
+      : value; // Show the value.inputValue so that even if user types in unsupported format, it will be shown in the input field
   const isCurrency = inputValueType === InputValueType.Currency;
   const isYear = inputValueType === InputValueType.Year;
   const isPercent = inputValueType === InputValueType.Percent;
