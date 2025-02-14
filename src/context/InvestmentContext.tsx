@@ -87,7 +87,10 @@ const investmentReducer = (state: State, action: Action): State => {
       return {
         ...state,
         mode: action.payload,
-        amount: action.payload.defaultAmount,
+        amount: {
+          inputValue: action.payload.defaultAmount,
+          actualValue: action.payload.defaultAmount,
+        },
       };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
