@@ -37,11 +37,6 @@ A powerful and user-friendly investment calculator that helps you plan your fina
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js 16+
-- npm or yarn
-
 ### Installation
 
 ```bash

@@ -6,7 +6,7 @@ import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
-import InputField from "./InputField";
+import InputField, { InputValueType } from "./InputField";
 import {
   ActionType,
   useInvestmentDispatch,
@@ -165,7 +165,8 @@ const CalculationCard = () => {
             handleInputChange(e, ActionType.Amount);
           }}
           errorText={errors.amount}
-          isRupee
+          inputClassName="w-[130px]"
+          inputValueType={InputValueType.Currency}
         />
         <SliderWithInput
           min={SLIDER_INPUT_METADATA.DURATION.min}
@@ -179,8 +180,9 @@ const CalculationCard = () => {
             handleInputChange(e, ActionType.Duration);
           }}
           containerClassName="mt-6"
+          inputClassName="w-[110px]"
           errorText={errors.duration}
-          isYear
+          inputValueType={InputValueType.Year}
         />
         <SliderWithInput
           min={SLIDER_INPUT_METADATA.INTEREST_RATE.min}
@@ -194,8 +196,9 @@ const CalculationCard = () => {
             handleInputChange(e, ActionType.InterestRate);
           }}
           containerClassName="mt-6"
+          inputClassName="w-24"
           errorText={errors.interestRate}
-          isPercent
+          inputValueType={InputValueType.Percent}
         />
         <div className="min-sm:flex gap-14 mt-6">
           <RadioGroup

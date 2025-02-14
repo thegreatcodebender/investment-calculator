@@ -1,6 +1,6 @@
 import { omitFirstWord } from "../utils/display";
 import { RupeeIcon } from "./Icons";
-import InputField, { InputFieldProps } from "./InputField";
+import InputField, { InputFieldProps, InputValueType } from "./InputField";
 import { ToWords } from "to-words";
 
 interface SliderWithInputProps extends InputFieldProps {
@@ -17,13 +17,12 @@ const SliderWithInput = ({
   step = 1,
   isLabelHidden,
   containerClassName,
+  inputClassName,
   id,
   label,
   placeholder,
   value,
-  isRupee,
-  isYear,
-  isPercent,
+  inputValueType,
   errorText,
   onChange,
 }: SliderWithInputProps) => {
@@ -42,23 +41,22 @@ const SliderWithInput = ({
   };
 
   const getLegend = (legendValue: any) => {
-    switch (true) {
-      case isRupee:
+    switch (inputValueType) {
+      case InputValueType.Currency:
         return (
           <span className="flex gap-0.5 items-center">
-            {isRupee && (
-              <span aria-hidden>
-                <RupeeIcon className="h-[10px] opacity-75" />
-              </span>
-            )}
+            <span aria-hidden>
+              <RupeeIcon className="h-[10px] opacity-75" />
+            </span>
+
             {legendValue.toString()[0] +
               " " +
               omitFirstWord(toWords.convert(legendValue))}
           </span>
         );
-      case isYear:
+      case InputValueType.Year:
         return <span>{legendValue} Years</span>;
-      case isPercent:
+      case InputValueType.Percent:
         return <span>{legendValue}%</span>;
       default:
         break;
@@ -69,7 +67,7 @@ const SliderWithInput = ({
       <legend className="sr-only">{label}</legend>
       <div
         className={`${
-          isRupee ? "flex max-md:flex-col gap-3 min-md:items-end" : ""
+          inputValueType ? "flex max-md:flex-col gap-3 min-md:items-end" : ""
         }`}
       >
         <InputField
@@ -78,15 +76,10 @@ const SliderWithInput = ({
           placeholder={placeholder}
           value={inputValue}
           isLabelHidden={isLabelHidden}
-          isRupee={isRupee}
+          inputValueType={inputValueType}
           errorText={errorText}
           onChange={onChange}
-          inputClassName="w-[130px]"
-          // inputValueText={
-          //   isRupee
-          //     ? toWords.convert(inputValue, { currency: true })
-          //     : undefined
-          // }
+          inputClassName={inputClassName}
         />
       </div>
       <div className="mt-2">

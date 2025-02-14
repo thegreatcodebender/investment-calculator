@@ -2,18 +2,21 @@ import rupeeIcon from "../assets/images/rupee.svg";
 import { InputAndActualValue } from "../context/InvestmentContext";
 import { amountINRWithComma } from "../utils/display";
 
+export enum InputValueType {
+  Year = "year",
+  Currency = "currency",
+  Percent = "percent",
+}
+
 export interface InputFieldProps {
   label: string;
   isLabelHidden?: boolean;
   containerClassName?: string;
   inputClassName?: string;
-  inputValueText?: string;
   id: string;
   placeholder: string;
   value: string | number | InputAndActualValue;
-  isRupee?: boolean;
-  isYear?: boolean;
-  isPercent?: boolean;
+  inputValueType?: InputValueType;
   errorText?: string;
   onChange?: (args: any) => void;
 }
@@ -23,15 +26,17 @@ const InputField = ({
   isLabelHidden,
   containerClassName,
   inputClassName,
-  inputValueText,
   id,
   placeholder,
   value,
-  isRupee,
+  inputValueType,
   errorText,
   onChange,
 }: InputFieldProps) => {
-  const inputValue = typeof value === "object" ? value.inputValue : value;
+  const inputValue = typeof value === "object" ? value.inputValue : value; // Show the value.inputValue so that even if user types in unsupported format, it will be shown in the input field
+  const isCurrency = inputValueType === InputValueType.Currency;
+  const isYear = inputValueType === InputValueType.Year;
+  const isPercent = inputValueType === InputValueType.Percent;
   return (
     <div className={`${containerClassName ? containerClassName : ""}`}>
       <label
@@ -42,41 +47,53 @@ const InputField = ({
       >
         {label}
       </label>
-      {isRupee ? (
+      {inputValueType ? (
         <>
-          <div
-            className={`relative${
-              inputValueText ? " min-md:inline-block" : ""
-            }`}
-          >
+          <div className={`relative`}>
             <span
-              className={`absolute left-3 top-[14px] ${
-                inputValueText ? "min-md:top-[22px]" : ""
+              className={`absolute ${
+                isCurrency
+                  ? "left-3 top-[14px]"
+                  : isYear
+                  ? "left-14 top-[13px]"
+                  : isPercent && "left-18 top-[13px]"
               }`}
             >
-              <img src={rupeeIcon} alt="Rupees" className="w-[10px]" />
+              {isCurrency ? (
+                <img src={rupeeIcon} alt="Rupees" className="w-[10px]" />
+              ) : (
+                <p className="leading-none">
+                  {isPercent ? "%" : isYear && "Years"}
+                </p>
+              )}
             </span>
             <input
               type="text"
               id={id}
               name={id}
               placeholder={placeholder}
+              inputMode="numeric"
+              autoComplete="off"
               value={
-                isNaN(Number(inputValue))
-                  ? inputValue
-                  : amountINRWithComma(Number(inputValue))
+                isCurrency && !isNaN(Number(inputValue))
+                  ? amountINRWithComma(Number(inputValue))
+                  : inputValue
               }
               onChange={onChange}
-              className={`${errorText ? "border-red-500" : ""} ${
-                inputClassName ? inputClassName : ""
-              } border-1 border-input-border rounded-sm font-medium px-3 py-2 ps-[26px] block mt-2 focus-visible:outline-primary`}
+              className={`${
+                errorText ? "border-red-500 focus-visible:outline-red-500" : ""
+              } ${
+                inputClassName ?? ""
+              } border-1 border-input-border rounded-sm font-medium px-3 py-2 ${
+                isCurrency
+                  ? "ps-[26px]"
+                  : isPercent
+                  ? "pe-8"
+                  : isYear && "pe-15"
+              }
+               block mt-2 focus-visible:outline-primary`}
             />
           </div>
-          {inputValueText && (
-            <span className="min-md:inline-block min-md:ms-2 text-xs">
-              {inputValueText}
-            </span>
-          )}
         </>
       ) : (
         <input
@@ -84,10 +101,12 @@ const InputField = ({
           id={id}
           name={id}
           placeholder={placeholder}
+          inputMode="text"
+          autoComplete="off"
           value={inputValue}
           onChange={onChange}
           className={`${errorText ? "border-red-500" : ""} ${
-            inputClassName ? inputClassName : ""
+            inputClassName ?? ""
           } border-1 border-input-border rounded-sm font-medium px-3 py-2 block mt-2 focus-visible:outline-primary`}
         />
       )}
