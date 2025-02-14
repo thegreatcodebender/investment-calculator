@@ -157,9 +157,9 @@ const CalculationCard = () => {
           min={SLIDER_INPUT_METADATA.AMOUNT.min}
           max={SLIDER_INPUT_METADATA.AMOUNT.max}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
-          label={activeMode.title}
+          label={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
-          placeholder={activeMode.title}
+          placeholder={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Amount);
@@ -172,9 +172,9 @@ const CalculationCard = () => {
           min={SLIDER_INPUT_METADATA.DURATION.min}
           max={SLIDER_INPUT_METADATA.DURATION.max}
           step={SLIDER_INPUT_METADATA.DURATION.step}
-          label="Duration"
+          label={SLIDER_INPUT_METADATA.DURATION.label}
           id={SLIDER_INPUT_METADATA.DURATION.id}
-          placeholder="Duration"
+          placeholder={SLIDER_INPUT_METADATA.DURATION.label}
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Duration);
@@ -188,9 +188,9 @@ const CalculationCard = () => {
           min={SLIDER_INPUT_METADATA.INTEREST_RATE.min}
           max={SLIDER_INPUT_METADATA.INTEREST_RATE.max}
           step={SLIDER_INPUT_METADATA.INTEREST_RATE.step}
-          label="Expected Interest Rate"
+          label={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
-          placeholder="Annual Interest"
+          placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.InterestRate);
@@ -203,7 +203,7 @@ const CalculationCard = () => {
         <div className="min-sm:flex gap-14 mt-6">
           <RadioGroup
             name="investment-nature"
-            title="Investment Nature"
+            title="Contribution Type"
             selectedRadioLabel={investmentNature}
             data={INVESTMENT_NATURE_LIST}
             onChange={(label: string) => {
@@ -214,7 +214,7 @@ const CalculationCard = () => {
             }}
           />
           <InputField
-            label="Current age (optional)"
+            label={INPUT_FIELD_METADATA.AGE.label}
             id={INPUT_FIELD_METADATA.AGE.id}
             value={age}
             placeholder=""

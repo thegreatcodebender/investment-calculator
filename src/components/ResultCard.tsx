@@ -41,18 +41,18 @@ const ResultCard = () => {
           investmentNature === INVESTMENT_NATURE_LIST[0].title
             ? INVESTMENT_NATURE_LIST[0].title
             : "One-time"
-        } Contribution`
-      : "Total earnings";
+        } Investment`
+      : "Total Future Value";
   const projectedAge =
     age.actualValue !== -1 ? age.actualValue + duration.actualValue : -1;
   const pieData = [
     {
-      title: "Total Investment",
+      title: "Total Amount Invested",
       value: totalInvestment,
       fill: "var(--color-accent-green)",
     },
     {
-      title: "Returns",
+      title: "Total Returns",
       value: totalInterest,
       fill: "var(--color-accent-purple)",
     },
@@ -83,7 +83,7 @@ const ResultCard = () => {
       {/* For screen readers accessibility */}
       <p className="sr-only">Calculation results</p>
       {/* Pie Chart */}
-      <div>
+      <div className="overflow-x-clip">
         <div className="h-[175px]">
           <ResponsiveContainer>
             <PieChart>
@@ -101,9 +101,9 @@ const ResultCard = () => {
           </ResponsiveContainer>
         </div>
         {/* Legend */}
-        <div className="flex flex-wrap gap-6 items-center justify-center mt-11 py-8">
+        <div className="items-center justify-center mt-8 px-8 sm:ms-12 pt-4 mb-12">
           {pieData.map((pie) => (
-            <div key={pie.title}>
+            <div key={pie.title} className="not-last:mb-6">
               <p className="flex gap-2 items-center leading-none">
                 <span
                   className="w-[20px] h-[20px] rounded-sm block"
@@ -119,7 +119,7 @@ const ResultCard = () => {
           ))}
         </div>
         {/* Main result */}
-        <div className="px-8 py-5 bg-white">
+        <div className="px-8 py-5 bg-white shadow-md">
           <h2 className="text-lg font-medium mb-2 min-sm:leading-none">
             {resultTitle}
           </h2>
@@ -131,13 +131,20 @@ const ResultCard = () => {
           </p>
         </div>
         {/* Sub text */}
-        {projectedAge !== -1 && (
-          <p className="px-8 text-xs mt-4">
-            You will achieve your target amount at the age of{" "}
-            <span className="font-semibold">{projectedAge}</span> if start
-            investing now!
-          </p>
-        )}
+        {projectedAge !== -1 &&
+          (investmentMode.title === INVESTMENT_MODES[0].title ? (
+            <p className="px-8 text-xs mt-4">
+              You will achieve your goal at the age of{" "}
+              <span className="font-semibold">{projectedAge}</span> if you start
+              investing now!
+            </p>
+          ) : (
+            <p className="px-8 text-xs mt-4">
+              Your investment will achieve the expected growth at the age of{" "}
+              <span className="font-semibold">{projectedAge}</span> if you start
+              now!
+            </p>
+          ))}
       </div>
       {/* Action button */}
       <div className="flex items-center justify-center mt-6">
