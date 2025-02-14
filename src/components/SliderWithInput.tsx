@@ -6,7 +6,6 @@ import { ToWords } from "to-words";
 interface SliderWithInputProps extends InputFieldProps {
   min: number;
   max: number;
-  value: number;
   step?: number;
   id: string;
   isLabelHidden?: boolean;
@@ -21,13 +20,15 @@ const SliderWithInput = ({
   id,
   label,
   placeholder,
-  value: inputValue,
+  value,
   isRupee,
   isYear,
   isPercent,
   errorText,
   onChange,
 }: SliderWithInputProps) => {
+  const inputValue = typeof value === "object" ? value.inputValue : value;
+  const actualValue = typeof value === "object" ? value.actualValue : value;
   // ToWords instance for converting number to words
   const toWords = new ToWords({
     converterOptions: {
@@ -95,14 +96,14 @@ const SliderWithInput = ({
           min={min}
           max={max}
           step={step}
-          value={inputValue}
+          value={actualValue}
           id={id + "-slider"}
           onChange={handleSliderChange}
           className="slider"
           style={
             {
               "--track-active-width": `${(
-                ((inputValue - min) / (max - min)) *
+                ((Number(actualValue) - min) / (max - min)) *
                 100
               ).toFixed(2)}%`,
             } as React.CSSProperties

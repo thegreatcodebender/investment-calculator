@@ -4,12 +4,17 @@ import {
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
 
+export interface InputAndActualValue {
+  inputValue: number | string;
+  actualValue: number;
+}
+
 interface State {
-  amount: number;
-  duration: number;
-  interestRate: number;
+  amount: InputAndActualValue;
+  duration: InputAndActualValue;
+  interestRate: InputAndActualValue;
   investmentNature: string;
-  age: number;
+  age: InputAndActualValue;
   mode: { title: string; shortName: string; defaultAmount: number };
 }
 
@@ -27,30 +32,58 @@ export enum ActionType {
   Mode = "SET_MODE",
 }
 
-const initialState = {
-  amount: 1500000,
-  duration: 8,
-  interestRate: 10,
+const initialState: State = {
+  amount: { inputValue: 1500000, actualValue: 1500000 },
+  duration: { inputValue: 8, actualValue: 8 },
+  interestRate: { inputValue: 10, actualValue: 10 },
   investmentNature: INVESTMENT_NATURE_LIST[0].title,
-  age: -1,
+  age: { inputValue: -1, actualValue: -1 },
   mode: INVESTMENT_MODES[0],
 };
 
-const investmentReducer = (state: State, action: Action) => {
+const investmentReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionType.Amount:
+      if (!action.payload.actualValue) {
+        return {
+          ...state,
+          amount: { ...state.amount, inputValue: action.payload.inputValue },
+        };
+      }
       return { ...state, amount: action.payload };
     case ActionType.Duration:
+      if (!action.payload.actualValue) {
+        return {
+          ...state,
+          duration: {
+            ...state.duration,
+            inputValue: action.payload.inputValue,
+          },
+        };
+      }
       return { ...state, duration: action.payload };
     case ActionType.InterestRate:
+      if (!action.payload.actualValue) {
+        return {
+          ...state,
+          interestRate: {
+            ...state.interestRate,
+            inputValue: action.payload.inputValue,
+          },
+        };
+      }
       return { ...state, interestRate: action.payload };
     case ActionType.InvestmentNature:
       return { ...state, investmentNature: action.payload };
     case ActionType.Age:
+      if (!action.payload.actualValue) {
+        return {
+          ...state,
+          age: { ...state.age, inputValue: action.payload.inputValue },
+        };
+      }
       return { ...state, age: action.payload };
     case ActionType.Mode:
-      console.log(action);
-
       return {
         ...state,
         mode: action.payload,

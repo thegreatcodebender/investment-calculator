@@ -45,14 +45,10 @@ const CalculationCard = () => {
     const inputVal = e.target.value;
     const inputValFormatted = Number(inputVal.replace(/[^0-9.-]+/g, ""));
 
-    // if (isNaN(Number(inputVal))) {
-    //   return;
-    // }
-
     switch (actionType) {
       case ActionType.Amount:
         isValid = isValueInRange(
-          inputValFormatted,
+          inputVal,
           SLIDER_INPUT_METADATA.AMOUNT.min,
           SLIDER_INPUT_METADATA.AMOUNT.max
         );
@@ -61,7 +57,6 @@ const CalculationCard = () => {
             ...prev,
             amount: INPUT_ERROR_MESSAGE.AMOUNT.rangeError,
           }));
-          return;
         } else {
           setErrors((prev) => ({
             ...prev,
@@ -71,7 +66,7 @@ const CalculationCard = () => {
         break;
       case ActionType.Duration:
         isValid = isValueInRange(
-          inputValFormatted,
+          inputVal,
           SLIDER_INPUT_METADATA.DURATION.min,
           SLIDER_INPUT_METADATA.DURATION.max
         );
@@ -80,7 +75,6 @@ const CalculationCard = () => {
             ...prev,
             duration: INPUT_ERROR_MESSAGE.DURATION.rangeError,
           }));
-          return;
         } else {
           setErrors((prev) => ({
             ...prev,
@@ -90,7 +84,7 @@ const CalculationCard = () => {
         break;
       case ActionType.InterestRate:
         isValid = isValueInRange(
-          inputValFormatted,
+          inputVal,
           SLIDER_INPUT_METADATA.INTEREST_RATE.min,
           SLIDER_INPUT_METADATA.INTEREST_RATE.max
         );
@@ -99,7 +93,6 @@ const CalculationCard = () => {
             ...prev,
             interestRate: INPUT_ERROR_MESSAGE.INTEREST_RATE.rangeError,
           }));
-          return;
         } else {
           setErrors((prev) => ({
             ...prev,
@@ -109,7 +102,7 @@ const CalculationCard = () => {
         break;
       case ActionType.Age:
         isValid = isValueInRange(
-          inputValFormatted,
+          inputVal,
           INPUT_FIELD_METADATA.AGE.min,
           INPUT_FIELD_METADATA.AGE.max
         );
@@ -118,7 +111,6 @@ const CalculationCard = () => {
             ...prev,
             age: INPUT_ERROR_MESSAGE.AGE.rangeError,
           }));
-          return;
         } else {
           setErrors((prev) => ({
             ...prev,
@@ -132,7 +124,17 @@ const CalculationCard = () => {
     if (isValid) {
       dispatchInvestment({
         type: actionType,
-        payload: inputValFormatted,
+        payload: {
+          inputValue: inputVal,
+          actualValue: inputValFormatted,
+        },
+      });
+    } else {
+      dispatchInvestment({
+        type: actionType,
+        payload: {
+          inputValue: inputVal,
+        },
       });
     }
   };
@@ -211,7 +213,7 @@ const CalculationCard = () => {
           <InputField
             label="Current age (optional)"
             id={INPUT_FIELD_METADATA.AGE.id}
-            value={age !== -1 ? age : ""}
+            value={age}
             placeholder=""
             containerClassName="max-sm:mt-6"
             inputClassName="w-[64px]"

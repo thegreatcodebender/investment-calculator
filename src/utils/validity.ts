@@ -1,16 +1,18 @@
 /**
- * Check if the value is in range
- * @param {number} value - Value to be checked
+ * Check if the value is in range of provided minimum and maximum values
+ * @param {number | string} value - Value to be checked
  * @param {number} min - Maximum acceptable value
  * @param {number} max - Minimum acceptable value
  * @returns {boolean} Boolean value
  */
 export const isValueInRange = (
-  value: number,
+  value: number | string,
   min: number,
   max: number
 ): boolean => {
-  if (isNaN(value) || isNaN(min) || isNaN(max)) return false;
-  if (value < min || value > max) return false;
+  const formattedValue = String(value).replace(/(?!^)(?<!,),(?!,)(?!$)/g, "");
+  if (isNaN(Number(formattedValue)) || isNaN(min) || isNaN(max)) return false;
+  if (Number(formattedValue) < min || Number(formattedValue) > max)
+    return false;
   return true;
 };

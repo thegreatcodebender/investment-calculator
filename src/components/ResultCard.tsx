@@ -29,9 +29,9 @@ const ResultCard = () => {
     totalInterest,
     investmentAndInterestTotal,
   } = calculateInvestment({
-    amount,
-    duration,
-    interestRate: interest,
+    amount: amount.actualValue,
+    duration: duration.actualValue,
+    interestRate: interest.actualValue,
     investmentMode: investmentMode.title,
     investmentNature,
   });
@@ -43,7 +43,8 @@ const ResultCard = () => {
             : "One-time"
         } Contribution`
       : "Total earnings";
-  const projectedAge = age !== -1 ? age + duration : -1;
+  const projectedAge =
+    age.actualValue !== -1 ? age.actualValue + duration.actualValue : -1;
   const pieData = [
     {
       title: "Total Investment",

@@ -1,4 +1,5 @@
 import rupeeIcon from "../assets/images/rupee.svg";
+import { InputAndActualValue } from "../context/InvestmentContext";
 import { amountINRWithComma } from "../utils/display";
 
 export interface InputFieldProps {
@@ -9,7 +10,7 @@ export interface InputFieldProps {
   inputValueText?: string;
   id: string;
   placeholder: string;
-  value: string | number;
+  value: string | number | InputAndActualValue;
   isRupee?: boolean;
   isYear?: boolean;
   isPercent?: boolean;
@@ -30,6 +31,7 @@ const InputField = ({
   errorText,
   onChange,
 }: InputFieldProps) => {
+  const inputValue = typeof value === "object" ? value.inputValue : value;
   return (
     <div className={`${containerClassName ? containerClassName : ""}`}>
       <label
@@ -59,7 +61,11 @@ const InputField = ({
               id={id}
               name={id}
               placeholder={placeholder}
-              value={amountINRWithComma(Number(value))}
+              value={
+                isNaN(Number(inputValue))
+                  ? inputValue
+                  : amountINRWithComma(Number(inputValue))
+              }
               onChange={onChange}
               className={`${errorText ? "border-red-500" : ""} ${
                 inputClassName ? inputClassName : ""
@@ -78,7 +84,7 @@ const InputField = ({
           id={id}
           name={id}
           placeholder={placeholder}
-          value={value}
+          value={inputValue}
           onChange={onChange}
           className={`${errorText ? "border-red-500" : ""} ${
             inputClassName ? inputClassName : ""
