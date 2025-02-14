@@ -28,3 +28,23 @@ export const omitFirstWord = (words: string): string => {
   wordsArr.shift();
   return wordsArr.join(" ");
 };
+
+/**
+ * Remove starting, ending and inbetween consecutive commas from the provided string
+ * @param {string | number} valueToFormat - Value to remove comma from
+ * @returns {string} Comma removed value if it is valid number, else param value
+ */
+export const removeCommaFromString = (
+  valueToFormat: string | number
+): string => {
+  const formattedValue = String(valueToFormat).replace(
+    /(?!^)(?<!,),(?!,)(?!$)/g,
+    ""
+  );
+
+  if (isNaN(Number(formattedValue))) {
+    return String(valueToFormat);
+  }
+
+  return formattedValue;
+};

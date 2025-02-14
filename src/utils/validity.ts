@@ -1,3 +1,5 @@
+import { removeCommaFromString } from "./display";
+
 /**
  * Check if the value is in range of provided minimum and maximum values
  * @param {number | string} value - Value to be checked
@@ -10,7 +12,7 @@ export const isValueInRange = (
   min: number,
   max: number
 ): boolean => {
-  const formattedValue = String(value).replace(/(?!^)(?<!,),(?!,)(?!$)/g, "");
+  const formattedValue = removeCommaFromString(String(value));
   if (isNaN(Number(formattedValue)) || isNaN(min) || isNaN(max)) return false;
   if (Number(formattedValue) < min || Number(formattedValue) > max)
     return false;

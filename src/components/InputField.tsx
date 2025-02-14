@@ -1,6 +1,6 @@
 import rupeeIcon from "../assets/images/rupee.svg";
 import { InputAndActualValue } from "../context/InvestmentContext";
-import { amountINRWithComma } from "../utils/display";
+import { amountINRWithComma, removeCommaFromString } from "../utils/display";
 
 export enum InputValueType {
   Year = "year",
@@ -39,6 +39,7 @@ const InputField = ({
         ? ""
         : value.inputValue
       : value; // Show the value.inputValue so that even if user types in unsupported format, it will be shown in the input field
+  const commaRemovedInputValue = removeCommaFromString(inputValue);
   const isCurrency = inputValueType === InputValueType.Currency;
   const isYear = inputValueType === InputValueType.Year;
   const isPercent = inputValueType === InputValueType.Percent;
@@ -80,8 +81,8 @@ const InputField = ({
               inputMode="numeric"
               autoComplete="off"
               value={
-                isCurrency && !isNaN(Number(inputValue))
-                  ? amountINRWithComma(Number(inputValue))
+                isCurrency && !isNaN(Number(commaRemovedInputValue))
+                  ? amountINRWithComma(Number(commaRemovedInputValue))
                   : inputValue
               }
               onChange={onChange}
