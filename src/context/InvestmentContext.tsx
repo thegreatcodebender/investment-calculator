@@ -7,6 +7,7 @@ import {
 export interface InputAndActualValue {
   inputValue: number | string;
   actualValue: number;
+  tempValue?: number;
 }
 
 interface State {
@@ -33,7 +34,7 @@ export enum ActionType {
 }
 
 const initialState: State = {
-  amount: { inputValue: 1500000, actualValue: 1500000 },
+  amount: { inputValue: 1500000, actualValue: 1500000, tempValue: -1 },
   duration: { inputValue: 8, actualValue: 8 },
   interestRate: { inputValue: 10, actualValue: 10 },
   investmentNature: INVESTMENT_NATURE_LIST[0].title,
@@ -47,10 +48,17 @@ const investmentReducer = (state: State, action: Action): State => {
       if (!action.payload.actualValue) {
         return {
           ...state,
-          amount: { ...state.amount, inputValue: action.payload.inputValue },
+          amount: {
+            ...state.amount,
+            inputValue: action.payload.inputValue,
+            tempValue: state.amount.tempValue,
+          },
         };
       }
-      return { ...state, amount: action.payload };
+      return {
+        ...state,
+        amount: { ...action.payload, tempValue: state.amount.tempValue },
+      };
     case ActionType.Duration:
       if (!action.payload.actualValue) {
         return {
@@ -84,12 +92,21 @@ const investmentReducer = (state: State, action: Action): State => {
       }
       return { ...state, age: action.payload };
     case ActionType.Mode:
+      const existingTempAmount = state.amount.tempValue; // To get the existing temp amount and update for data persistence
+      const newTempAmount = action.payload.tempAmount ?? existingTempAmount; // Get new temp value to be updated into the state
       return {
         ...state,
         mode: action.payload,
         amount: {
-          inputValue: action.payload.defaultAmount,
-          actualValue: action.payload.defaultAmount,
+          inputValue:
+            existingTempAmount !== -1
+              ? existingTempAmount
+              : action.payload.defaultAmount,
+          actualValue:
+            existingTempAmount !== -1
+              ? existingTempAmount
+              : action.payload.defaultAmount,
+          tempValue: newTempAmount,
         },
       };
     default:

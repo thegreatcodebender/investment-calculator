@@ -147,7 +147,7 @@ const CalculationCard = () => {
         onClick={(modeObj) =>
           dispatchInvestment({
             type: ActionType.Mode,
-            payload: modeObj,
+            payload: { ...modeObj, tempAmount: amount.actualValue },
           })
         }
       />
