@@ -40,14 +40,16 @@ const InputField = ({
         : value.inputValue
       : value; // Show the value.inputValue so that even if user types in unsupported format, it will be shown in the input field
   const commaRemovedInputValue = removeCommaFromString(inputValue);
+  const noTrailingDecimalPoint =
+    commaRemovedInputValue[commaRemovedInputValue.length - 1] !== ".";
   const isCurrency = inputValueType === InputValueType.Currency;
   const isYear = inputValueType === InputValueType.Year;
   const isPercent = inputValueType === InputValueType.Percent;
   return (
     <div className={`${containerClassName ? containerClassName : ""}`}>
       <label
-        className={`text-sm uppercase font-semibold block ${
-          isLabelHidden ? " sr-only" : ""
+        className={`text-sm uppercase font-semibold inline-block ${
+          isLabelHidden ? "sr-only" : ""
         }`}
         htmlFor={id}
       >
@@ -68,7 +70,7 @@ const InputField = ({
               {isCurrency ? (
                 <img src={rupeeIcon} alt="Rupees" className="w-[10px]" />
               ) : (
-                <p className="leading-none">
+                <p className="leading-none select-none">
                   {isPercent ? "%" : isYear && "Years"}
                 </p>
               )}
@@ -78,11 +80,13 @@ const InputField = ({
               id={id}
               name={id}
               placeholder={placeholder}
-              inputMode="numeric"
+              inputMode={isYear ? "numeric" : "decimal"}
               autoComplete="off"
               value={
-                isCurrency && !isNaN(Number(commaRemovedInputValue))
-                  ? amountINRWithComma(Number(commaRemovedInputValue))
+                isCurrency &&
+                !isNaN(Number(commaRemovedInputValue)) &&
+                noTrailingDecimalPoint // Trailing decimal point prevents user from typing decimal values when i18n is used
+                  ? amountINRWithComma(Number(commaRemovedInputValue), true)
                   : inputValue
               }
               onChange={onChange}

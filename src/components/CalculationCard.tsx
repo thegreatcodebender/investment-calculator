@@ -20,11 +20,18 @@ import { INPUT_ERROR_MESSAGE } from "../constants/errors";
 import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
 
+interface Errors {
+  amount: string;
+  duration: string;
+  interest_rate: string;
+  age: string;
+}
+
 const CalculationCard = () => {
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<Errors>({
     amount: "",
     duration: "",
-    interestRate: "",
+    interest_rate: "",
     age: "",
   });
   const investmentState = useInvestmentState();
@@ -35,6 +42,30 @@ const CalculationCard = () => {
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const activeMode = investmentState.mode;
+
+  /**
+   * Set the error for field name passed, as `true` if the validity is true and, `false` if otherwise
+   * @param {ActionType} actionType - Action type enum value which includes the field name
+   * @param {boolean} isValid - Boolean state of validity of the input field
+   */
+  const modifyError = (actionType: ActionType, isValid: boolean) => {
+    const fieldName = actionType.split("SET_")[1];
+    if (!fieldName) {
+      throw new Error("Field name doesn't exist");
+    }
+    const fieldNameLowerCase = fieldName.toLowerCase();
+    if (!isValid) {
+      setErrors((prev) => ({
+        ...prev,
+        [fieldNameLowerCase]: INPUT_ERROR_MESSAGE[fieldName].rangeError,
+      }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        [fieldNameLowerCase]: "",
+      }));
+    }
+  };
 
   // To handle the input change
   const handleInputChange = (
@@ -52,17 +83,6 @@ const CalculationCard = () => {
           SLIDER_INPUT_METADATA.AMOUNT.min,
           SLIDER_INPUT_METADATA.AMOUNT.max
         );
-        if (!isValid) {
-          setErrors((prev) => ({
-            ...prev,
-            amount: INPUT_ERROR_MESSAGE.AMOUNT.rangeError,
-          }));
-        } else {
-          setErrors((prev) => ({
-            ...prev,
-            amount: "",
-          }));
-        }
         break;
       case ActionType.Duration:
         isValid = isValueInRange(
@@ -70,17 +90,6 @@ const CalculationCard = () => {
           SLIDER_INPUT_METADATA.DURATION.min,
           SLIDER_INPUT_METADATA.DURATION.max
         );
-        if (!isValid) {
-          setErrors((prev) => ({
-            ...prev,
-            duration: INPUT_ERROR_MESSAGE.DURATION.rangeError,
-          }));
-        } else {
-          setErrors((prev) => ({
-            ...prev,
-            duration: "",
-          }));
-        }
         break;
       case ActionType.InterestRate:
         isValid = isValueInRange(
@@ -88,17 +97,6 @@ const CalculationCard = () => {
           SLIDER_INPUT_METADATA.INTEREST_RATE.min,
           SLIDER_INPUT_METADATA.INTEREST_RATE.max
         );
-        if (!isValid) {
-          setErrors((prev) => ({
-            ...prev,
-            interestRate: INPUT_ERROR_MESSAGE.INTEREST_RATE.rangeError,
-          }));
-        } else {
-          setErrors((prev) => ({
-            ...prev,
-            interestRate: "",
-          }));
-        }
         break;
       case ActionType.Age:
         isValid = isValueInRange(
@@ -106,21 +104,11 @@ const CalculationCard = () => {
           INPUT_FIELD_METADATA.AGE.min,
           INPUT_FIELD_METADATA.AGE.max
         );
-        if (!isValid) {
-          setErrors((prev) => ({
-            ...prev,
-            age: INPUT_ERROR_MESSAGE.AGE.rangeError,
-          }));
-        } else {
-          setErrors((prev) => ({
-            ...prev,
-            age: "",
-          }));
-        }
         break;
       default:
         break;
     }
+
     if (isValid) {
       dispatchInvestment({
         type: actionType,
@@ -137,6 +125,8 @@ const CalculationCard = () => {
         },
       });
     }
+    // Update the error
+    modifyError(actionType, isValid);
   };
   return (
     <Card className="w-full min-lg:w-[60%]">
@@ -144,12 +134,14 @@ const CalculationCard = () => {
       <TabGroup
         data={INVESTMENT_MODES}
         activeTab={activeMode.title}
-        onClick={(modeObj) =>
+        onClick={(modeObj) => {
           dispatchInvestment({
             type: ActionType.Mode,
-            payload: { ...modeObj, tempAmount: amount.actualValue },
-          })
-        }
+            payload: modeObj,
+          });
+          // Reset the amount error since the mode change will replace the amount input value with the actual value
+          modifyError(ActionType.Amount, true);
+        }}
       />
       {/* Input fields */}
       <div className="mt-6">
@@ -197,7 +189,7 @@ const CalculationCard = () => {
           }}
           containerClassName="mt-6"
           inputClassName="w-24"
-          errorText={errors.interestRate}
+          errorText={errors.interest_rate}
           inputValueType={InputValueType.Percent}
         />
         <div className="min-sm:flex gap-14 mt-6">

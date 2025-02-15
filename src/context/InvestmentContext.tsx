@@ -7,7 +7,7 @@ import {
 export interface InputAndActualValue {
   inputValue: number | string;
   actualValue: number;
-  tempValue?: number;
+  prevModeAmount?: number;
 }
 
 interface State {
@@ -25,7 +25,7 @@ interface Action {
 }
 
 export enum ActionType {
-  Amount = "SET_TARGET_AMOUNT",
+  Amount = "SET_AMOUNT",
   Duration = "SET_DURATION",
   InterestRate = "SET_INTEREST_RATE",
   InvestmentNature = "SET_INVESTMENT_NATURE",
@@ -34,7 +34,7 @@ export enum ActionType {
 }
 
 const initialState: State = {
-  amount: { inputValue: 1500000, actualValue: 1500000, tempValue: -1 },
+  amount: { inputValue: 1500000, actualValue: 1500000, prevModeAmount: -1 },
   duration: { inputValue: 8, actualValue: 8 },
   interestRate: { inputValue: 10, actualValue: 10 },
   investmentNature: INVESTMENT_NATURE_LIST[0].title,
@@ -51,13 +51,16 @@ const investmentReducer = (state: State, action: Action): State => {
           amount: {
             ...state.amount,
             inputValue: action.payload.inputValue,
-            tempValue: state.amount.tempValue,
+            prevModeAmount: state.amount.prevModeAmount,
           },
         };
       }
       return {
         ...state,
-        amount: { ...action.payload, tempValue: state.amount.tempValue },
+        amount: {
+          ...action.payload,
+          prevModeAmount: state.amount.prevModeAmount,
+        },
       };
     case ActionType.Duration:
       if (!action.payload.actualValue) {
@@ -92,21 +95,21 @@ const investmentReducer = (state: State, action: Action): State => {
       }
       return { ...state, age: action.payload };
     case ActionType.Mode:
-      const existingTempAmount = state.amount.tempValue; // To get the existing temp amount and update for data persistence
-      const newTempAmount = action.payload.tempAmount ?? existingTempAmount; // Get new temp value to be updated into the state
+      const existingPrevModeAmount = state.amount.prevModeAmount; // To get the existing prev mode amount for data persistence between modes
+      const newPrevModeAmount = state.amount.actualValue; // Get new prev mode value to be updated into the state
       return {
         ...state,
         mode: action.payload,
         amount: {
           inputValue:
-            existingTempAmount !== -1
-              ? existingTempAmount
+            existingPrevModeAmount !== -1
+              ? existingPrevModeAmount
               : action.payload.defaultAmount,
           actualValue:
-            existingTempAmount !== -1
-              ? existingTempAmount
+            existingPrevModeAmount !== -1
+              ? existingPrevModeAmount
               : action.payload.defaultAmount,
-          tempValue: newTempAmount,
+          prevModeAmount: newPrevModeAmount,
         },
       };
     default:

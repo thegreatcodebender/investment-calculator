@@ -3,15 +3,20 @@
  * @param {number} amount Amount
  * @returns {string} Comma seperated amount
  */
-export const amountINRWithComma = (amount: number): string => {
+export const amountINRWithComma = (
+  amount: number,
+  showDecimal = false
+): string => {
   if (typeof amount !== "number" || isNaN(amount)) {
     throw new Error("Input must be a valid number.");
   }
+  const isDecimal = amount.toString().includes(".");
   const formattedAmount = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     currencyDisplay: "code",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: isDecimal && showDecimal ? 2 : 0,
   }).format(amount);
 
   // Remove currency code
@@ -37,13 +42,12 @@ export const omitFirstWord = (words: string): string => {
 export const removeCommaFromString = (
   valueToFormat: string | number
 ): string => {
-  const formattedValue = String(valueToFormat).replace(
-    /(?!^)(?<!,),(?!,)(?!$)/g,
-    ""
-  );
+  const formattedValue = valueToFormat
+    .toString()
+    .replace(/(?!^)(?<!,),(?!,)(?!$)/g, "");
 
   if (isNaN(Number(formattedValue))) {
-    return String(valueToFormat);
+    return valueToFormat.toString();
   }
 
   return formattedValue;

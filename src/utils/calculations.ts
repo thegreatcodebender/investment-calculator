@@ -16,6 +16,7 @@ interface InvestmentResult {
   totalInterest: number;
   investmentAndInterestTotal: number;
 }
+
 /**
  * Calculate monthly contribution required to achieve target amount
  * @param {Object} params Parameters
@@ -50,12 +51,12 @@ export const calculateInvestment = ({
         contribution = // Monthly contribution
           (targetAmount * monthlyInterest) /
           ((1 + monthlyInterest) ** monthsCount - 1);
-        contributionRounded = Math.round(contribution);
-        totalInvestment = Math.round(contribution * monthsCount);
+        contributionRounded = contribution;
+        totalInvestment = contribution * monthsCount;
         totalInterest = targetAmount - totalInvestment;
       } else {
         contribution = targetAmount / (1 + monthlyInterest) ** monthsCount; // One-time contribution
-        contributionRounded = Math.round(contribution);
+        contributionRounded = contribution;
         totalInvestment = targetAmount;
         totalInterest = targetAmount - contribution;
       }
@@ -73,7 +74,7 @@ export const calculateInvestment = ({
           investmentAmount * (1 + monthlyInterest) ** monthsCount;
         totalInvestment = investmentAmount;
       }
-      totalInterest = Math.round(investmentAndInterestTotal - totalInvestment);
+      totalInterest = investmentAndInterestTotal - totalInvestment;
       break;
   }
 
