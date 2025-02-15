@@ -150,6 +150,7 @@ const useInvestmentParams = () => {
             defaultAmount: isParamAmountInRange
               ? paramAmount
               : investmentModeObj?.defaultAmount,
+            prevModeAmount: -1,
           },
         });
 

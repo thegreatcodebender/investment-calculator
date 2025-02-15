@@ -96,10 +96,12 @@ const investmentReducer = (state: State, action: Action): State => {
       return { ...state, age: action.payload };
     case ActionType.Mode:
       const existingPrevModeAmount = state.amount.prevModeAmount; // To get the existing prev mode amount for data persistence between modes
-      const newPrevModeAmount = state.amount.actualValue; // Get new prev mode value to be updated into the state
+      const newPrevModeAmount =
+        action.payload.prevModeAmount ?? state.amount.actualValue; // Get new prev mode value to be updated into the state
+      const { title, shortName, defaultAmount }: State["mode"] = action.payload;
       return {
         ...state,
-        mode: action.payload,
+        mode: { title, shortName, defaultAmount },
         amount: {
           inputValue:
             existingPrevModeAmount !== -1
