@@ -1,12 +1,4 @@
-interface RadioProps {
-  isChecked?: boolean;
-  name: string;
-  containerClassName?: string;
-  id: string;
-  label: string;
-  inputClassName?: string;
-  onChange: (args: any) => void;
-}
+import { RadioProps } from "../types/radio";
 
 const Radio = ({
   isChecked,

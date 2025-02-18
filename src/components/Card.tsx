@@ -1,9 +1,5 @@
 import { PropsWithChildren } from "react";
-
-interface CardProps {
-  bgColor?: string;
-  className?: string;
-}
+import { CardProps } from "../types/card";
 
 const Card = ({
   bgColor,

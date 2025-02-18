@@ -6,7 +6,7 @@ import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
-import InputField, { InputValueType } from "./InputField";
+import InputField from "./InputField";
 import {
   useInvestmentDispatch,
   useInvestmentState,
@@ -19,6 +19,7 @@ import { INPUT_ERROR_MESSAGE } from "../constants/errors";
 import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
+import { InputValueType } from "../types/inputField";
 
 interface Errors {
   amount: string;

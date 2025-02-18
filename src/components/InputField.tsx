@@ -1,25 +1,6 @@
 import rupeeIcon from "../assets/images/rupee.svg";
-import { InputAndActualValue } from "../types/investmentContext";
+import { InputFieldProps, InputValueType } from "../types/inputField";
 import { amountINRWithComma, removeCommaFromString } from "../utils/display";
-
-export enum InputValueType {
-  Year = "year",
-  Currency = "currency",
-  Percent = "percent",
-}
-
-export interface InputFieldProps {
-  label: string;
-  isLabelHidden?: boolean;
-  containerClassName?: string;
-  inputClassName?: string;
-  id: string;
-  placeholder: string;
-  value: string | number | InputAndActualValue;
-  inputValueType?: InputValueType;
-  errorText?: string;
-  onChange?: (args: any) => void;
-}
 
 const InputField = ({
   label,

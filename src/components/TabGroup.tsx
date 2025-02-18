@@ -2,14 +2,7 @@ import Tab from "./Tab";
 import { INVESTMENT_MODES } from "../constants/investment";
 import useIsMobile from "../hooks/useIsMobile";
 import { useState } from "react";
-
-interface TabGroupProps {
-  data: typeof INVESTMENT_MODES;
-  activeTab: string;
-  onClick: (modeObj: (typeof INVESTMENT_MODES)[0]) => void;
-}
-
-export type TabMap = Map<string, HTMLElement>;
+import { TabGroupProps } from "../types/tabGroup";
 
 const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
   const [isScrollIntoViewActive, setIsScrollIntoViewActive] = useState(false); // To prevent scrollIntoView from firing on page load

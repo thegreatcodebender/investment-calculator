@@ -1,15 +1,13 @@
-// hooks/useDebounce.ts
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
-const useDebounce = (callback: (...args: any[]) => void, delay = 250) => {
-  let timeoutId: number;
+const useDebounce = (callback: (...args: unknown[]) => void, delay = 250) => {
+  const timeoutId = useRef<number>();
 
   const debouncedFn = useCallback(
-    (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => callback(...args), delay);
-
-      return () => clearTimeout(timeoutId);
+    (...args: unknown[]) => {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = setTimeout(() => callback(...args), delay);
+      return () => clearTimeout(timeoutId.current);
     },
     [callback, delay]
   );

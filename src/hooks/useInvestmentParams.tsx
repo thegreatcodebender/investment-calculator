@@ -73,7 +73,7 @@ const useInvestmentParams = () => {
       const paramMode = params.mode as InvestmentModeShortName;
       const paramAge = Number(params.age);
 
-      let isParamAmountInRange = isValueInRange(
+      const isParamAmountInRange = isValueInRange(
         paramAmount,
         SLIDER_INPUT_METADATA.AMOUNT.min,
         SLIDER_INPUT_METADATA.AMOUNT.max

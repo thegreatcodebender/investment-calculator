@@ -1,15 +1,9 @@
+import { InputValueType } from "../types/inputField";
+import { SliderWithInputProps } from "../types/sliderWithInput";
 import { omitFirstWord } from "../utils/display";
 import { RupeeIcon } from "./Icons";
-import InputField, { InputFieldProps, InputValueType } from "./InputField";
+import InputField from "./InputField";
 import { ToWords } from "to-words";
-
-interface SliderWithInputProps extends InputFieldProps {
-  min: number;
-  max: number;
-  step?: number;
-  id: string;
-  isLabelHidden?: boolean;
-}
 
 const SliderWithInput = ({
   min,
@@ -37,10 +31,10 @@ const SliderWithInput = ({
 
   // To handle slider input change and active track width
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange(e);
+    if (onChange) onChange(e);
   };
 
-  const getLegend = (legendValue: any) => {
+  const getLegend = (legendValue: string | number) => {
     switch (inputValueType) {
       case InputValueType.Currency:
         return (
@@ -51,7 +45,9 @@ const SliderWithInput = ({
 
             {legendValue.toString()[0] +
               " " +
-              omitFirstWord(toWords.convert(legendValue))}
+              (typeof legendValue === "number"
+                ? omitFirstWord(toWords.convert(legendValue))
+                : "Error")}
           </span>
         );
       case InputValueType.Year:

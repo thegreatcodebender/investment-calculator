@@ -1,13 +1,5 @@
-import { INVESTMENT_NATURE_LIST } from "../constants/investment";
+import { RadioGroupProps } from "../types/radioGroup";
 import Radio from "./Radio";
-interface RadioGroupProps {
-  name: string;
-  selectedRadioLabel: string;
-  data: typeof INVESTMENT_NATURE_LIST;
-  title?: string;
-  containerClassName?: string;
-  onChange: (args: any) => void;
-}
 
 const RadioGroup = ({
   name,

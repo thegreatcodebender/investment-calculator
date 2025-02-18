@@ -1,10 +1,5 @@
 import { PropsWithChildren } from "react";
-interface TabProps {
-  children: string;
-  isActive?: boolean;
-  onClick?: () => void;
-  refFn: (node: HTMLButtonElement) => void;
-}
+import { TabProps } from "../types/tab";
 
 const Tab = ({
   children,

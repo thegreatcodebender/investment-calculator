@@ -1,11 +1,5 @@
 import { PropsWithChildren } from "react";
-
-interface ButtonProps {
-  className?: string;
-  onClick?: (args: any) => void;
-  type?: "button" | "submit";
-  btnType: "primary" | "secondary";
-}
+import { ButtonProps } from "../types/button";
 
 export const Button = ({
   className,
