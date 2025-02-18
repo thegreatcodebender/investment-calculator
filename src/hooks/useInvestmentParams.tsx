@@ -5,7 +5,6 @@ import {
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
 import {
-  ActionType,
   useInvestmentDispatch,
   useInvestmentState,
 } from "../context/InvestmentContext";
@@ -14,6 +13,7 @@ import {
   INPUT_FIELD_METADATA,
   SLIDER_INPUT_METADATA,
 } from "../constants/input";
+import { ActionType } from "../types/investmentContext";
 
 const investmentNatureShortNames = INVESTMENT_NATURE_LIST.map(
   ({ shortName }) => shortName
@@ -45,7 +45,7 @@ const useInvestmentParams = () => {
     urlParams.set("duration", duration.toString());
     urlParams.set("interest", interest.toString());
     const natureShortName = INVESTMENT_NATURE_LIST.find(
-      ({ title }) => title === investmentNature
+      ({ title }) => title === investmentNature.actualValue
     )?.shortName;
     urlParams.set("nature", natureShortName ?? "");
     urlParams.set("mode", activeMode.shortName ?? "");

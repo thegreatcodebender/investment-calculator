@@ -1,5 +1,5 @@
 import rupeeIcon from "../assets/images/rupee.svg";
-import { InputAndActualValue } from "../context/InvestmentContext";
+import { InputAndActualValue } from "../types/investmentContext";
 import { amountINRWithComma, removeCommaFromString } from "../utils/display";
 
 export enum InputValueType {

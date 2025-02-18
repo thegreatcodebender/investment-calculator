@@ -1,50 +1,37 @@
 import React, { createContext, ReactNode, useContext, useReducer } from "react";
-import {
-  INVESTMENT_MODES,
-  INVESTMENT_NATURE_LIST,
-} from "../constants/investment";
-
-export interface InputAndActualValue {
-  inputValue: number | string;
-  actualValue: number;
-  prevModeAmount?: number;
-}
-
-interface State {
-  amount: InputAndActualValue;
-  duration: InputAndActualValue;
-  interestRate: InputAndActualValue;
-  investmentNature: string;
-  age: InputAndActualValue;
-  mode: { title: string; shortName: string; defaultAmount: number };
-}
-
-interface Action {
-  type: ActionType;
-  payload: any;
-}
-
-export enum ActionType {
-  Amount = "SET_AMOUNT",
-  Duration = "SET_DURATION",
-  InterestRate = "SET_INTEREST_RATE",
-  InvestmentNature = "SET_INVESTMENT_NATURE",
-  Age = "SET_AGE",
-  Mode = "SET_MODE",
-}
+import { INVESTMENT_INITIAL_STATE } from "../constants/investment";
+import { Action, ActionType, State } from "../types/investmentContext";
 
 const initialState: State = {
-  amount: { inputValue: 1500000, actualValue: 1500000, prevModeAmount: -1 },
-  duration: { inputValue: 8, actualValue: 8 },
-  interestRate: { inputValue: 10, actualValue: 10 },
-  investmentNature: INVESTMENT_NATURE_LIST[0].title,
-  age: { inputValue: -1, actualValue: -1 },
-  mode: INVESTMENT_MODES[0],
+  amount: {
+    inputValue: INVESTMENT_INITIAL_STATE.AMOUNT,
+    actualValue: INVESTMENT_INITIAL_STATE.AMOUNT,
+    prevModeAmount: INVESTMENT_INITIAL_STATE.AMOUNT,
+  },
+  duration: {
+    inputValue: INVESTMENT_INITIAL_STATE.DURATION,
+    actualValue: INVESTMENT_INITIAL_STATE.DURATION,
+    prevModeDuration: INVESTMENT_INITIAL_STATE.DURATION,
+  },
+  interestRate: {
+    inputValue: INVESTMENT_INITIAL_STATE.INTEREST_RATE,
+    actualValue: INVESTMENT_INITIAL_STATE.INTEREST_RATE,
+    prevModeInterestRate: INVESTMENT_INITIAL_STATE.INTEREST_RATE,
+  },
+  investmentNature: {
+    actualValue: INVESTMENT_INITIAL_STATE.INVESTMENT_NATURE,
+    prevModeInvestmentNature: INVESTMENT_INITIAL_STATE.INVESTMENT_NATURE,
+  },
+  age: {
+    inputValue: INVESTMENT_INITIAL_STATE.AGE,
+    actualValue: INVESTMENT_INITIAL_STATE.AGE,
+  },
+  mode: INVESTMENT_INITIAL_STATE.MODE,
 };
 
 const investmentReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case ActionType.Amount:
+    case ActionType.Amount: {
       if (!action.payload.actualValue) {
         return {
           ...state,
@@ -62,31 +49,55 @@ const investmentReducer = (state: State, action: Action): State => {
           prevModeAmount: state.amount.prevModeAmount,
         },
       };
-    case ActionType.Duration:
+    }
+    case ActionType.Duration: {
       if (!action.payload.actualValue) {
         return {
           ...state,
           duration: {
             ...state.duration,
             inputValue: action.payload.inputValue,
+            prevModeDuration: state.duration.prevModeDuration,
           },
         };
       }
-      return { ...state, duration: action.payload };
-    case ActionType.InterestRate:
+      return {
+        ...state,
+        duration: {
+          ...action.payload,
+          prevModeDuration: state.duration.prevModeDuration,
+        },
+      };
+    }
+    case ActionType.InterestRate: {
       if (!action.payload.actualValue) {
         return {
           ...state,
           interestRate: {
             ...state.interestRate,
             inputValue: action.payload.inputValue,
+            prevModeInterestRate: state.interestRate.prevModeInterestRate,
           },
         };
       }
-      return { ...state, interestRate: action.payload };
-    case ActionType.InvestmentNature:
-      return { ...state, investmentNature: action.payload };
-    case ActionType.Age:
+      return {
+        ...state,
+        interestRate: {
+          ...action.payload,
+          prevModeInterestRate: state.interestRate.prevModeInterestRate,
+        },
+      };
+    }
+    case ActionType.InvestmentNature: {
+      return {
+        ...state,
+        investmentNature: {
+          actualValue: action.payload,
+          prevModeInvestmentNature: state.investmentNature.actualValue,
+        },
+      };
+    }
+    case ActionType.Age: {
       if (!action.payload.actualValue) {
         return {
           ...state,
@@ -94,10 +105,26 @@ const investmentReducer = (state: State, action: Action): State => {
         };
       }
       return { ...state, age: action.payload };
-    case ActionType.Mode:
+    }
+    case ActionType.Mode: {
+      if (action.payload.title === state.mode.title) {
+        return state;
+      }
       const existingPrevModeAmount = state.amount.prevModeAmount; // To get the existing prev mode amount for data persistence between modes
+      const existingPrevModeDuration = state.duration.prevModeDuration;
+      const existingPrevModeInterestRate =
+        state.interestRate.prevModeInterestRate;
+      const existingPrevModeInvestmentNature =
+        state.investmentNature.prevModeInvestmentNature;
       const newPrevModeAmount =
         action.payload.prevModeAmount ?? state.amount.actualValue; // Get new prev mode value to be updated into the state
+      const newPrevModeDuration =
+        action.payload.prevModeDuration ?? state.duration.actualValue;
+      const newPrevModeInterestRate =
+        action.payload.prevModeInterestRate ?? state.interestRate.actualValue;
+      const newPrevModeInvestmentNature =
+        action.payload.prevModeInvestmentNature ??
+        state.investmentNature.prevModeInvestmentNature;
       const { title, shortName, defaultAmount }: State["mode"] = action.payload;
       return {
         ...state,
@@ -113,9 +140,25 @@ const investmentReducer = (state: State, action: Action): State => {
               : action.payload.defaultAmount,
           prevModeAmount: newPrevModeAmount,
         },
+        duration: {
+          inputValue: existingPrevModeDuration,
+          actualValue: existingPrevModeDuration,
+          prevModeDuration: newPrevModeDuration,
+        },
+        interestRate: {
+          inputValue: existingPrevModeInterestRate,
+          actualValue: existingPrevModeInterestRate,
+          prevModeInterestRate: newPrevModeInterestRate,
+        },
+        investmentNature: {
+          actualValue: existingPrevModeInvestmentNature,
+          prevModeInvestmentNature: newPrevModeInvestmentNature,
+        },
       };
-    default:
+    }
+    default: {
       throw new Error(`Unknown action type: ${action.type}`);
+    }
   }
 };
 

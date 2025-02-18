@@ -8,7 +8,6 @@ import {
 } from "../constants/investment";
 import InputField, { InputValueType } from "./InputField";
 import {
-  ActionType,
   useInvestmentDispatch,
   useInvestmentState,
 } from "../context/InvestmentContext";
@@ -19,6 +18,7 @@ import {
 import { INPUT_ERROR_MESSAGE } from "../constants/errors";
 import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
+import { ActionType } from "../types/investmentContext";
 
 interface Errors {
   amount: string;
@@ -196,7 +196,7 @@ const CalculationCard = () => {
           <RadioGroup
             name="investment-nature"
             title="Contribution Type"
-            selectedRadioLabel={investmentNature}
+            selectedRadioLabel={investmentNature.actualValue}
             data={INVESTMENT_NATURE_LIST}
             onChange={(label: string) => {
               dispatchInvestment({

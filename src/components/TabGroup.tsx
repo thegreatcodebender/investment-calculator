@@ -24,7 +24,7 @@ const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
     onClick(modeObj);
     // Prevent scrolling on rerenders
     if (timeoutId) clearTimeout(timeoutId);
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       setIsScrollIntoViewActive(false);
     }, 100);
   };
