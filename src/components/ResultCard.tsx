@@ -33,12 +33,12 @@ const ResultCard = () => {
     duration: duration.actualValue,
     interestRate: interest.actualValue,
     investmentMode: investmentMode.title,
-    investmentNature,
+    investmentNature: investmentNature.actualValue,
   });
   const resultTitle =
     investmentMode.title === INVESTMENT_MODES[0].title
       ? `Required ${
-          investmentNature === INVESTMENT_NATURE_LIST[0].title
+          investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title
             ? INVESTMENT_NATURE_LIST[0].title
             : "One-time"
         } Investment`
