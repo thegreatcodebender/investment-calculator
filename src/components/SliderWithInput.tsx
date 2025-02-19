@@ -18,6 +18,7 @@ const SliderWithInput = ({
   value,
   inputValueType,
   errorText,
+  tooltipText,
   onChange,
 }: SliderWithInputProps) => {
   const inputValue = typeof value === "object" ? value.inputValue : value;
@@ -74,6 +75,7 @@ const SliderWithInput = ({
           isLabelHidden={isLabelHidden}
           inputValueType={inputValueType}
           errorText={errorText}
+          tooltipText={tooltipText}
           onChange={onChange}
           inputClassName={inputClassName}
         />

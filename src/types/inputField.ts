@@ -16,5 +16,6 @@ export interface InputFieldProps {
   value: string | number | InputAndActualValue;
   inputValueType?: InputValueType;
   errorText?: string;
+  tooltipText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

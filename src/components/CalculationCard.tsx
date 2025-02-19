@@ -5,6 +5,7 @@ import RadioGroup from "./RadioGroup";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
+  INVESTMENT_NATURE_TOOLTIP,
 } from "../constants/investment";
 import InputField from "./InputField";
 import {
@@ -132,6 +133,7 @@ const CalculationCard = () => {
     // Update the error
     modifyError(actionType, isValid);
   };
+
   return (
     <Card className="w-full min-lg:w-[60%]">
       {/* Tab navigation */}
@@ -154,6 +156,7 @@ const CalculationCard = () => {
           max={SLIDER_INPUT_METADATA.AMOUNT.max}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
           label={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
+          tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[activeMode.title]}
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
           placeholder={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
           value={amount}
@@ -169,6 +172,7 @@ const CalculationCard = () => {
           max={SLIDER_INPUT_METADATA.DURATION.max}
           step={SLIDER_INPUT_METADATA.DURATION.step}
           label={SLIDER_INPUT_METADATA.DURATION.label}
+          tooltipText={SLIDER_INPUT_METADATA.DURATION.tooltip}
           id={SLIDER_INPUT_METADATA.DURATION.id}
           placeholder={SLIDER_INPUT_METADATA.DURATION.label}
           value={duration}
@@ -185,6 +189,7 @@ const CalculationCard = () => {
           max={SLIDER_INPUT_METADATA.INTEREST_RATE.max}
           step={SLIDER_INPUT_METADATA.INTEREST_RATE.step}
           label={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
+          tooltipText={SLIDER_INPUT_METADATA.INTEREST_RATE.tooltip}
           id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
           placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           value={interest}
@@ -201,6 +206,7 @@ const CalculationCard = () => {
           title="Contribution Type"
           selectedRadioLabel={investmentNature.actualValue}
           data={INVESTMENT_NATURE_LIST}
+          tooltipText={INVESTMENT_NATURE_TOOLTIP}
           containerClassName="mt-6"
           onChange={(label: string) => {
             dispatchInvestment({
@@ -212,6 +218,7 @@ const CalculationCard = () => {
         <div className="min-sm:flex gap-14 mt-6">
           <InputField
             label={INPUT_FIELD_METADATA.AGE.label}
+            tooltipText={INPUT_FIELD_METADATA.AGE.tooltip}
             id={INPUT_FIELD_METADATA.AGE.id}
             value={age}
             placeholder=""
@@ -224,6 +231,7 @@ const CalculationCard = () => {
           />
           <InputField
             label={INPUT_FIELD_METADATA.INFLATION.label}
+            tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip}
             id={INPUT_FIELD_METADATA.INFLATION.id}
             value={inflation}
             placeholder=""

@@ -1,6 +1,7 @@
 import rupeeIcon from "../assets/images/rupee.svg";
 import { InputFieldProps, InputValueType } from "../types/inputField";
 import { amountINRWithComma, removeCommaFromString } from "../utils/display";
+import Tooltip from "./Tooltip";
 
 const InputField = ({
   label,
@@ -12,6 +13,7 @@ const InputField = ({
   value,
   inputValueType,
   errorText,
+  tooltipText,
   onChange,
 }: InputFieldProps) => {
   const inputValue =
@@ -28,14 +30,17 @@ const InputField = ({
   const isPercent = inputValueType === InputValueType.Percent;
   return (
     <div className={`${containerClassName ? containerClassName : ""}`}>
-      <label
-        className={`text-sm uppercase font-semibold inline-block ${
-          isLabelHidden ? "sr-only" : ""
-        }`}
-        htmlFor={id}
-      >
-        {label}
-      </label>
+      <div className="flex gap-3 items-center">
+        <label
+          className={`text-sm uppercase font-semibold inline-block ${
+            tooltipText ? "leading-none" : ""
+          } ${isLabelHidden ? "sr-only" : ""}`}
+          htmlFor={id}
+        >
+          {label}
+        </label>
+        {tooltipText && <Tooltip tooltipContent={tooltipText} />}
+      </div>
       {inputValueType ? (
         <>
           <div className={`relative`}>

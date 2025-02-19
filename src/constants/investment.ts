@@ -2,6 +2,7 @@ export const INVESTMENT_NATURE_LIST = [
   { title: "Monthly", shortName: "monthly" },
   { title: "Lump Sum (One-time)", shortName: "one-time" },
 ];
+export const INVESTMENT_NATURE_TOOLTIP = "Type of invesment that suits you";
 export const INVESTMENT_MODES = [
   { title: "Plan Your Goal", shortName: "target", defaultAmount: 2500000 },
   {
