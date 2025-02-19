@@ -11,7 +11,7 @@ const Radio = ({
 }: RadioProps) => {
   return (
     <div
-      className={`not-last:mb-2 ${
+      className={`max-sm:not-last:mb-2 ${
         containerClassName ? containerClassName : ""
       }`}
     >

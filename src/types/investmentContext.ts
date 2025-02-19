@@ -33,6 +33,7 @@ export interface State {
   investmentNature: InvestmentNature;
   age: InputAndActualValue;
   mode: Mode;
+  inflation: InputAndActualValue;
 }
 
 export interface Action {
@@ -47,4 +48,5 @@ export enum ActionType {
   InvestmentNature = "SET_INVESTMENT_NATURE",
   Age = "SET_AGE",
   Mode = "SET_MODE",
+  Inflation = "SET_INFLATION",
 }

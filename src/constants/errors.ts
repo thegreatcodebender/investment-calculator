@@ -20,4 +20,7 @@ export const INPUT_ERROR_MESSAGE: INPUT_ERROR_MESSAGE_TYPE = {
   AGE: {
     rangeError: `Enter the age between ${INPUT_FIELD_METADATA.AGE.min} - ${INPUT_FIELD_METADATA.AGE.max}.`,
   },
+  INFLATION: {
+    rangeError: `Enter the inflation rate between ${INPUT_FIELD_METADATA.INFLATION.min}% - ${INPUT_FIELD_METADATA.INFLATION.max}%.`,
+  },
 };

@@ -16,16 +16,18 @@ const RadioGroup = ({
           {title}
         </legend>
       )}
-      {data.map(({ title: radioLabel }, index) => (
-        <Radio
-          name={name}
-          id={name + "-radio-" + index}
-          label={radioLabel}
-          key={radioLabel}
-          isChecked={radioLabel === selectedRadioLabel}
-          onChange={onChange}
-        />
-      ))}
+      <div className="sm:flex gap-6 flex-wrap">
+        {data.map(({ title: radioLabel }, index) => (
+          <Radio
+            name={name}
+            id={name + "-radio-" + index}
+            label={radioLabel}
+            key={radioLabel}
+            isChecked={radioLabel === selectedRadioLabel}
+            onChange={onChange}
+          />
+        ))}
+      </div>
     </fieldset>
   );
 };

@@ -34,6 +34,7 @@ const useInvestmentParams = () => {
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age.actualValue;
   const activeMode = investmentState.mode;
+  const inflation = investmentState.inflation.actualValue;
 
   /**
    * Construct URL params for creating the link
@@ -50,6 +51,7 @@ const useInvestmentParams = () => {
     urlParams.set("nature", natureShortName ?? "");
     urlParams.set("mode", activeMode.shortName ?? "");
     urlParams.set("age", age !== -1 ? age.toString() : "");
+    urlParams.set("inflation", inflation ? inflation.toString() : "");
     return urlParams;
   };
 
@@ -72,6 +74,7 @@ const useInvestmentParams = () => {
       const paramNature = params.nature as InvestmentNatureShortName;
       const paramMode = params.mode as InvestmentModeShortName;
       const paramAge = Number(params.age);
+      const paramInflation = Number(params.inflation);
 
       const isParamAmountInRange = isValueInRange(
         paramAmount,
@@ -134,6 +137,19 @@ const useInvestmentParams = () => {
           payload: INVESTMENT_NATURE_LIST.find(
             ({ shortName }) => shortName === paramNature
           )?.title,
+        });
+      }
+      // Update Inflation Rate
+      if (
+        isValueInRange(
+          paramInflation,
+          INPUT_FIELD_METADATA.INFLATION.min,
+          INPUT_FIELD_METADATA.INFLATION.max
+        )
+      ) {
+        dispatchInvestment({
+          type: ActionType.Inflation,
+          payload: { inputValue: paramInflation, actualValue: paramInflation },
         });
       }
       // Update Investment Mode

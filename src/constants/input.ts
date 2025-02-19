@@ -35,4 +35,11 @@ export const INPUT_FIELD_METADATA = {
     default: -1,
     label: "Your Current Age (optional)",
   },
+  INFLATION: {
+    min: 1,
+    max: 10,
+    id: "inflation-rate",
+    default: -1,
+    label: "Expected Inflation Rate",
+  },
 };

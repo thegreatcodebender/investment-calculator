@@ -1,12 +1,15 @@
 import React, { createContext, ReactNode, useContext, useReducer } from "react";
-import { INVESTMENT_INITIAL_STATE } from "../constants/investment";
+import {
+  INVESTMENT_INITIAL_STATE,
+  INVESTMENT_MODES,
+} from "../constants/investment";
 import { Action, ActionType, State } from "../types/investmentContext";
 
 const initialState: State = {
   amount: {
     inputValue: INVESTMENT_INITIAL_STATE.AMOUNT,
     actualValue: INVESTMENT_INITIAL_STATE.AMOUNT,
-    prevModeAmount: INVESTMENT_INITIAL_STATE.AMOUNT,
+    prevModeAmount: INVESTMENT_MODES[1].defaultAmount,
   },
   duration: {
     inputValue: INVESTMENT_INITIAL_STATE.DURATION,
@@ -27,6 +30,10 @@ const initialState: State = {
     actualValue: INVESTMENT_INITIAL_STATE.AGE,
   },
   mode: INVESTMENT_INITIAL_STATE.MODE,
+  inflation: {
+    inputValue: INVESTMENT_INITIAL_STATE.INFLATION,
+    actualValue: INVESTMENT_INITIAL_STATE.INFLATION,
+  },
 };
 
 const investmentReducer = (state: State, action: Action): State => {
@@ -124,7 +131,7 @@ const investmentReducer = (state: State, action: Action): State => {
         action.payload.prevModeInterestRate ?? state.interestRate.actualValue;
       const newPrevModeInvestmentNature =
         action.payload.prevModeInvestmentNature ??
-        state.investmentNature.prevModeInvestmentNature;
+        state.investmentNature.actualValue;
       const { title, shortName, defaultAmount }: State["mode"] = action.payload;
       return {
         ...state,
@@ -155,6 +162,18 @@ const investmentReducer = (state: State, action: Action): State => {
           prevModeInvestmentNature: newPrevModeInvestmentNature,
         },
       };
+    }
+    case ActionType.Inflation: {
+      if (!action.payload.actualValue) {
+        return {
+          ...state,
+          inflation: {
+            ...state.inflation,
+            inputValue: action.payload.inputValue,
+          },
+        };
+      }
+      return { ...state, inflation: action.payload };
     }
     default: {
       throw new Error(`Unknown action type: ${action.type}`);

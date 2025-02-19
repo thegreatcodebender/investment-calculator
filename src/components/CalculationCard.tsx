@@ -20,13 +20,7 @@ import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
 import { InputValueType } from "../types/inputField";
-
-interface Errors {
-  amount: string;
-  duration: string;
-  interest_rate: string;
-  age: string;
-}
+import { Errors } from "../types/errors";
 
 const CalculationCard = () => {
   const [errors, setErrors] = useState<Errors>({
@@ -34,6 +28,7 @@ const CalculationCard = () => {
     duration: "",
     interest_rate: "",
     age: "",
+    inflation: "",
   });
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
@@ -43,6 +38,7 @@ const CalculationCard = () => {
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const activeMode = investmentState.mode;
+  const inflation = investmentState.inflation;
 
   /**
    * Set the error for field name passed, as `true` if the validity is true and, `false` if otherwise
@@ -104,6 +100,13 @@ const CalculationCard = () => {
           inputVal,
           INPUT_FIELD_METADATA.AGE.min,
           INPUT_FIELD_METADATA.AGE.max
+        );
+        break;
+      case ActionType.Inflation:
+        isValid = isValueInRange(
+          inputVal,
+          INPUT_FIELD_METADATA.INFLATION.min,
+          INPUT_FIELD_METADATA.INFLATION.max
         );
         break;
       default:
@@ -193,19 +196,20 @@ const CalculationCard = () => {
           errorText={errors.interest_rate}
           inputValueType={InputValueType.Percent}
         />
+        <RadioGroup
+          name="investment-nature"
+          title="Contribution Type"
+          selectedRadioLabel={investmentNature.actualValue}
+          data={INVESTMENT_NATURE_LIST}
+          containerClassName="mt-6"
+          onChange={(label: string) => {
+            dispatchInvestment({
+              type: ActionType.InvestmentNature,
+              payload: label,
+            });
+          }}
+        />
         <div className="min-sm:flex gap-14 mt-6">
-          <RadioGroup
-            name="investment-nature"
-            title="Contribution Type"
-            selectedRadioLabel={investmentNature.actualValue}
-            data={INVESTMENT_NATURE_LIST}
-            onChange={(label: string) => {
-              dispatchInvestment({
-                type: ActionType.InvestmentNature,
-                payload: label,
-              });
-            }}
-          />
           <InputField
             label={INPUT_FIELD_METADATA.AGE.label}
             id={INPUT_FIELD_METADATA.AGE.id}
@@ -217,6 +221,19 @@ const CalculationCard = () => {
               handleInputChange(e, ActionType.Age);
             }}
             errorText={errors.age}
+          />
+          <InputField
+            label={INPUT_FIELD_METADATA.INFLATION.label}
+            id={INPUT_FIELD_METADATA.INFLATION.id}
+            value={inflation}
+            placeholder=""
+            containerClassName="max-sm:mt-6"
+            inputClassName="w-[98px]"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleInputChange(e, ActionType.Inflation);
+            }}
+            inputValueType={InputValueType.Percent}
+            errorText={errors.inflation}
           />
         </div>
       </div>

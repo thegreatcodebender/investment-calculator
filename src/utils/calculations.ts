@@ -49,7 +49,7 @@ export const calculateInvestment = ({
       const targetAmount = amount;
       if (investmentNature === INVESTMENT_NATURE_LIST[0].title) {
         // Monthly contribution
-        contribution = // Monthly contribution
+        contribution =
           (targetAmount * monthlyInterest) /
           ((1 + monthlyInterest) ** monthsCount - 1);
         contributionRounded = contribution;
@@ -88,4 +88,31 @@ export const calculateInvestment = ({
     totalInterest,
     investmentAndInterestTotal,
   };
+};
+
+interface InflationAdjustedParams {
+  futureValue: number;
+  inflationRate: number;
+  duration: number;
+}
+
+/**
+ * Calculate the inflation adjusted present value of investment value
+ * @param {Object} params Params
+ * @param {number} params.futureValue Future investment value
+ * @param {number} params.inflationRate Annual rate of inflation in percentage
+ * @param {number} params.duration Number of years
+ * @returns {number} Inflation adjusted present value
+ */
+export const calculateInflationAdjustedValue = ({
+  futureValue,
+  inflationRate,
+  duration,
+}: InflationAdjustedParams): number => {
+  if (isNaN(futureValue) || isNaN(inflationRate) || isNaN(duration))
+    throw new Error(`One or more input parameters are not valid numbers`);
+
+  const inflationRateDecimal = inflationRate / 100;
+  const currentValue = futureValue / (1 + inflationRateDecimal) ** duration;
+  return currentValue;
 };

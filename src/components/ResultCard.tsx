@@ -3,7 +3,10 @@ import Card from "./Card";
 import { RupeeIcon } from "./Icons";
 import { Button } from "./Button";
 import { useInvestmentState } from "../context/InvestmentContext";
-import { calculateInvestment } from "../utils/calculations";
+import {
+  calculateInflationAdjustedValue,
+  calculateInvestment,
+} from "../utils/calculations";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -23,6 +26,7 @@ const ResultCard = () => {
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const investmentMode = investmentState.mode;
+  const inflation = investmentState.inflation;
   const {
     contribution,
     totalInvestment,
@@ -48,7 +52,12 @@ const ResultCard = () => {
   const pieData = [
     {
       title: "Total Amount Invested",
-      value: totalInvestment,
+      value:
+        investmentMode.title === INVESTMENT_MODES[0].title
+          ? investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title
+            ? totalInvestment
+            : contribution
+          : totalInvestment,
       fill: "var(--color-accent-green)",
     },
     {
@@ -57,6 +66,15 @@ const ResultCard = () => {
       fill: "var(--color-accent-purple)",
     },
   ];
+
+  const inflationAdjustedValue = calculateInflationAdjustedValue({
+    futureValue:
+      investmentMode.title === INVESTMENT_MODES[1].title
+        ? investmentAndInterestTotal
+        : amount.actualValue,
+    inflationRate: inflation.actualValue,
+    duration: duration.actualValue,
+  });
 
   let copyTextChangeTimeoutId: null | number = null;
   /**
@@ -129,20 +147,30 @@ const ResultCard = () => {
               ? amountINRWithComma(investmentAndInterestTotal)
               : amountINRWithComma(contribution)}
           </p>
+          {/* Inflation projection*/}
+          <p className="text-sm font-normal flex flex-wrap gap-1 mt-4 opacity-80 items-center">
+            {investmentMode.title === INVESTMENT_MODES[0].title &&
+              "Your goal will be"}{" "}
+            equivalent to today's value:
+            <span className="flex gap-0.5 items-center leading-none">
+              <RupeeIcon className="h-[11px]" />
+              {amountINRWithComma(inflationAdjustedValue)}
+            </span>
+          </p>
         </div>
         {/* Sub text */}
         {projectedAge !== -1 &&
           (investmentMode.title === INVESTMENT_MODES[0].title ? (
             <p className="px-8 text-xs mt-4">
               You will achieve your goal at the age of{" "}
-              <span className="font-semibold">{projectedAge}</span> if you start
-              investing now!
+              <span className="font-semibold">{projectedAge.toFixed(0)}</span>{" "}
+              if you start investing now!
             </p>
           ) : (
             <p className="px-8 text-xs mt-4">
               Your investment will achieve the expected growth at the age of{" "}
-              <span className="font-semibold">{projectedAge}</span> if you start
-              now!
+              <span className="font-semibold">{projectedAge.toFixed(0)}</span>{" "}
+              if you start now!
             </p>
           ))}
       </div>
