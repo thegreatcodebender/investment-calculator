@@ -6,5 +6,5 @@ export interface RadioGroupProps {
   data: typeof INVESTMENT_NATURE_LIST;
   title?: string;
   containerClassName?: string;
-  onChange: (args: unknown) => void;
+  onChange: (label: string) => void;
 }

@@ -5,5 +5,5 @@ export interface RadioProps {
   id: string;
   label: string;
   inputClassName?: string;
-  onChange: (args: unknown) => void;
+  onChange: (label: string) => void;
 }
