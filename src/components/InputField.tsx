@@ -30,7 +30,7 @@ const InputField = ({
   const isPercent = inputValueType === InputValueType.Percent;
   return (
     <div className={`${containerClassName ? containerClassName : ""}`}>
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center">
         <label
           className={`text-sm uppercase font-semibold inline-block ${
             tooltipText ? "leading-none" : ""

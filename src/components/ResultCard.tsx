@@ -15,6 +15,8 @@ import { amountINRWithComma } from "../utils/display";
 import useInvestmentParams from "../hooks/useInvestmentParams";
 import { copyToClipboard } from "../utils/nativeActions";
 import { useState } from "react";
+import Tooltip from "./Tooltip";
+import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 
 const ResultCard = () => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
@@ -148,14 +150,18 @@ const ResultCard = () => {
               : amountINRWithComma(contribution)}
           </p>
           {/* Inflation projection*/}
-          <p className="text-sm font-normal flex flex-wrap gap-1 mt-4 opacity-80 items-center">
+          <p className="text-sm font-normal flex flex-wrap mt-4 opacity-80 items-center">
+            Inflation-Adjusted Value{" "}
             {investmentMode.title === INVESTMENT_MODES[0].title &&
-              "Your goal will be"}{" "}
-            equivalent to today's value:
-            <span className="flex gap-0.5 items-center leading-none">
-              <RupeeIcon className="h-[11px]" />
-              {amountINRWithComma(inflationAdjustedValue)}
-            </span>
+              "of your goal"}
+            <Tooltip
+              tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP}
+              iconClassName="sm:!ms-1"
+            />
+          </p>
+          <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">
+            <RupeeIcon className="h-[12px]" />
+            {amountINRWithComma(inflationAdjustedValue)}
           </p>
         </div>
         {/* Sub text */}

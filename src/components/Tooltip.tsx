@@ -39,18 +39,18 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
         onFocus={showTooltip}
         onBlur={hideTooltip}
         onClick={showTooltip}
-        className={`inline-block leading-none text-gray-500 cursor-pointer${
+        className={`flex p-1 max-sm:p-2.25 sm:ms-2 leading-none text-gray-600 cursor-pointer${
           iconClassName ? ` ${iconClassName}` : ""
         }`}
         aria-describedby={`tooltip-${tooltipIdRandom}`}
       >
-        <span className="material-symbols-outlined">info</span>
+        <span className="material-symbols-outlined !text-[18px]">info</span>
       </button>
 
       {isVisible &&
         createPortal(
           <div
-            className="absolute z-999 px-4 py-2 text-xs text-gray-600 max-w-60 bg-white rounded shadow-lg border border-gray-200"
+            className="absolute z-999 p-2 text-xs text-gray-800 min-w-[150px] max-w-60 bg-white rounded shadow-card border border-gray-200"
             role="tooltip"
             id={`tooltip-${tooltipIdRandom}`}
             onMouseEnter={showTooltip}

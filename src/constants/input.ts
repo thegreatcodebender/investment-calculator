@@ -11,9 +11,10 @@ export const SLIDER_INPUT_METADATA = {
       [INVESTMENT_MODES[1].title]: "Investment Amount",
     },
     tooltip: {
-      [INVESTMENT_MODES[0].title]: "Amount you want to achieve with investment",
+      [INVESTMENT_MODES[0].title]:
+        "Enter the total amount you want to achieve (e.g., INR 25,00,000)",
       [INVESTMENT_MODES[1].title]:
-        "Amount you are willing to invest periodically (Monthly or One-time)",
+        "Enter the amount you plan to invest (e.g., INR 10,000)",
     },
   },
   DURATION: {
@@ -22,7 +23,7 @@ export const SLIDER_INPUT_METADATA = {
     step: 1,
     id: "duration-input",
     label: "Investment Timeline",
-    tooltip: "Number of years you want to invest",
+    tooltip: "Enter the number of years you plan to invest (e.g., 10 years)",
   },
   INTEREST_RATE: {
     min: 1,
@@ -30,7 +31,7 @@ export const SLIDER_INPUT_METADATA = {
     step: 0.01,
     id: "interest-input",
     label: "Expected Annual Return",
-    tooltip: "Annual rate of investment growth",
+    tooltip: "Enter the expected annual return on your investment (e.g., 8%)",
   },
 };
 
@@ -41,7 +42,7 @@ export const INPUT_FIELD_METADATA = {
     id: "current-age",
     default: -1,
     label: "Your Current Age (optional)",
-    tooltip: "Project your investment insights from your age",
+    tooltip: "Enter your current age to see when you’ll reach your goal",
   },
   INFLATION: {
     min: 1,
@@ -49,6 +50,7 @@ export const INPUT_FIELD_METADATA = {
     id: "inflation-rate",
     default: -1,
     label: "Expected Inflation Rate",
-    tooltip: "Average inflation rate for the past 5 years: 5.7%",
+    tooltip:
+      "Enter the expected annual inflation rate. Average inflation rate for the past 5 years: 5.7%",
   },
 };
