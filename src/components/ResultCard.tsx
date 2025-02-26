@@ -154,10 +154,7 @@ const ResultCard = () => {
             Inflation-Adjusted Value{" "}
             {investmentMode.title === INVESTMENT_MODES[0].title &&
               "of your goal"}
-            <Tooltip
-              tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP}
-              iconClassName="sm:!ms-1"
-            />
+            <Tooltip tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP} />
           </p>
           <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">
             <RupeeIcon className="h-[12px]" />

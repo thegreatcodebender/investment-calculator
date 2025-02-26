@@ -14,7 +14,7 @@ const RadioGroup = ({
   return (
     <fieldset className={`${containerClassName ? containerClassName : ""}`}>
       {title && (
-        <div className="flex gap-3 items-center mb-2">
+        <div className="flex items-center mb-2">
           <legend
             className={`text-sm uppercase font-semibold block${
               tooltipText ? ` leading-none` : ""

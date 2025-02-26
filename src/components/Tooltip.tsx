@@ -39,7 +39,7 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
         onFocus={showTooltip}
         onBlur={hideTooltip}
         onClick={showTooltip}
-        className={`flex p-1 max-sm:p-2.25 sm:ms-2 leading-none text-gray-600 cursor-pointer${
+        className={`flex p-1 max-sm:p-2.25 sm:ms-1 leading-none text-gray-600 cursor-pointer${
           iconClassName ? ` ${iconClassName}` : ""
         }`}
         aria-describedby={`tooltip-${tooltipIdRandom}`}
