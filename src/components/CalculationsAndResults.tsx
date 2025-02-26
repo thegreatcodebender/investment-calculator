@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -9,6 +10,8 @@ import ResultCard from "./ResultCard";
 import SummaryCard from "./SummaryCard";
 
 const CalculationsAndResults = () => {
+  const [isCalculationCardVisible, setIsCalculationCardVisible] =
+    useState(false);
   const investmentState = useInvestmentState();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -36,8 +39,12 @@ const CalculationsAndResults = () => {
         investmentState={investmentState}
         calculationResult={calculationResult}
         resultTitle={resultTitle}
+        isCalculationCardVisible={isCalculationCardVisible}
       />
-      <CalculationCard investmentState={investmentState} />
+      <CalculationCard
+        investmentState={investmentState}
+        setIsCalculationCardVisible={setIsCalculationCardVisible}
+      />
       <ResultCard
         investmentState={investmentState}
         calculationResult={calculationResult}

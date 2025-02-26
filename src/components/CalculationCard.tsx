@@ -19,9 +19,12 @@ import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
 import { InputValueType } from "../types/inputField";
 import { Errors } from "../types/errors";
-import { InvestmentState } from "../types/investmentState";
+import { CalculationCardProps } from "../types/card";
 
-const CalculationCard = ({ investmentState }: InvestmentState) => {
+const CalculationCard = ({
+  investmentState,
+  setIsCalculationCardVisible,
+}: CalculationCardProps) => {
   const [errors, setErrors] = useState<Errors>({
     amount: "",
     duration: "",
@@ -35,8 +38,19 @@ const CalculationCard = ({ investmentState }: InvestmentState) => {
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
-  const activeMode = investmentState.mode;
+  const investmentMode = investmentState.mode;
   const inflation = investmentState.inflation;
+
+  // Observer to check if the card is in view or not
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setIsCalculationCardVisible(true);
+        else setIsCalculationCardVisible(false);
+      });
+    },
+    { threshold: 0.4 }
+  );
 
   /**
    * Set the error for field name passed, as `true` if the validity is true and, `false` if otherwise
@@ -136,7 +150,7 @@ const CalculationCard = ({ investmentState }: InvestmentState) => {
       {/* Tab navigation */}
       <TabGroup
         data={INVESTMENT_MODES}
-        activeTab={activeMode.title}
+        activeTab={investmentMode.title}
         onClick={(modeObj) => {
           dispatchInvestment({
             type: ActionType.Mode,
@@ -147,15 +161,22 @@ const CalculationCard = ({ investmentState }: InvestmentState) => {
         }}
       />
       {/* Input fields */}
-      <div className="mt-6">
+      <div
+        className="mt-6"
+        ref={(node) => {
+          if (node) observer.observe(node);
+        }}
+      >
         <SliderWithInput
           min={SLIDER_INPUT_METADATA.AMOUNT.min}
           max={SLIDER_INPUT_METADATA.AMOUNT.max}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
-          label={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
-          tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[activeMode.title]}
+          label={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
+          tooltipText={
+            SLIDER_INPUT_METADATA.AMOUNT.tooltip[investmentMode.title]
+          }
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
-          placeholder={SLIDER_INPUT_METADATA.AMOUNT.label[activeMode.title]}
+          placeholder={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Amount);

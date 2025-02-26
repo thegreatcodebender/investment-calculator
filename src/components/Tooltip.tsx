@@ -43,6 +43,7 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
           iconClassName ? ` ${iconClassName}` : ""
         }`}
         aria-describedby={`tooltip-${tooltipIdRandom}`}
+        type="button"
       >
         <span className="material-symbols-outlined !text-[18px]">info</span>
       </button>

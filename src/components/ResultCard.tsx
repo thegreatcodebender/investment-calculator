@@ -13,12 +13,12 @@ import { copyToClipboard } from "../utils/nativeActions";
 import { useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
-import { CalculationCardProps } from "../types/card";
+import { ResultCardProps } from "../types/card";
 
 const ResultCard = ({
   investmentState,
   calculationResult,
-}: CalculationCardProps) => {
+}: ResultCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
@@ -143,9 +143,8 @@ const ResultCard = ({
           </p>
           {/* Inflation projection*/}
           <p className="text-sm font-normal flex flex-wrap mt-4 opacity-80 items-center">
-            Inflation-Adjusted Value{" "}
-            {investmentMode.title === INVESTMENT_MODES[0].title &&
-              "of your goal"}
+            Inflation-Adjusted{" "}
+            {investmentMode.title === INVESTMENT_MODES[0].title && "(Goal)"}
             <Tooltip tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP} />
           </p>
           <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">

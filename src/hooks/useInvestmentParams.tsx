@@ -33,7 +33,7 @@ const useInvestmentParams = () => {
   const interest = investmentState.interestRate.actualValue;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age.actualValue;
-  const activeMode = investmentState.mode;
+  const investmentMode = investmentState.mode;
   const inflation = investmentState.inflation.actualValue;
 
   /**
@@ -49,7 +49,7 @@ const useInvestmentParams = () => {
       ({ title }) => title === investmentNature.actualValue
     )?.shortName;
     urlParams.set("nature", natureShortName ?? "");
-    urlParams.set("mode", activeMode.shortName ?? "");
+    urlParams.set("mode", investmentMode.shortName ?? "");
     urlParams.set("age", age !== -1 ? age.toString() : "");
     urlParams.set("inflation", inflation ? inflation.toString() : "");
     return urlParams;
