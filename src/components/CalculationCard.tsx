@@ -8,10 +8,7 @@ import {
   INVESTMENT_NATURE_TOOLTIP,
 } from "../constants/investment";
 import InputField from "./InputField";
-import {
-  useInvestmentDispatch,
-  useInvestmentState,
-} from "../context/InvestmentContext";
+import { useInvestmentDispatch } from "../context/InvestmentContext";
 import {
   INPUT_FIELD_METADATA,
   SLIDER_INPUT_METADATA,
@@ -22,8 +19,9 @@ import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
 import { InputValueType } from "../types/inputField";
 import { Errors } from "../types/errors";
+import { InvestmentState } from "../types/investmentState";
 
-const CalculationCard = () => {
+const CalculationCard = ({ investmentState }: InvestmentState) => {
   const [errors, setErrors] = useState<Errors>({
     amount: "",
     duration: "",
@@ -31,7 +29,6 @@ const CalculationCard = () => {
     age: "",
     inflation: "",
   });
-  const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount;
   const duration = investmentState.duration;

@@ -1,10 +1,9 @@
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
-import CalculationCard from "./components/CalculationCard";
 import Header from "./components/Header";
-import ResultCard from "./components/ResultCard";
 import { InvestmentProvider } from "./context/InvestmentContext";
 import Footer from "./components/Footer";
+import CalculationsAndResults from "./components/CalculationsAndResults";
 
 const App = () => {
   return (
@@ -19,8 +18,7 @@ const App = () => {
         </p>
         <div className="min-lg:flex gap-6 my-4">
           <InvestmentProvider>
-            <CalculationCard />
-            <ResultCard />
+            <CalculationsAndResults />
           </InvestmentProvider>
         </div>
       </main>

@@ -2,11 +2,7 @@ import { Pie, PieChart, ResponsiveContainer } from "recharts";
 import Card from "./Card";
 import { RupeeIcon } from "./Icons";
 import { Button } from "./Button";
-import { useInvestmentState } from "../context/InvestmentContext";
-import {
-  calculateInflationAdjustedValue,
-  calculateInvestment,
-} from "../utils/calculations";
+import { calculateInflationAdjustedValue } from "../utils/calculations";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -17,14 +13,16 @@ import { copyToClipboard } from "../utils/nativeActions";
 import { useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
+import { CalculationCardProps } from "../types/card";
 
-const ResultCard = () => {
+const ResultCard = ({
+  investmentState,
+  calculationResult,
+}: CalculationCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const { getShareableLink } = useInvestmentParams();
-  const investmentState = useInvestmentState();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
-  const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const age = investmentState.age;
   const investmentMode = investmentState.mode;
@@ -34,13 +32,7 @@ const ResultCard = () => {
     totalInvestment,
     totalInterest,
     investmentAndInterestTotal,
-  } = calculateInvestment({
-    amount: amount.actualValue,
-    duration: duration.actualValue,
-    interestRate: interest.actualValue,
-    investmentMode: investmentMode.title,
-    investmentNature: investmentNature.actualValue,
-  });
+  } = calculationResult;
   const resultTitle =
     investmentMode.title === INVESTMENT_MODES[0].title
       ? `Required ${
