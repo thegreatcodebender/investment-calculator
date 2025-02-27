@@ -24,6 +24,7 @@ import { CalculationCardProps } from "../types/card";
 const CalculationCard = ({
   investmentState,
   setIsCalculationCardVisible,
+  cardRef,
 }: CalculationCardProps) => {
   const [errors, setErrors] = useState<Errors>({
     amount: "",
@@ -146,7 +147,7 @@ const CalculationCard = ({
   };
 
   return (
-    <Card className="w-full min-lg:w-[60%]">
+    <Card className="w-full min-lg:w-[60%]" cardRef={cardRef}>
       {/* Tab navigation */}
       <TabGroup
         data={INVESTMENT_MODES}

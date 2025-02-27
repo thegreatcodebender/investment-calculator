@@ -18,6 +18,7 @@ import { ResultCardProps } from "../types/card";
 const ResultCard = ({
   investmentState,
   calculationResult,
+  cardRef,
 }: ResultCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const { getShareableLink } = useInvestmentParams();
@@ -91,6 +92,7 @@ const ResultCard = ({
     <Card
       className="w-full min-lg:w-[40%] max-lg:mt-8 px-0 flex flex-col justify-between"
       bgColor="bg-primary-light"
+      cardRef={cardRef}
     >
       {/* For screen readers accessibility */}
       <p className="sr-only">Calculation results</p>

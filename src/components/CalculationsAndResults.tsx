@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -12,6 +12,8 @@ import SummaryCard from "./SummaryCard";
 const CalculationsAndResults = () => {
   const [isCalculationCardVisible, setIsCalculationCardVisible] =
     useState(false);
+  const calculationCardRef = useRef<HTMLDivElement | null>(null);
+  const resultCardRef = useRef<HTMLDivElement | null>(null);
   const investmentState = useInvestmentState();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -33,6 +35,22 @@ const CalculationsAndResults = () => {
             : "One-time"
         } Investment`
       : "Total Future Value";
+
+  const handleClick = () => {
+    if (isCalculationCardVisible) {
+      if (resultCardRef.current) {
+        const { top: cardTop } = resultCardRef.current.getBoundingClientRect();
+        window.scrollTo({ behavior: "auto", top: cardTop + 80 });
+      }
+    } else {
+      if (calculationCardRef.current) {
+        calculationCardRef.current.scrollIntoView({
+          behavior: "auto",
+          inline: "start",
+        });
+      }
+    }
+  };
   return (
     <>
       <SummaryCard
@@ -40,15 +58,18 @@ const CalculationsAndResults = () => {
         calculationResult={calculationResult}
         resultTitle={resultTitle}
         isCalculationCardVisible={isCalculationCardVisible}
+        handleClick={handleClick}
       />
       <CalculationCard
         investmentState={investmentState}
         setIsCalculationCardVisible={setIsCalculationCardVisible}
+        cardRef={calculationCardRef}
       />
       <ResultCard
         investmentState={investmentState}
         calculationResult={calculationResult}
         resultTitle={resultTitle}
+        cardRef={resultCardRef}
       />
     </>
   );

@@ -38,7 +38,7 @@ const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
               isMobile &&
               isScrollIntoViewActive
             ) {
-              node.scrollIntoView({ behavior: "smooth", inline: "start" });
+              node.scrollIntoView({ behavior: "auto", inline: "start" });
             }
           }}
         >
