@@ -7,6 +7,7 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const triggerRef = useRef<HTMLButtonElement>(null);
   const tooltipIdRandom = Math.round(Math.random() * 150);
+  const tooltipBodyWidth = 250;
 
   /** Show tooltip by setting the state to true */
   const showTooltip = () => setIsVisible(true);
@@ -17,9 +18,13 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
     if (isVisible && triggerRef.current) {
       const { bottom, left, width } =
         triggerRef.current.getBoundingClientRect();
+      const tooltipRightEdge = left + width + tooltipBodyWidth / 2;
+      const isOverFlowing = tooltipRightEdge > window.innerWidth;
       setPosition({
-        top: bottom + window.scrollY,
-        left: left + width / 2 + window.scrollX,
+        top: bottom + window.scrollY - 4,
+        left: isOverFlowing
+          ? left - tooltipBodyWidth / 4
+          : left + width / 2 + window.scrollX,
       });
     }
   };
@@ -51,7 +56,7 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
       {isVisible &&
         createPortal(
           <div
-            className="absolute z-999 p-2 text-xs text-gray-800 min-w-[150px] max-w-60 bg-white rounded shadow-card border border-gray-200"
+            className="motion-safe:animate-fade-in-fast absolute z-999 p-2.5 sm:p-3 text-xs text-gray-800 max-sm:min-w-[250px] max-w-60 bg-white rounded shadow-card border border-gray-200"
             role="tooltip"
             id={`tooltip-${tooltipIdRandom}`}
             onMouseEnter={showTooltip}
@@ -63,14 +68,6 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
             }}
           >
             {tooltipContent}
-            <div
-              className="absolute w-3 h-3 bg-gray-100 shadow-lg border border-gray-200 [clip-path:polygon(50%_50%,100%_100%,0%_100%)]"
-              style={{
-                top: "-12px",
-                left: "50%",
-                transform: "translateX(-50%)",
-              }}
-            ></div>
           </div>,
           document.body
         )}

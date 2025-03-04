@@ -14,7 +14,7 @@ const SummaryCardContainer: React.FC<
             ? "bottom-[-200px]"
             : "top-[-200px]"
           : ""
-      } transition-all ease-cubic-bezier duration-400 animate-fade-in fixed flex justify-center left-0 w-full  z-9999 lg:hidden`}
+      } motion-safe:transition-all ease-cubic-bezier duration-400 motion-safe:animate-fade-in fixed flex justify-center left-0 w-full  z-9999 lg:hidden`}
       aria-hidden
     >
       <div
