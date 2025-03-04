@@ -10,8 +10,9 @@ import ResultCard from "./ResultCard";
 import SummaryCard from "./SummaryCard";
 
 const CalculationsAndResults = () => {
-  const [isCalculationCardVisible, setIsCalculationCardVisible] =
-    useState(false);
+  const [isCalculationCardVisible, setIsCalculationCardVisible] = useState<
+    null | boolean
+  >(null);
   const calculationCardRef = useRef<HTMLDivElement | null>(null);
   const resultCardRef = useRef<HTMLDivElement | null>(null);
   const investmentState = useInvestmentState();
@@ -36,11 +37,17 @@ const CalculationsAndResults = () => {
         } Investment`
       : "Total Future Value";
 
+  /**
+   * Handle scroll to required card when summary card is clicked
+   */
   const handleClick = () => {
     if (isCalculationCardVisible) {
       if (resultCardRef.current) {
         const { top: cardTop } = resultCardRef.current.getBoundingClientRect();
-        window.scrollTo({ behavior: "auto", top: cardTop + 80 });
+        window.scrollTo({
+          behavior: "auto",
+          top: cardTop + window.scrollY - 80,
+        });
       }
     } else {
       if (calculationCardRef.current) {

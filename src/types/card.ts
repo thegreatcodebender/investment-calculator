@@ -14,11 +14,19 @@ export interface ResultCardProps extends InvestmentState {
 }
 
 export interface CalculationCardProps extends InvestmentState {
-  setIsCalculationCardVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsCalculationCardVisible: React.Dispatch<
+    React.SetStateAction<null | boolean>
+  >;
   cardRef: Ref<HTMLDivElement>;
 }
 
 export interface SummaryCardProps extends ResultCardProps {
-  isCalculationCardVisible: boolean;
+  isCalculationCardVisible: null | boolean;
+  handleClick: () => void;
+}
+
+export interface SummaryCardContainerProps {
+  position: "bottom" | "top";
+  isVisible: boolean;
   handleClick: () => void;
 }
