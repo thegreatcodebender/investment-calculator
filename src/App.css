@@ -41,6 +41,12 @@
   :root {
     color: #222222;
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      scroll-behavior: smooth;
+    }
+  }
 }
 
 @layer components {

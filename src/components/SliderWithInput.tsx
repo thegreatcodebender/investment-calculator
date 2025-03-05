@@ -35,6 +35,11 @@ const SliderWithInput = ({
     if (onChange) onChange(e);
   };
 
+  /**
+   * Get legend with unit for input
+   * @param {string | number} legendValue Value to be shown as legend
+   * @returns Legend with unit
+   */
   const getLegend = (legendValue: string | number) => {
     switch (inputValueType) {
       case InputValueType.Currency:
@@ -59,6 +64,7 @@ const SliderWithInput = ({
         break;
     }
   };
+
   return (
     <fieldset className={containerClassName}>
       <legend className="sr-only">{label}</legend>
