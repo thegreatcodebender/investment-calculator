@@ -20,6 +20,7 @@ import { ActionType } from "../types/investmentContext";
 import { InputValueType } from "../types/inputField";
 import { Errors } from "../types/errors";
 import { CalculationCardProps } from "../types/card";
+import { amountINRWithComma } from "../utils/display";
 
 const CalculationCard = ({
   investmentState,
@@ -183,7 +184,7 @@ const CalculationCard = ({
             SLIDER_INPUT_METADATA.AMOUNT.tooltip[investmentMode.title]
           }
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
-          placeholder={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
+          placeholder={amountINRWithComma(SLIDER_INPUT_METADATA.AMOUNT.min)}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Amount);
@@ -199,7 +200,7 @@ const CalculationCard = ({
           label={SLIDER_INPUT_METADATA.DURATION.label}
           tooltipText={SLIDER_INPUT_METADATA.DURATION.tooltip}
           id={SLIDER_INPUT_METADATA.DURATION.id}
-          placeholder={SLIDER_INPUT_METADATA.DURATION.label}
+          placeholder={SLIDER_INPUT_METADATA.DURATION.min.toString()}
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Duration);
@@ -216,7 +217,7 @@ const CalculationCard = ({
           label={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           tooltipText={SLIDER_INPUT_METADATA.INTEREST_RATE.tooltip}
           id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
-          placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
+          placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.min.toString()}
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.InterestRate);
@@ -259,7 +260,7 @@ const CalculationCard = ({
             tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip}
             id={INPUT_FIELD_METADATA.INFLATION.id}
             value={inflation}
-            placeholder=""
+            placeholder={INPUT_FIELD_METADATA.INFLATION.min.toString()}
             containerClassName="max-sm:mt-6"
             inputClassName="w-[98px]"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

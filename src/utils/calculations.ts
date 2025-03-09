@@ -22,8 +22,8 @@ interface InvestmentResult {
  * @param {Object} params Parameters
  * @param {number} params.duration Number of years
  * @param {number} params.interestRate Interest rate in percentage
- * @param {string} params.investmentMode Investment mode
- * @param {string} params.investmentNature Investment nature
+ * @param {string} params.investmentMode Investment mode - Goal or target
+ * @param {string} params.investmentNature Investment nature - monthly or lump sum
  * @returns {Object} Investment details.
  * @property {number} contribution - Monthly contribution required
  * @property {number} totalInvestment - Total amount invested
