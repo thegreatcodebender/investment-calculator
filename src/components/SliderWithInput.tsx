@@ -111,10 +111,7 @@ const SliderWithInput = ({
             }
           ></div>
         </div>
-        <div
-          className="mt-[2px] flex justify-between w-full text-xs"
-          aria-hidden
-        >
+        <div className="mt-1.5 flex justify-between w-full text-xs" aria-hidden>
           {getLegend(min)}
           {getLegend(max)}
         </div>

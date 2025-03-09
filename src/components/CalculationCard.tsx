@@ -138,9 +138,15 @@ const CalculationCard = ({
       dispatchInvestment({
         type: actionType,
         payload: {
-          inputValue: inputVal,
+          inputValue:
+            actionType === "SET_AGE" && inputVal.length === 0 ? -1 : inputVal,
         },
       });
+    }
+    // Age is optional, so no error should be shown when it is empty
+    if (actionType === "SET_AGE" && inputVal.length === 0) {
+      modifyError(actionType, true);
+      return;
     }
     // Update the error
     modifyError(actionType, isValid);

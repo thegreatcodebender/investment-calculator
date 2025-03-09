@@ -106,6 +106,16 @@ const investmentReducer = (state: State, action: Action): State => {
     }
     case ActionType.Age: {
       if (!action.payload.actualValue) {
+        if (action.payload.inputValue === -1) {
+          return {
+            ...state,
+            age: {
+              ...state.age,
+              inputValue: action.payload.inputValue,
+              actualValue: action.payload.inputValue,
+            },
+          };
+        }
         return {
           ...state,
           age: { ...state.age, inputValue: action.payload.inputValue },
