@@ -14,6 +14,7 @@ import { useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
+import GenerateImageButton from "./GenerateImageButton";
 
 const ResultCard = ({
   investmentState,
@@ -34,30 +35,43 @@ const ResultCard = ({
     totalInterest,
     investmentAndInterestTotal,
   } = calculationResult;
-  const resultTitle =
-    investmentMode.title === INVESTMENT_MODES[0].title
-      ? `Required ${
-          investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title
-            ? INVESTMENT_NATURE_LIST[0].title
-            : "One-time"
-        } Investment`
-      : "Total Future Value";
+  const isGoalSelected = investmentMode.title === INVESTMENT_MODES[0].title;
+  const isMonthlySelected =
+    investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title;
+  // Get contribution value when it is available
+  const resultCommaSeperated = amountINRWithComma(
+    contribution === -1 ? investmentAndInterestTotal : contribution
+  );
+  // Result title to be shown according to the contribution type and investment nature
+  const resultTitle = isGoalSelected
+    ? `Required ${
+        isMonthlySelected ? INVESTMENT_NATURE_LIST[0].title : "One-time"
+      } Investment`
+    : "Total Future Value";
+  // Projected age if age is provided
   const projectedAge =
     age.actualValue !== -1 ? age.actualValue + duration.actualValue : -1;
   const pieData = [
     {
       title: "Total Amount Invested",
-      value:
-        investmentMode.title === INVESTMENT_MODES[0].title
-          ? investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title
+      value: isGoalSelected
+        ? isMonthlySelected
+          ? totalInvestment
+          : contribution
+        : totalInvestment,
+      valueCommaSeperated: amountINRWithComma(
+        isGoalSelected
+          ? isMonthlySelected
             ? totalInvestment
             : contribution
-          : totalInvestment,
+          : totalInvestment
+      ),
       fill: "var(--color-accent-green)",
     },
     {
       title: "Total Returns",
       value: totalInterest,
+      valueCommaSeperated: amountINRWithComma(totalInterest),
       fill: "var(--color-accent-purple)",
     },
   ];
@@ -70,6 +84,10 @@ const ResultCard = ({
     inflationRate: inflation.actualValue,
     duration: duration.actualValue,
   });
+
+  const inflationAdjustedCommaSeperated = amountINRWithComma(
+    inflationAdjustedValue
+  );
 
   let copyTextChangeTimeoutId: null | number = null;
   /**
@@ -127,7 +145,7 @@ const ResultCard = ({
               </p>
               <p className="ps-7 flex gap-0.25 mt-2 items-center leading-none text-lg font-semibold">
                 <RupeeIcon className="h-3.25" />
-                {amountINRWithComma(pie.value)}
+                {pie.valueCommaSeperated}
               </p>
             </div>
           ))}
@@ -139,24 +157,21 @@ const ResultCard = ({
           </h2>
           <p className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none">
             <RupeeIcon className="h-[18px]" />
-            {contribution === -1
-              ? amountINRWithComma(investmentAndInterestTotal)
-              : amountINRWithComma(contribution)}
+            {resultCommaSeperated}
           </p>
           {/* Inflation projection*/}
           <p className="text-sm font-normal flex flex-wrap mt-4 opacity-80 items-center">
-            Inflation-Adjusted{" "}
-            {investmentMode.title === INVESTMENT_MODES[0].title && "(Goal)"}
+            Inflation-Adjusted {isGoalSelected && "(Goal)"}
             <Tooltip tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP} />
           </p>
           <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">
             <RupeeIcon className="h-[12px]" />
-            {amountINRWithComma(inflationAdjustedValue)}
+            {inflationAdjustedCommaSeperated}
           </p>
         </div>
         {/* Sub text */}
         {projectedAge !== -1 &&
-          (investmentMode.title === INVESTMENT_MODES[0].title ? (
+          (isGoalSelected ? (
             <p className="px-8 text-xs mt-4">
               You will achieve your goal at the age of{" "}
               <span className="font-semibold">{projectedAge.toFixed(0)}</span>{" "}
@@ -171,10 +186,18 @@ const ResultCard = ({
           ))}
       </div>
       {/* Action button */}
-      <div className="flex items-center justify-center mt-6">
+      <div className="flex flex-wrap gap-3 items-center justify-center mt-6">
         <Button btnType="primary" onClick={handleCopyLink}>
           {copyBtnText}
         </Button>
+        <GenerateImageButton
+          pieData={pieData}
+          investmentState={investmentState}
+          calculationResult={calculationResult}
+          resultTitle={resultTitle}
+          inflationAdjustedValue={inflationAdjustedValue}
+          isGoalSelected={isGoalSelected}
+        />
       </div>
     </Card>
   );

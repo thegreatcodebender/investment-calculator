@@ -87,25 +87,30 @@ const SliderWithInput = ({
         />
       </div>
       <div className="mt-2">
-        <input
-          type="range"
-          name={id + "-slider"}
-          min={min}
-          max={max}
-          step={step}
-          value={actualValue}
-          id={id + "-slider"}
-          onChange={handleSliderChange}
-          className="slider"
-          style={
-            {
-              "--track-active-width": `${(
-                ((Number(actualValue) - min) / (max - min)) *
-                100
-              ).toFixed(2)}%`,
-            } as React.CSSProperties
-          }
-        />
+        <div className="slider-wrapper">
+          <input
+            type="range"
+            name={id + "-slider"}
+            min={min}
+            max={max}
+            step={step}
+            value={actualValue}
+            id={id + "-slider"}
+            onChange={handleSliderChange}
+            className="slider"
+          />
+          <div
+            className="slider-track mt-[-8px]"
+            style={
+              {
+                "--track-active-width": `${(
+                  ((Number(actualValue) - min) / (max - min)) *
+                  100
+                ).toFixed(2)}%`,
+              } as React.CSSProperties
+            }
+          ></div>
+        </div>
         <div
           className="mt-[2px] flex justify-between w-full text-xs"
           aria-hidden
