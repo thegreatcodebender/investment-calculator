@@ -5,14 +5,22 @@ import { TooltipProps } from "../types/tooltip";
 const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [tooltipIdRandom, setTooltipIdRandom] = useState<undefined | number>(
+    undefined
+  );
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const tooltipIdRandom = Math.round(Math.random() * 150);
   const tooltipBodyWidth = 250;
 
   /** Show tooltip by setting the state to true */
-  const showTooltip = () => setIsVisible(true);
+  const showTooltip = () => {
+    setTooltipIdRandom(Math.round(Math.random() * 150));
+    setIsVisible(true);
+  };
   /** Hide tooltip by setting the state to false */
-  const hideTooltip = () => setIsVisible(false);
+  const hideTooltip = () => {
+    setTooltipIdRandom(undefined);
+    setIsVisible(false);
+  };
   /** Place tooltip at required position */
   const placeTooltip = () => {
     if (isVisible && triggerRef.current) {
@@ -47,7 +55,9 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
         className={`flex p-1 max-sm:p-2.25 sm:ms-1 leading-none text-gray-600 cursor-pointer${
           iconClassName ? ` ${iconClassName}` : ""
         }`}
-        aria-describedby={`tooltip-${tooltipIdRandom}`}
+        aria-describedby={
+          tooltipIdRandom ? `tooltip-${tooltipIdRandom}` : undefined
+        }
         type="button"
       >
         <span className="material-symbols-outlined !text-[18px]">info</span>
