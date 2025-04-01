@@ -16,11 +16,9 @@ const App = () => {
         <p className="text-base">
           Fuel your investment journey by placing your expectations upfront!
         </p>
-        <div className="min-lg:flex gap-6 my-4">
-          <InvestmentProvider>
-            <CalculationsAndResults />
-          </InvestmentProvider>
-        </div>
+        <InvestmentProvider>
+          <CalculationsAndResults />
+        </InvestmentProvider>
       </main>
       <Footer />
     </BrowserRouter>

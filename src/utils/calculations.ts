@@ -1,3 +1,4 @@
+import { ToWords } from "to-words";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -115,4 +116,127 @@ export const calculateInflationAdjustedValue = ({
   const inflationRateDecimal = inflationRate / 100;
   const currentValue = futureValue / (1 + inflationRateDecimal) ** duration;
   return currentValue;
+};
+
+interface InvestmentResultsArrParams extends InvestmentParams {
+  inflationRate: number;
+}
+
+/**
+ * Calculate investment progress along the period
+ * @param {Object} params Parameters
+ * @param {number} params.duration Number of years
+ * @param {number} params.interestRate Interest rate in percentage
+ * @param {string} params.investmentMode Investment mode - Goal or target
+ * @param {string} params.investmentNature Investment nature - monthly or lump sum
+ * @returns {Array} With year, with investment, without investment and their inflation adjusted values
+ */
+export const calculateInvestmentProgression = ({
+  amount,
+  duration,
+  interestRate,
+  investmentMode,
+  investmentNature,
+  inflationRate,
+}: InvestmentResultsArrParams) => {
+  let resultArr = [];
+  switch (investmentMode) {
+    case INVESTMENT_MODES[0].title: {
+      const { contribution } = calculateInvestment({
+        amount,
+        duration,
+        interestRate,
+        investmentMode,
+        investmentNature,
+      });
+
+      for (let year = 1; year <= duration; year++) {
+        const { investmentAndInterestTotal } = calculateInvestment({
+          amount: contribution,
+          duration: year,
+          interestRate,
+          investmentMode: INVESTMENT_MODES[1].title, // Use monthly contribution to project the investment
+          investmentNature,
+        });
+        resultArr.push({
+          year,
+          withInvestment: Math.round(investmentAndInterestTotal),
+          withInflnAdj: -1,
+          withoutInflnAdj: -1,
+          withoutInvestment:
+            investmentNature === INVESTMENT_NATURE_LIST[0].title
+              ? Math.round(contribution * year * 12)
+              : Math.round(contribution),
+        });
+      }
+      break;
+    }
+    case INVESTMENT_MODES[1].title: {
+      for (let year = 1; year <= duration; year++) {
+        const { investmentAndInterestTotal } = calculateInvestment({
+          amount,
+          duration: year,
+          interestRate,
+          investmentMode,
+          investmentNature,
+        });
+        resultArr.push({
+          year,
+          withInvestment: Math.round(investmentAndInterestTotal),
+          withInflnAdj: -1,
+          withoutInflnAdj: -1,
+          withoutInvestment:
+            investmentNature === INVESTMENT_NATURE_LIST[1].title
+              ? amount
+              : Math.round(amount * year * 12),
+        });
+      }
+      break;
+    }
+    default:
+      break;
+  }
+
+  // Add inflation adjusted values to the array
+  resultArr.map((resultObj) => {
+    const toWords = new ToWords({
+      converterOptions: {
+        currency: true,
+        doNotAddOnly: true,
+        currencyOptions: {
+          // can be used to override defaults for the selected locale
+          name: "Rupee",
+          plural: "Rupees",
+          symbol: "₹",
+          fractionalUnit: {
+            name: "Lakh",
+            plural: "Lakhs",
+            symbol: "",
+          },
+        },
+      },
+    });
+    const year = resultObj.year;
+    const withoutInflnAdjVal = Math.round(
+      calculateInflationAdjustedValue({
+        futureValue: resultObj.withoutInvestment,
+        inflationRate,
+        duration: year,
+      })
+    );
+    resultObj.withoutInflnAdj = withoutInflnAdjVal;
+    resultObj.withoutInflnAdjWords = toWords.convert(withoutInflnAdjVal);
+    const withInflnAdjVal = Math.round(
+      calculateInflationAdjustedValue({
+        futureValue: resultObj.withInvestment,
+        inflationRate,
+        duration: year,
+      })
+    );
+    resultObj.withInflnAdj = withInflnAdjVal;
+    resultObj.withInflnAdjAdjWords = toWords.convert(withInflnAdjVal);
+    // resultObj.
+  });
+
+  return resultArr;
 };

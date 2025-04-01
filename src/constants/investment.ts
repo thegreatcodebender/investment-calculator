@@ -1,9 +1,3 @@
-export const INVESTMENT_NATURE_LIST = [
-  { title: "Monthly", shortName: "monthly" },
-  { title: "Lump Sum (One-time)", shortName: "one-time" },
-];
-export const INVESTMENT_NATURE_TOOLTIP =
-  "Choose how you’ll invest: monthly contributions or a one-time lump sum";
 export const INVESTMENT_MODES = [
   { title: "Plan Your Goal", shortName: "target", defaultAmount: 2500000 },
   {
@@ -12,6 +6,12 @@ export const INVESTMENT_MODES = [
     defaultAmount: 10000,
   },
 ];
+export const INVESTMENT_NATURE_LIST = [
+  { title: "Monthly", shortName: "monthly" },
+  { title: "Lump Sum (One-time)", shortName: "one-time" },
+];
+export const INVESTMENT_NATURE_TOOLTIP =
+  "Choose how you’ll invest: monthly contributions or a one-time lump sum";
 export const INVESTMENT_INITIAL_STATE = {
   AMOUNT: INVESTMENT_MODES[0].defaultAmount,
   DURATION: 10,
