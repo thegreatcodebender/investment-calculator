@@ -11,18 +11,7 @@ import {
 import CalculationCard from "./CalculationCard";
 import ResultCard from "./ResultCard";
 import SummaryCard from "./SummaryCard";
-import Card from "./Card";
-import { amountINRWithComma } from "../utils/display";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import LineGraphCard from "./LineGraphCard";
 
 const CalculationsAndResults = () => {
   const [isCalculationCardVisible, setIsCalculationCardVisible] = useState<
@@ -52,7 +41,6 @@ const CalculationsAndResults = () => {
     investmentNature: investmentNature.actualValue,
     inflationRate: inflationRate.actualValue,
   });
-  console.log(resultArr);
 
   const resultTitle =
     investmentMode.title === INVESTMENT_MODES[0].title
@@ -107,62 +95,7 @@ const CalculationsAndResults = () => {
           cardRef={resultCardRef}
         />
       </div>
-      <Card className="max-lg:mt-8 min-w-[300px]">
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart
-            width={500}
-            height={300}
-            data={resultArr}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="4 4" />
-            <XAxis dataKey="year" />
-            <YAxis dataKey="withInflnAdj" />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="withoutInflnAdj" stroke="#82ca9d" />
-            <Line
-              type="monotone"
-              dataKey="withoutInvestment"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="withInflnAdj" stroke="gray" />
-            <Line type="monotone" dataKey="withoutInflnAdj" stroke="red" />
-          </LineChart>
-        </ResponsiveContainer>
-        <table width={"100%"} style={{ textAlign: "end" }}>
-          <thead>
-            <tr>
-              <th style={{ textAlign: "center" }}>Year</th>
-              <th>Without Investment</th>
-              <th>With Investment</th>
-            </tr>
-          </thead>
-          <tbody>
-            {resultArr.map((rowData, index) => (
-              <tr key={"row" + index}>
-                <td>{index + 1}</td>
-                <td>{amountINRWithComma(rowData.withoutInvestment)}</td>
-                <td>
-                  {amountINRWithComma(rowData.withInvestment)} (
-                  {(
-                    ((rowData.withInvestment - rowData.withoutInvestment) /
-                      rowData.withoutInvestment) *
-                    100
-                  ).toFixed(0)}
-                  %)
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card>
+      <LineGraphCard resultArr={resultArr} />
     </>
   );
 };

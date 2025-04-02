@@ -24,17 +24,6 @@ export const amountINRWithComma = (
 };
 
 /**
- * Omit the first word of a sentence
- * @param {string} words Sentence
- * @returns {string} First word of the sentence
- */
-export const omitFirstWord = (words: string): string => {
-  const wordsArr = words.split(" ");
-  wordsArr.shift();
-  return wordsArr.join(" ");
-};
-
-/**
  * Remove starting, ending and inbetween consecutive commas from the provided string
  * @param {string | number} valueToFormat - Value to remove comma from
  * @returns {string} Comma removed value if it is valid number, else param value
@@ -51,4 +40,46 @@ export const removeCommaFromString = (
   }
 
   return formattedValue;
+};
+
+interface CurrencyInWords {
+  amount: number;
+  decimalCount?: number;
+  shortName?: boolean;
+}
+
+/**
+ * Convert currency amount to words of highest value
+ * @param amount Amount in number
+ * @param decimalCount Number of decimals to be included in the result. Default is 0;
+ * @param shortName Whether short name of currency to be included in result. Default is false.
+ */
+export const currencyInWords = ({
+  amount,
+  decimalCount = 0,
+  shortName = false,
+}: CurrencyInWords): string => {
+  let inWords = "",
+    shortWord = "",
+    longWord = "",
+    divisor = 1000;
+
+  if (amount <= 99999) {
+    shortWord = "K";
+    longWord = "Thousand";
+  } else if (amount <= 9999999) {
+    shortWord = "L";
+    longWord = "Lakh";
+    divisor = 100000;
+  } else {
+    shortWord = "Cr";
+    longWord = "Crore";
+    divisor = 10000000;
+  }
+
+  inWords = `${(amount / divisor).toFixed(decimalCount)}${
+    shortName ? shortWord : ` ${longWord}`
+  }`;
+
+  return inWords;
 };

@@ -1,4 +1,3 @@
-import { ToWords } from "to-words";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -118,8 +117,16 @@ export const calculateInflationAdjustedValue = ({
   return currentValue;
 };
 
-interface InvestmentResultsArrParams extends InvestmentParams {
+interface InvestmentProgressionArrParams extends InvestmentParams {
   inflationRate: number;
+}
+
+export interface InvestmentProgressionResultObj {
+  year: number;
+  withInvestment: number;
+  withInvestmentInflnAdj: number;
+  withoutInvestmentInflnAdj: number;
+  withoutInvestment: number;
 }
 
 /**
@@ -138,7 +145,7 @@ export const calculateInvestmentProgression = ({
   investmentMode,
   investmentNature,
   inflationRate,
-}: InvestmentResultsArrParams) => {
+}: InvestmentProgressionArrParams): InvestmentProgressionResultObj[] => {
   let resultArr = [];
   switch (investmentMode) {
     case INVESTMENT_MODES[0].title: {
@@ -150,7 +157,7 @@ export const calculateInvestmentProgression = ({
         investmentNature,
       });
 
-      for (let year = 1; year <= duration; year++) {
+      for (let year = 0; year <= duration; year++) {
         const { investmentAndInterestTotal } = calculateInvestment({
           amount: contribution,
           duration: year,
@@ -161,8 +168,8 @@ export const calculateInvestmentProgression = ({
         resultArr.push({
           year,
           withInvestment: Math.round(investmentAndInterestTotal),
-          withInflnAdj: -1,
-          withoutInflnAdj: -1,
+          withInvestmentInflnAdj: -1,
+          withoutInvestmentInflnAdj: -1,
           withoutInvestment:
             investmentNature === INVESTMENT_NATURE_LIST[0].title
               ? Math.round(contribution * year * 12)
@@ -172,7 +179,7 @@ export const calculateInvestmentProgression = ({
       break;
     }
     case INVESTMENT_MODES[1].title: {
-      for (let year = 1; year <= duration; year++) {
+      for (let year = 0; year <= duration; year++) {
         const { investmentAndInterestTotal } = calculateInvestment({
           amount,
           duration: year,
@@ -183,8 +190,8 @@ export const calculateInvestmentProgression = ({
         resultArr.push({
           year,
           withInvestment: Math.round(investmentAndInterestTotal),
-          withInflnAdj: -1,
-          withoutInflnAdj: -1,
+          withInvestmentInflnAdj: -1,
+          withoutInvestmentInflnAdj: -1,
           withoutInvestment:
             investmentNature === INVESTMENT_NATURE_LIST[1].title
               ? amount
@@ -198,45 +205,25 @@ export const calculateInvestmentProgression = ({
   }
 
   // Add inflation adjusted values to the array
-  resultArr.map((resultObj) => {
-    const toWords = new ToWords({
-      converterOptions: {
-        currency: true,
-        doNotAddOnly: true,
-        currencyOptions: {
-          // can be used to override defaults for the selected locale
-          name: "Rupee",
-          plural: "Rupees",
-          symbol: "₹",
-          fractionalUnit: {
-            name: "Lakh",
-            plural: "Lakhs",
-            symbol: "",
-          },
-        },
-      },
-    });
+  return resultArr.map((resultObj) => {
+    const newResultObj = { ...resultObj };
     const year = resultObj.year;
-    const withoutInflnAdjVal = Math.round(
+    const withoutInvestmentInflnAdjVal = Math.round(
       calculateInflationAdjustedValue({
         futureValue: resultObj.withoutInvestment,
         inflationRate,
         duration: year,
       })
     );
-    resultObj.withoutInflnAdj = withoutInflnAdjVal;
-    resultObj.withoutInflnAdjWords = toWords.convert(withoutInflnAdjVal);
-    const withInflnAdjVal = Math.round(
+    newResultObj.withoutInvestmentInflnAdj = withoutInvestmentInflnAdjVal;
+    const withInvestmentInflnAdjVal = Math.round(
       calculateInflationAdjustedValue({
         futureValue: resultObj.withInvestment,
         inflationRate,
         duration: year,
       })
     );
-    resultObj.withInflnAdj = withInflnAdjVal;
-    resultObj.withInflnAdjAdjWords = toWords.convert(withInflnAdjVal);
-    // resultObj.
+    newResultObj.withInvestmentInflnAdj = withInvestmentInflnAdjVal;
+    return newResultObj;
   });
-
-  return resultArr;
 };

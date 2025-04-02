@@ -1,9 +1,8 @@
 import { InputValueType } from "../types/inputField";
 import { SliderWithInputProps } from "../types/sliderWithInput";
-import { omitFirstWord } from "../utils/display";
+import { currencyInWords } from "../utils/display";
 import { RupeeIcon } from "./Icons";
 import InputField from "./InputField";
-import { ToWords } from "to-words";
 
 const SliderWithInput = ({
   min,
@@ -23,12 +22,6 @@ const SliderWithInput = ({
 }: SliderWithInputProps) => {
   const inputValue = typeof value === "object" ? value.inputValue : value;
   const actualValue = typeof value === "object" ? value.actualValue : value;
-  // ToWords instance for converting number to words
-  const toWords = new ToWords({
-    converterOptions: {
-      doNotAddOnly: true,
-    },
-  });
 
   // To handle slider input change and active track width
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,11 +42,9 @@ const SliderWithInput = ({
               <RupeeIcon className="h-[10px] opacity-75" />
             </span>
 
-            {legendValue.toString()[0] +
-              " " +
-              (typeof legendValue === "number"
-                ? omitFirstWord(toWords.convert(legendValue))
-                : "Error")}
+            {typeof legendValue === "number"
+              ? currencyInWords({ amount: legendValue })
+              : "Error"}
           </span>
         );
       case InputValueType.Year:
