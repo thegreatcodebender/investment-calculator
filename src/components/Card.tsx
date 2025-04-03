@@ -6,6 +6,7 @@ const Card = ({
   className,
   children,
   cardRef,
+  ariaHidden = false,
 }: PropsWithChildren<CardProps>) => {
   return (
     <div
@@ -13,6 +14,7 @@ const Card = ({
         className ? className : ""
       } shadow-card p-6 rounded-2xl border-[rgba(13,122,72,0.01)]`}
       ref={cardRef}
+      aria-hidden={ariaHidden}
     >
       {children}
     </div>

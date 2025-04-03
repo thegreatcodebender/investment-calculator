@@ -240,11 +240,11 @@ const GenerateImageButton = ({
 
   return (
     <Button
-      btnType="secondary"
+      btnType="primary"
       onClick={generateResultImage}
       isDisabled={isLoading}
     >
-      Download My Plan
+      Save as image
     </Button>
   );
 };

@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import { InvestmentProvider } from "./context/InvestmentContext";
 import Footer from "./components/Footer";
 import CalculationsAndResults from "./components/CalculationsAndResults";
+import FAQCard from "./components/FAQCard";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <InvestmentProvider>
           <CalculationsAndResults />
         </InvestmentProvider>
+        <FAQCard />
       </main>
       <Footer />
     </BrowserRouter>

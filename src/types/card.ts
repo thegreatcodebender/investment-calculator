@@ -5,6 +5,7 @@ export interface CardProps {
   bgColor?: string;
   className?: string;
   cardRef?: Ref<HTMLDivElement>;
+  ariaHidden?: boolean;
 }
 
 export interface ResultCardProps extends InvestmentState {

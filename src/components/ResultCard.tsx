@@ -185,19 +185,24 @@ const ResultCard = ({
             </p>
           ))}
       </div>
-      {/* Action button */}
-      <div className="flex flex-wrap gap-3 items-center justify-center mt-6">
-        <Button btnType="primary" onClick={handleCopyLink}>
-          {copyBtnText}
-        </Button>
-        <GenerateImageButton
-          pieData={pieData}
-          investmentState={investmentState}
-          calculationResult={calculationResult}
-          resultTitle={resultTitle}
-          inflationAdjustedValue={inflationAdjustedValue}
-          isGoalSelected={isGoalSelected}
-        />
+      {/* Action buttons */}
+      <div className="flex flex-col items-center mt-6">
+        <h3 className="mb-3 text-sm uppercase font-semibold inline-block leading-none">
+          Share your investment plan
+        </h3>
+        <div className="flex flex-wrap gap-3 items-center justify-center">
+          <GenerateImageButton
+            pieData={pieData}
+            investmentState={investmentState}
+            calculationResult={calculationResult}
+            resultTitle={resultTitle}
+            inflationAdjustedValue={inflationAdjustedValue}
+            isGoalSelected={isGoalSelected}
+          />
+          <Button btnType="primary" onClick={handleCopyLink}>
+            {copyBtnText}
+          </Button>
+        </div>
       </div>
     </Card>
   );
