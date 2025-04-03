@@ -1,3 +1,4 @@
+import { useInvestmentState } from "../context/InvestmentContext";
 import { currencyInWords } from "../utils/display";
 import { RupeeIcon } from "./Icons";
 
@@ -23,23 +24,18 @@ interface TooltipGraphProps {
 }
 
 const TooltipGraph = ({ payload }: TooltipGraphProps) => {
+  const investmentState = useInvestmentState();
+  const age = investmentState.age.actualValue;
   const dataKeysToShow = ["withInvestment", "withoutInvestment"];
-
-  if (payload && payload[0] && payload[0].payload.year === 0) {
-    return <></>;
-  }
 
   return (
     <div className="rounded-sm bg-white border-1 border-gray-300 overflow-clip relative md:shadow-xl">
-      {/* Year */}
-      {payload && payload[0] && (
-        <p className="absolute right-0 p-1.25 text-white text-xs font-semibold rounded-bl-sm leading-none text-end bg-gray-700">
-          {new Date().getFullYear() + payload[0].payload.year}
-        </p>
-      )}
       <div className="px-3 py-2">
         {payload &&
-          payload.map((data) => {
+          // Map dataKeys array to make withInvestment appear on the top since default order is based on the <Line> order
+          dataKeysToShow.map((dataKey) => {
+            const data = payload.find((item) => item.dataKey === dataKey);
+            if (!data) return "";
             if (dataKeysToShow.some((keyName) => keyName === data.dataKey)) {
               return (
                 <div
@@ -61,11 +57,13 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                         {/* Amount */}
                         <RupeeIcon className="max-md:h-2.75 h-3.25" />
                         <p>
-                          {currencyInWords({
-                            amount: data.value,
-                            decimalCount: 2,
-                            shortName: true,
-                          })}
+                          {data.value === 0
+                            ? "0"
+                            : currencyInWords({
+                                amount: data.value,
+                                decimalCount: 2,
+                                shortName: true,
+                              })}
                         </p>
                       </div>
                     </div>
@@ -75,11 +73,13 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                     <p className="font-normal">Inflation adjusted: </p>
                     <RupeeIcon className="h-2.25 opacity-75" />
                     <p className="font-semibold">
-                      {currencyInWords({
-                        amount: data.payload[`${data.dataKey}InflnAdj`],
-                        decimalCount: 2,
-                        shortName: true,
-                      })}
+                      {data.value === 0
+                        ? "0"
+                        : currencyInWords({
+                            amount: data.payload[`${data.dataKey}InflnAdj`],
+                            decimalCount: 2,
+                            shortName: true,
+                          })}
                     </p>
                   </div>
                 </div>
@@ -87,6 +87,18 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
             }
           })}
       </div>
+      {/* Projected age and year */}
+      {payload && payload[0] && (
+        <p className="p-1.25 text-white text-xs font-semibold leading-none text-center bg-gray-700">
+          {age !== -1 && (
+            <>
+              At age {age + payload[0].payload.year}{" "}
+              {<span className="text-xs opacity-60">•</span>}{" "}
+            </>
+          )}
+          {new Date().getFullYear() + payload[0].payload.year}
+        </p>
+      )}
     </div>
   );
 };

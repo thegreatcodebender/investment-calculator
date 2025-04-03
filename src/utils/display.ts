@@ -62,23 +62,32 @@ export const currencyInWords = ({
   let inWords = "",
     shortWord = "",
     longWord = "",
-    divisor = 1000;
+    divisor = 1;
 
-  if (amount <= 99999) {
+  if (amount < 100000) {
     shortWord = "K";
     longWord = "Thousand";
-  } else if (amount <= 9999999) {
+    divisor = 1000;
+  } else if (amount < 10000000) {
     shortWord = "L";
-    longWord = "Lakh";
+    longWord = "Lakhs";
     divisor = 100000;
-  } else {
+  } else if (amount < 10000000000) {
     shortWord = "Cr";
-    longWord = "Crore";
+    longWord = "Crores";
     divisor = 10000000;
+  } else if (amount < 1000000000000) {
+    shortWord = "KCr";
+    longWord = "Thousand Crores";
+    divisor = 10000000000;
+  } else {
+    shortWord = "LCr";
+    longWord = "Lakh Crores";
+    divisor = 1000000000000;
   }
 
-  inWords = `${(amount / divisor).toFixed(decimalCount)}${
-    shortName ? shortWord : ` ${longWord}`
+  inWords = `${(amount / divisor).toFixed(decimalCount)} ${
+    shortName ? shortWord : longWord
   }`;
 
   return inWords;
