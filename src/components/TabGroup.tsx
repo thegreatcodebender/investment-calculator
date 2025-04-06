@@ -7,7 +7,7 @@ import { TabGroupProps } from "../types/tabGroup";
 const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
   const [isScrollIntoViewActive, setIsScrollIntoViewActive] = useState(false); // To prevent scrollIntoView from firing on page load
   const isMobile = useIsMobile();
-  let timeoutId: number | null = null;
+  let timeoutId: NodeJS.Timeout | null = null;
   /**
    * Invoke onClick function and activate `initialAction` state to enable `scrollIntoView`
    * @param {typeof INVESTMENT_MODES[0]} modeObj - Title, Default Amount, Short name

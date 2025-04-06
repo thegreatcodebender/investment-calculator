@@ -14,6 +14,7 @@ const InputField = ({
   inputValueType,
   errorText,
   tooltipText,
+  inputMode = "text",
   onChange,
 }: InputFieldProps) => {
   const inputValue =
@@ -97,7 +98,7 @@ const InputField = ({
           id={id}
           name={id}
           placeholder={placeholder}
-          inputMode="text"
+          inputMode={inputMode}
           autoComplete="off"
           value={inputValue}
           onChange={onChange}

@@ -15,15 +15,12 @@ export interface ResultCardProps extends InvestmentState {
 }
 
 export interface CalculationCardProps extends InvestmentState {
-  setIsCalculationCardVisible: React.Dispatch<
-    React.SetStateAction<null | boolean>
-  >;
   cardRef: Ref<HTMLDivElement>;
 }
 
 export interface SummaryCardProps extends ResultCardProps {
-  isCalculationCardVisible: null | boolean;
-  handleClick: () => void;
+  calculationCardRef: React.MutableRefObject<HTMLDivElement | null>;
+  resultCardRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 export interface SummaryCardContainerProps {

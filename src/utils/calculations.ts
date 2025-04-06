@@ -146,7 +146,7 @@ export const calculateInvestmentProgression = ({
   investmentNature,
   inflationRate,
 }: InvestmentProgressionArrParams): InvestmentProgressionResultObj[] => {
-  let resultArr = [];
+  const resultArr = [];
   switch (investmentMode) {
     case INVESTMENT_MODES[0].title: {
       const { contribution } = calculateInvestment({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Card from "./Card";
 import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
@@ -21,12 +21,15 @@ import { InputValueType } from "../types/inputField";
 import { Errors } from "../types/errors";
 import { CalculationCardProps } from "../types/card";
 import { amountINRWithComma } from "../utils/display";
+import useIsMobile from "../hooks/useIsMobile";
+import { useCalculationCardDispatch } from "../context/CalculationCardContext";
+import { CalculationCardActionTypes } from "../types/calculationCardContext";
 
 const CalculationCard = ({
   investmentState,
-  setIsCalculationCardVisible,
   cardRef,
 }: CalculationCardProps) => {
+  const isMobile = useIsMobile();
   const [errors, setErrors] = useState<Errors>({
     amount: "",
     duration: "",
@@ -34,6 +37,7 @@ const CalculationCard = ({
     age: "",
     inflation: "",
   });
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -43,12 +47,24 @@ const CalculationCard = ({
   const investmentMode = investmentState.mode;
   const inflation = investmentState.inflation;
 
+  const calculationCardDispatch = useCalculationCardDispatch();
+
   // Observer to check if the card is in view or not
-  const observer = new IntersectionObserver(
+  observerRef.current = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setIsCalculationCardVisible(true);
-        else setIsCalculationCardVisible(false);
+        if (isMobile) {
+          if (entry.isIntersecting)
+            calculationCardDispatch({
+              type: CalculationCardActionTypes.SET_VISIBILITY,
+              payload: true,
+            });
+          else
+            calculationCardDispatch({
+              type: CalculationCardActionTypes.SET_VISIBILITY,
+              payload: false,
+            });
+        }
       });
     },
     { threshold: 0.4 }
@@ -172,7 +188,9 @@ const CalculationCard = ({
       <div
         className="mt-6"
         ref={(node) => {
-          if (node) observer.observe(node);
+          if (node && observerRef.current) {
+            observerRef.current.observe(node);
+          }
         }}
       >
         <SliderWithInput
@@ -254,6 +272,7 @@ const CalculationCard = ({
               handleInputChange(e, ActionType.Age);
             }}
             errorText={errors.age}
+            inputMode="numeric"
           />
           <InputField
             label={INPUT_FIELD_METADATA.INFLATION.label}

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { memo, ReactNode, useEffect, useRef, useState } from "react";
 
 interface AccordionProps {
   title: string;
@@ -6,11 +6,16 @@ interface AccordionProps {
   id: string;
   isOpen?: boolean;
 }
-const Accordion = ({ title, content, id, isOpen = false }: AccordionProps) => {
+const Accordion = memo(function Accordion({
+  title,
+  content,
+  id,
+  isOpen = false,
+}: AccordionProps) {
   const [isExpanded, setIsExpanded] = useState(isOpen);
   const [height, setHeight] = useState("0px");
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const resizeTimeoutId = useRef<number | null>(null);
+  const resizeTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const handleButtonClick = () => {
     setIsExpanded((prev) => !prev);
@@ -74,6 +79,6 @@ const Accordion = ({ title, content, id, isOpen = false }: AccordionProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default Accordion;

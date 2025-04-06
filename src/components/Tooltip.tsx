@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { createPortal } from "react-dom";
 import { TooltipProps } from "../types/tooltip";
 
-const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
+const Tooltip = memo(function ToolTip({
+  tooltipContent,
+  iconClassName,
+}: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [tooltipIdRandom, setTooltipIdRandom] = useState<undefined | number>(
@@ -83,6 +86,6 @@ const Tooltip = ({ tooltipContent, iconClassName }: TooltipProps) => {
         )}
     </>
   );
-};
+});
 
 export default Tooltip;

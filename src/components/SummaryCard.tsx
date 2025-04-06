@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import { SummaryCardContainerProps, SummaryCardProps } from "../types/card";
 import { amountINRWithComma } from "../utils/display";
 import { RupeeIcon } from "./Icons";
+import { useCalculationCardState } from "../context/CalculationCardContext";
 
 const SummaryCardContainer: React.FC<
   PropsWithChildren<SummaryCardContainerProps>
@@ -33,9 +34,9 @@ const SummaryCardContainer: React.FC<
 const SummaryCard = ({
   calculationResult,
   resultTitle,
-  isCalculationCardVisible,
   investmentState,
-  handleClick,
+  calculationCardRef,
+  resultCardRef,
 }: SummaryCardProps) => {
   const { contribution, investmentAndInterestTotal } = calculationResult;
   const amount = investmentState.amount;
@@ -43,6 +44,33 @@ const SummaryCard = ({
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const investmentMode = investmentState.mode;
+
+  const calculationCardState = useCalculationCardState();
+  const isCalculationCardVisible =
+    calculationCardState.isCalculationCardVisible;
+
+  /**
+   * Handle scroll to required card when summary card is clicked
+   */
+  const handleClick = () => {
+    if (isCalculationCardVisible) {
+      if (resultCardRef && resultCardRef.current) {
+        const { top: cardTop } = resultCardRef.current.getBoundingClientRect();
+        window.scrollTo({
+          behavior: "auto",
+          top: cardTop + window.scrollY - 80,
+        });
+      }
+    } else {
+      if (calculationCardRef.current) {
+        calculationCardRef.current.scrollIntoView({
+          behavior: "auto",
+          inline: "start",
+        });
+      }
+    }
+  };
+
   return (
     isCalculationCardVisible !== null && (
       <>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -12,11 +12,9 @@ import CalculationCard from "./CalculationCard";
 import ResultCard from "./ResultCard";
 import SummaryCard from "./SummaryCard";
 import LineGraphCard from "./LineGraphCard";
+import { CalculationCardProvider } from "../context/CalculationCardContext";
 
 const CalculationsAndResults = () => {
-  const [isCalculationCardVisible, setIsCalculationCardVisible] = useState<
-    null | boolean
-  >(null);
   const calculationCardRef = useRef<HTMLDivElement | null>(null);
   const resultCardRef = useRef<HTMLDivElement | null>(null);
   const investmentState = useInvestmentState();
@@ -51,43 +49,22 @@ const CalculationsAndResults = () => {
         } Investment`
       : "Total Future Value";
 
-  /**
-   * Handle scroll to required card when summary card is clicked
-   */
-  const handleClick = () => {
-    if (isCalculationCardVisible) {
-      if (resultCardRef.current) {
-        const { top: cardTop } = resultCardRef.current.getBoundingClientRect();
-        window.scrollTo({
-          behavior: "auto",
-          top: cardTop + window.scrollY - 80,
-        });
-      }
-    } else {
-      if (calculationCardRef.current) {
-        calculationCardRef.current.scrollIntoView({
-          behavior: "auto",
-          inline: "start",
-        });
-      }
-    }
-  };
-
   return (
     <>
       <div className="min-lg:flex gap-6 my-4">
-        <SummaryCard
-          investmentState={investmentState}
-          calculationResult={calculationResult}
-          resultTitle={resultTitle}
-          isCalculationCardVisible={isCalculationCardVisible}
-          handleClick={handleClick}
-        />
-        <CalculationCard
-          investmentState={investmentState}
-          setIsCalculationCardVisible={setIsCalculationCardVisible}
-          cardRef={calculationCardRef}
-        />
+        <CalculationCardProvider>
+          <SummaryCard
+            investmentState={investmentState}
+            calculationResult={calculationResult}
+            resultTitle={resultTitle}
+            calculationCardRef={calculationCardRef}
+            resultCardRef={resultCardRef}
+          />
+          <CalculationCard
+            investmentState={investmentState}
+            cardRef={calculationCardRef}
+          />
+        </CalculationCardProvider>
         <ResultCard
           investmentState={investmentState}
           calculationResult={calculationResult}

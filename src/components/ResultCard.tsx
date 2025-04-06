@@ -89,7 +89,7 @@ const ResultCard = ({
     inflationAdjustedValue
   );
 
-  let copyTextChangeTimeoutId: null | number = null;
+  let copyTextChangeTimeoutId: null | NodeJS.Timeout = null;
   /**
    * Copy the shareable link to clipboard and show copied text for a short period
    */

@@ -18,4 +18,14 @@ export interface InputFieldProps {
   errorText?: string;
   tooltipText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputMode?:
+    | "text"
+    | "search"
+    | "email"
+    | "tel"
+    | "url"
+    | "none"
+    | "numeric"
+    | "decimal"
+    | undefined;
 }
