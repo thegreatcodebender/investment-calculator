@@ -1,10 +1,10 @@
-import { PieChart, Pie } from "recharts";
 import { createRoot } from "react-dom/client";
 import { Button } from "./Button";
 import { GenerateImageButtonProps } from "../types/generateImageButton";
 import saveImageTemplate from "../assets/images/save_image_template.png";
 import { amountINRWithComma } from "../utils/display";
 import { useState } from "react";
+import ResultPieChart from "./ResultPieChart";
 
 const GenerateImageButton = ({
   pieData,
@@ -49,13 +49,13 @@ const GenerateImageButton = ({
 
       // Create an offscreen container with explicit dimensions
       const offscreenDiv = document.createElement("div");
-      offscreenDiv.style.position = "absolute";
-      offscreenDiv.style.left = "-9999px";
+      // offscreenDiv.style.position = "absolute";
+      // offscreenDiv.style.left = "-9999px";
       offscreenDiv.style.width = "1080px";
       offscreenDiv.style.height = "1920px";
       offscreenDiv.style.backgroundColor = "white";
       document.body.appendChild(offscreenDiv);
-      // document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
+      document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
 
       const root = createRoot(offscreenDiv);
 
@@ -71,7 +71,7 @@ const GenerateImageButton = ({
             lineHeight: "1 !important",
           }}
         >
-          <div className="absolute top-[196px] left-[52px]">
+          <div className="absolute top-[200px] left-[52px]">
             <div className="flex gap-[144px] mb-[60px] ms-1.5">
               {/* Amount */}
               <div className="w-[350px]">
@@ -112,19 +112,14 @@ const GenerateImageButton = ({
 
             {/* Chart and legend */}
             <div className="relative mt-43">
-              <PieChart width={360} height={360}>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="title"
-                  outerRadius="80%"
-                  innerRadius="50%"
-                  fill="var(--color-accent-green)"
-                  cx="50%"
-                  cy="50%"
+              <div className="w-90 h-90">
+                <ResultPieChart
+                  pieData={pieData}
                   isAnimationActive={false}
+                  outerRadius={130}
+                  innerRadius={80}
                 />
-              </PieChart>
+              </div>
               <div className="absolute left-[456px] top-0 h-90 w-125">
                 {pieData.map((pie) => (
                   <div
@@ -223,8 +218,8 @@ const GenerateImageButton = ({
             document.body.removeChild(link);
 
             // Clean up offscreen container
-            root.unmount();
-            document.body.removeChild(offscreenDiv);
+            // root.unmount();
+            // document.body.removeChild(offscreenDiv);
             setIsLoading(false);
           })
           .catch((error) => {

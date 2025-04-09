@@ -1,4 +1,3 @@
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
 import Card from "./Card";
 import { RupeeIcon } from "./Icons";
 import { Button } from "./Button";
@@ -15,6 +14,7 @@ import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
 import GenerateImageButton from "./GenerateImageButton";
+import ResultPieChart from "./ResultPieChart";
 
 const ResultCard = ({
   investmentState,
@@ -117,20 +117,7 @@ const ResultCard = ({
       {/* Pie Chart */}
       <div className="overflow-x-clip">
         <div className="h-[175px]">
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={pieData}
-                dataKey={"value"}
-                nameKey={"title"}
-                outerRadius={80}
-                innerRadius={50}
-                fill="var(--color-accent-green)"
-                cx="50%"
-                cy="50%"
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <ResultPieChart pieData={pieData} />
         </div>
         {/* Legend */}
         <div className="items-center justify-center mt-8 px-8 sm:ms-12 pt-4 mb-12">
