@@ -19,7 +19,12 @@ const LineGraphCard = ({ resultArr }: LineGraphCardProps) => {
         {isMobile ? "Touch " : "Hover over "}
         the chart to know more.
       </p>
-      <ProgressionLineGraph resultArr={resultArr} isMobile={isMobile} />
+      <div style={{ height: isMobile ? 350 : 300 }}>
+        <ProgressionLineGraph
+          resultArr={resultArr}
+          height={isMobile ? 350 : 300}
+        />
+      </div>
       <p className="mb-2 text-xs text-gray-600">
         KCr - Thousand Crores, LCr - Lakh Crores
       </p>
