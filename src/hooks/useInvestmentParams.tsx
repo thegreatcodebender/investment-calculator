@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
@@ -25,7 +24,7 @@ const investmentModeShortNames = INVESTMENT_MODES.map(
 type InvestmentModeShortName = (typeof investmentModeShortNames)[number];
 
 const useInvestmentParams = () => {
-  const [searchParams] = useSearchParams();
+  const searchParams = new URLSearchParams(window.location.search);
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount.actualValue;
