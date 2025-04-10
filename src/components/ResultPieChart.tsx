@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ResultPieChartProps } from "../types/resultPieChart";
+import LoadingDots from "./LoadingDots";
+import useDebounce from "../hooks/useDebounce";
 
 const ResultPieChart: React.FC<ResultPieChartProps> = ({
   pieData,
@@ -7,18 +9,38 @@ const ResultPieChart: React.FC<ResultPieChartProps> = ({
   outerRadius = 80,
   innerRadius = 50,
 }) => {
+  const [pieDataDebounced, setPieDataDebounced] = useState(pieData);
   const [rechartsComponents, setRechartsComponents] = useState<{
     ResponsiveContainer: any;
     PieChart: any;
     Pie: any;
-  }>({ ResponsiveContainer: null, PieChart: null, Pie: null });
-  const [isChartLoaded, setIsChartLoaded] = useState(false);
-  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
+  }>({ ResponsiveContainer: null, PieChart: null, Pie: null }); // To store the rechart components after dynamic import
+  const isChartLoadedRef = useRef(false); // Ref to prevent from import being called after recharts is imported
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // To store timeout id
 
+  /**
+   * Debounce the calculation to prevent performance issues in low end devices
+   * */
+  const debouncedPieDataUpdate = useDebounce(
+    () => setPieDataDebounced(pieData),
+    200
+  );
+
+  // Debounced calculation runs when pieData changes
+  useEffect(() => {
+    if (isAnimationActive) {
+      // For normal chart
+      debouncedPieDataUpdate();
+    } else {
+      setPieDataDebounced(pieData); // For share section
+    }
+  }, [pieData]);
+
+  // Load recharts module
   useEffect(() => {
     const loadRecharts = async () => {
       if (
-        !isChartLoaded &&
+        !isChartLoadedRef.current &&
         (document.readyState === "interactive" ||
           document.readyState === "complete")
       ) {
@@ -29,22 +51,28 @@ const ResultPieChart: React.FC<ResultPieChartProps> = ({
             PieChart: recharts.PieChart,
             Pie: recharts.Pie,
           });
-          setIsChartLoaded(true);
+          isChartLoadedRef.current = true;
         } catch (error) {
           console.error("Error while loading recharts ", error);
         }
       }
     };
 
-    // document.addEventListener("readystatechange", loadRecharts);
-    // return () => document.removeEventListener("readystatechange", loadRecharts);
-
-    if (!isChartLoaded)
-      timeoutIdRef.current = setTimeout(() => {
+    // Load recharts components only once
+    if (!isChartLoadedRef.current) {
+      if (isAnimationActive) {
+        // For normal chart
+        timeoutIdRef.current = setTimeout(() => {
+          loadRecharts();
+          timeoutIdRef.current = null;
+        }, 500);
+      } else {
+        // Chart inside 'share as image' btn
         loadRecharts();
-        timeoutIdRef.current = null;
-      }, 500);
+      }
+    }
 
+    // Clear pending timeout if any
     return () => {
       if (timeoutIdRef.current) {
         clearTimeout(timeoutIdRef.current);
@@ -53,11 +81,12 @@ const ResultPieChart: React.FC<ResultPieChartProps> = ({
   }, []);
 
   const { ResponsiveContainer, PieChart, Pie } = rechartsComponents;
+
   return ResponsiveContainer && PieChart && Pie ? (
     <ResponsiveContainer>
       <PieChart>
         <Pie
-          data={pieData}
+          data={pieDataDebounced}
           dataKey="value"
           nameKey="title"
           outerRadius={outerRadius}
@@ -65,16 +94,13 @@ const ResultPieChart: React.FC<ResultPieChartProps> = ({
           fill="var(--color-accent-green)"
           cx="50%"
           cy="50%"
+          animationEasing="ease"
           isAnimationActive={isAnimationActive}
         />
       </PieChart>
     </ResponsiveContainer>
   ) : (
-    <div className="flex justify-center items-center h-full space-x-2">
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse"></div>
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse delay-75"></div>
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse delay-150"></div>
-    </div>
+    <LoadingDots />
   );
 };
 

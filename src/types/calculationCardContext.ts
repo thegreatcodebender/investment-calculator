@@ -8,5 +8,5 @@ export enum CalculationCardActionTypes {
 
 export interface CalculationCardAction {
   type: CalculationCardActionTypes;
-  payload: any;
+  payload: boolean;
 }

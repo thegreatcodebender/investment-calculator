@@ -4,10 +4,7 @@ import {
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
 import { useInvestmentState } from "../context/InvestmentContext";
-import {
-  calculateInvestment,
-  calculateInvestmentProgression,
-} from "../utils/calculations";
+import { calculateInvestment } from "../utils/calculations";
 import CalculationCard from "./CalculationCard";
 import ResultCard from "./ResultCard";
 import SummaryCard from "./SummaryCard";
@@ -23,21 +20,12 @@ const CalculationsAndResults = () => {
   const interest = investmentState.interestRate;
   const investmentNature = investmentState.investmentNature;
   const investmentMode = investmentState.mode;
-  const inflationRate = investmentState.inflation;
   const calculationResult = calculateInvestment({
     amount: amount.actualValue,
     duration: duration.actualValue,
     interestRate: interest.actualValue,
     investmentMode: investmentMode.title,
     investmentNature: investmentNature.actualValue,
-  });
-  const resultArr = calculateInvestmentProgression({
-    amount: amount.actualValue,
-    duration: duration.actualValue,
-    interestRate: interest.actualValue,
-    investmentMode: investmentMode.title,
-    investmentNature: investmentNature.actualValue,
-    inflationRate: inflationRate.actualValue,
   });
 
   const resultTitle =
@@ -72,7 +60,7 @@ const CalculationsAndResults = () => {
           cardRef={resultCardRef}
         />
       </div>
-      <LineGraphCard resultArr={resultArr} />
+      <LineGraphCard />
     </>
   );
 };

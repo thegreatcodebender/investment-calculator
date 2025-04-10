@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import TooltipGraph from "./TooltipGraph";
 import { ProgressionLineGraphProps } from "../types/progressionLineGraph";
+import LoadingDots from "./LoadingDots";
+import {
+  calculateInvestmentProgression,
+  InvestmentProgressionResultObj,
+} from "../utils/calculations";
+import { useInvestmentState } from "../context/InvestmentContext";
+import useDebounce from "../hooks/useDebounce";
 
 const ProgressionLineGraph: React.FC<ProgressionLineGraphProps> = ({
   height,
-  resultArr,
 }) => {
   const [rechartsComponents, setRechartsComponents] = useState<{
     ResponsiveContainer: any;
@@ -18,14 +24,37 @@ const ProgressionLineGraph: React.FC<ProgressionLineGraphProps> = ({
     XAxis: null,
     Tooltip: null,
     Line: null,
+  }); // To store the rechart components after dynamic import
+  const [resultArr, setResultArr] = useState<
+    InvestmentProgressionResultObj[] | null
+  >(null);
+  const isChartLoadedRef = useRef(false); // Ref to prevent from import being called after recharts is imported
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // To store timeout id
+  const investmentState = useInvestmentState(); // Investment state
+  // Debounce the calculation to prevent performance issue in low end devices
+  const debouncedProgressionCalculation = useDebounce(() => {
+    setResultArr(() =>
+      calculateInvestmentProgression({
+        amount: investmentState.amount.actualValue,
+        duration: investmentState.duration.actualValue,
+        interestRate: investmentState.interestRate.actualValue,
+        investmentMode: investmentState.mode.title,
+        investmentNature: investmentState.investmentNature.actualValue,
+        inflationRate: investmentState.inflation.actualValue,
+      })
+    );
   });
-  const [isChartLoaded, setIsChartLoaded] = useState(false);
-  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debounced calculation runs when investmentState changes
+  useEffect(() => {
+    debouncedProgressionCalculation();
+  }, [investmentState]);
+
+  // Import recharts and set recharts component state
   useEffect(() => {
     const loadRecharts = async () => {
       if (
-        !isChartLoaded &&
+        !isChartLoadedRef.current &&
         (document.readyState === "interactive" ||
           document.readyState === "complete")
       ) {
@@ -38,22 +67,21 @@ const ProgressionLineGraph: React.FC<ProgressionLineGraphProps> = ({
             Tooltip: recharts.Tooltip,
             Line: recharts.Line,
           });
-          setIsChartLoaded(true);
+          isChartLoadedRef.current = true;
         } catch (error) {
           console.error("Error while loading recharts ", error);
         }
       }
     };
 
-    // document.addEventListener("readystatechange", loadRecharts);
-    // return () => document.removeEventListener("readystatechange", loadRecharts);
-
-    if (!isChartLoaded)
+    // Load recharts components only once
+    if (!isChartLoadedRef.current)
       timeoutIdRef.current = setTimeout(() => {
         loadRecharts();
         timeoutIdRef.current = null;
       }, 500);
 
+    // Clear pending timeout if any
     return () => {
       if (timeoutIdRef.current) {
         clearTimeout(timeoutIdRef.current);
@@ -127,11 +155,7 @@ const ProgressionLineGraph: React.FC<ProgressionLineGraphProps> = ({
       </LineChart>
     </ResponsiveContainer>
   ) : (
-    <div className="flex justify-center items-center h-full space-x-2">
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse"></div>
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse delay-75"></div>
-      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse delay-150"></div>
-    </div>
+    <LoadingDots />
   );
 };
 

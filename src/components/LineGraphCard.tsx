@@ -1,13 +1,8 @@
 import Card from "./Card";
-import { InvestmentProgressionResultObj } from "../utils/calculations";
 import useIsMobile from "../hooks/useIsMobile";
 import ProgressionLineGraph from "./ProgressionLineGraph";
 
-interface LineGraphCardProps {
-  resultArr: InvestmentProgressionResultObj[];
-}
-
-const LineGraphCard = ({ resultArr }: LineGraphCardProps) => {
+const LineGraphCard = () => {
   const isMobile = useIsMobile();
   return (
     <Card className="max-lg:mt-8 min-w-[300px] mt-6">
@@ -20,12 +15,9 @@ const LineGraphCard = ({ resultArr }: LineGraphCardProps) => {
         the chart to know more.
       </p>
       <div style={{ height: isMobile ? 350 : 300 }}>
-        <ProgressionLineGraph
-          resultArr={resultArr}
-          height={isMobile ? 350 : 300}
-        />
+        <ProgressionLineGraph height={isMobile ? 350 : 300} />
       </div>
-      <p className="mb-2 text-xs text-gray-600">
+      <p className="text-xs text-gray-600">
         KCr - Thousand Crores, LCr - Lakh Crores
       </p>
     </Card>

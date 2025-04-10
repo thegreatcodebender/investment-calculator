@@ -22,6 +22,7 @@ const ResultCard = ({
   cardRef,
 }: ResultCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
+  const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -97,18 +98,20 @@ const ResultCard = ({
     const isCopied = await copyToClipboard(getShareableLink());
     if (isCopied) {
       setCopyBtnText("Copied!");
+      setIsCopyBtnDisabled(true);
     }
     if (copyTextChangeTimeoutId) {
       clearTimeout(copyTextChangeTimeoutId);
     }
     copyTextChangeTimeoutId = setTimeout(() => {
       setCopyBtnText("Copy Link");
-    }, 2000);
+      setIsCopyBtnDisabled(false);
+    }, 1500);
   };
 
   return (
     <Card
-      className="w-full min-lg:w-[40%] max-lg:mt-8 px-0 flex flex-col justify-between"
+      className="w-full min-lg:w-[40%] max-lg:mt-8 !px-0 flex flex-col justify-between"
       bgColor="bg-primary-light"
       cardRef={cardRef}
     >
@@ -177,7 +180,7 @@ const ResultCard = ({
         <h3 className="mb-3 text-sm uppercase font-semibold inline-block leading-none">
           Share your investment plan
         </h3>
-        <div className="flex flex-wrap gap-3 items-center justify-center">
+        <div className="px-3 flex flex-wrap gap-3 items-center justify-center">
           <GenerateImageButton
             pieData={pieData}
             investmentState={investmentState}
@@ -186,7 +189,12 @@ const ResultCard = ({
             inflationAdjustedValue={inflationAdjustedValue}
             isGoalSelected={isGoalSelected}
           />
-          <Button btnType="primary" onClick={handleCopyLink}>
+          <Button
+            btnType="primary"
+            onClick={handleCopyLink}
+            isDisabled={isCopyBtnDisabled}
+            isFixedWidth
+          >
             {copyBtnText}
           </Button>
         </div>

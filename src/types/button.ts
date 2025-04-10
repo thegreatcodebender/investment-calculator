@@ -4,4 +4,5 @@ export interface ButtonProps {
   type?: "button" | "submit";
   btnType: "primary" | "secondary";
   isDisabled?: boolean;
+  isFixedWidth?: boolean;
 }

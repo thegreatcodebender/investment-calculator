@@ -23,8 +23,8 @@ const FAQCard = () => {
                 Invest INR 10L today at 6% return for 10 years, and inflation
                 rate is 5.7%. After 10 years:
               </p>
-              <div className="flex justify-center">
-                <table className="mt-3 border-collapse">
+              <div className="overflow-x-auto no-scrollbar">
+                <table className="mt-3 mx-auto border-collapse">
                   <THEAD>
                     <TR>
                       <TH haveBorder={false}>

@@ -22,7 +22,7 @@ const Accordion = memo(function Accordion({
     <div className="not-last:mb-4">
       <h3>
         <button
-          className={`w-full p-3 border-1 border-gray-300 text-start font-medium bg-gray-50 cursor-pointer motion-safe:transition-all ease-cubic-bezier relative ${
+          className={`w-full p-3 pe-7 border-1 border-gray-300 text-start font-medium bg-gray-50 cursor-pointer motion-safe:transition-all ease-cubic-bezier relative ${
             isExpanded ? "rounded-t-md  border-b-transparent" : " rounded-md"
           }`}
           aria-expanded={true}
@@ -42,7 +42,7 @@ const Accordion = memo(function Accordion({
       </h3>
       <div
         className={`motion-safe:transition-all ease-cubic-bezier border-1 duration-300 border-gray-300 rounded-b-md overflow-hidden${
-          isExpanded ? " max-h-96 border-t-transparent" : " max-h-0 opacity-0"
+          isExpanded ? " max-h-480 border-t-transparent" : " max-h-0 opacity-0"
         }`}
         aria-labelledby={`accordion-button-${id}`}
         aria-hidden={!isExpanded}
