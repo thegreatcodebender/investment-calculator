@@ -2,6 +2,7 @@ import Accordion from "./Accordion";
 import Card from "./Card";
 import { RupeeIcon } from "./Icons";
 import { TBODY, TD, TH, THEAD, TR } from "./Table";
+import calculationsImage from "/assets/images/calculations.svg";
 
 const FAQCard = () => {
   return (
@@ -10,7 +11,6 @@ const FAQCard = () => {
       <div className="mt-3">
         {/* Accordion 1 */}
         <Accordion
-          id="faq-1"
           title="What does 'Inflation-Adjusted' mean?"
           content={
             <>
@@ -94,7 +94,6 @@ const FAQCard = () => {
         />
         {/* Accordion 2 */}
         <Accordion
-          id="faq-2"
           title="Why invest if inflation eats into returns?"
           content={
             <>
@@ -124,7 +123,25 @@ const FAQCard = () => {
         />
         {/* Accordion 3 */}
         <Accordion
-          id="faq-4"
+          title="How are the values determined?"
+          content={
+            <>
+              <a
+                href="/assets/images/calculations.png"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={calculationsImage}
+                  alt="equations used for calculating the result values"
+                  loading="lazy"
+                />
+              </a>
+            </>
+          }
+        />
+        {/* Accordion 4 */}
+        <Accordion
           title="Can investing really make my future better?"
           content={
             <>
