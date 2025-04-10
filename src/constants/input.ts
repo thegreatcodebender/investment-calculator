@@ -27,7 +27,7 @@ export const SLIDER_INPUT_METADATA = {
   },
   INTEREST_RATE: {
     min: 1,
-    max: 20,
+    max: 25,
     step: 0.05,
     id: "interest-input",
     label: "Expected Annual Return",
