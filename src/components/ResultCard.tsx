@@ -15,6 +15,7 @@ import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
 import GenerateImageButton from "./GenerateImageButton";
 import ResultPieChart from "./ResultPieChart";
+import useDebounce from "../hooks/useDebounce";
 
 const ResultCard = ({
   investmentState,
@@ -90,7 +91,12 @@ const ResultCard = ({
     inflationAdjustedValue
   );
 
-  let copyTextChangeTimeoutId: null | NodeJS.Timeout = null;
+  /** Revery copy button text to original */
+  const revertCopyText = useDebounce(() => {
+    setCopyBtnText("Copy Link");
+    setIsCopyBtnDisabled(false);
+  }, 1500);
+
   /**
    * Copy the shareable link to clipboard and show copied text for a short period
    */
@@ -100,13 +106,7 @@ const ResultCard = ({
       setCopyBtnText("Copied!");
       setIsCopyBtnDisabled(true);
     }
-    if (copyTextChangeTimeoutId) {
-      clearTimeout(copyTextChangeTimeoutId);
-    }
-    copyTextChangeTimeoutId = setTimeout(() => {
-      setCopyBtnText("Copy Link");
-      setIsCopyBtnDisabled(false);
-    }, 1500);
+    revertCopyText();
   };
 
   return (

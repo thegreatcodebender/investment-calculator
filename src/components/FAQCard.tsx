@@ -24,19 +24,27 @@ const FAQCard = () => {
                 rate is 5.7%. After 10 years:
               </p>
               <div className="overflow-x-auto no-scrollbar">
-                <table className="mt-3 mx-auto border-collapse">
+                <table className="mt-3 mx-auto border-collapse max-sm:leading-none">
                   <THEAD>
                     <TR>
                       <TH haveBorder={false}>
                         <span className="sr-only">Value type</span>
                       </TH>
-                      <TH>Without investment</TH>
-                      <TH>With investment</TH>
+                      <TH>
+                        <span className="max-sm:text-xs">
+                          Without investment
+                        </span>
+                      </TH>
+                      <TH>
+                        <span className="max-sm:text-xs">With investment</span>
+                      </TH>
                     </TR>
                   </THEAD>
                   <TBODY>
                     <TR>
-                      <TH>Nominal value</TH>
+                      <TH>
+                        <span className="max-sm:text-xs">Nominal value</span>
+                      </TH>
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
                           <RupeeIcon className="h-2.5" />
@@ -56,7 +64,11 @@ const FAQCard = () => {
                       </TD>
                     </TR>
                     <TR>
-                      <TH>Inflation-Adjusted</TH>
+                      <TH>
+                        <span className="max-sm:text-xs">
+                          Inflation-Adjusted
+                        </span>
+                      </TH>
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
                           <RupeeIcon className="h-2.5" />
@@ -135,6 +147,7 @@ const FAQCard = () => {
                   src={calculationsImage}
                   alt="equations used for calculating the result values"
                   loading="lazy"
+                  className="block max-sm:w-full aspect-[605/225]"
                 />
               </a>
             </>

@@ -1,5 +1,6 @@
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { ButtonProps } from "../types/button";
+import useDebounce from "../hooks/useDebounce";
 
 export const Button = ({
   className,
@@ -11,24 +12,25 @@ export const Button = ({
   isFixedWidth = false,
 }: PropsWithChildren<ButtonProps>) => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const btnTypeStyles =
     btnType === "primary"
       ? "text-white bg-primary"
       : "border-1 border-primary text-primary not-disabled:hover:bg-primary not-disabled:hover:text-white";
 
+  /**
+   * Fix button height if `isFixedHeight` is true
+   */
+  const fixBtnHeight = useDebounce(() => {
+    if (buttonRef.current) {
+      buttonRef.current.style.width =
+        Math.ceil(buttonRef.current.scrollWidth + 1) + "px";
+    }
+  });
+
   // To fix the width of buttons fixed to change texts without layout shift
   useEffect(() => {
     if (isFixedWidth) {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current); // Clear timeout if any
-      timeoutRef.current = setTimeout(() => {
-        if (buttonRef.current) {
-          buttonRef.current.style.width =
-            Math.ceil(buttonRef.current.scrollWidth + 1) + "px";
-        }
-        timeoutRef.current = null;
-      }, 0);
+      fixBtnHeight();
     }
   }, [isFixedWidth]);
 

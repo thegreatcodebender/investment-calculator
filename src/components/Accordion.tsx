@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useId, useRef, useState } from "react";
 import { AccordionProps } from "../types/accordion";
+import useDebounce from "../hooks/useDebounce";
 
 const Accordion = memo(function Accordion({
   title,
@@ -8,10 +9,24 @@ const Accordion = memo(function Accordion({
 }: AccordionProps) {
   const [isExpanded, setIsExpanded] = useState(isOpen);
   const contentContainerRef = useRef<HTMLDivElement | null>(null);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const windowResizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const id = useId();
+
+  const hideAccordion = useDebounce(() => {
+    // When accordion is expanded and height set is to 0
+    if (contentContainerRef.current && isExpanded) {
+      contentContainerRef.current.style.display = "none";
+      contentContainerRef.current.style.height = "auto";
+    }
+  }, 500);
+
+  const animateExpansion = useDebounce(() => {
+    // When accordion is collapsed and height is set to 0
+    if (contentContainerRef.current && !isExpanded) {
+      contentContainerRef.current.style.height =
+        contentContainerRef.current.scrollHeight + "px";
+      setIsExpanded(true);
+    }
+  }, 100);
 
   /**
    * Accordion expand animation on accordion trigger button click
@@ -29,27 +44,22 @@ const Accordion = memo(function Accordion({
     }
 
     // To hide the accordion
-    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-    hideTimeoutRef.current = setTimeout(() => {
-      // When accordion is expanded and height set is to 0
-      if (contentContainerRef.current && isExpanded) {
-        contentContainerRef.current.style.display = "none";
-        contentContainerRef.current.style.height = "auto";
-        hideTimeoutRef.current = null;
-      }
-    }, 500);
+    hideAccordion();
 
     // Change after a delay to animate expansion
-    if (showTimeoutRef.current) clearTimeout(showTimeoutRef.current);
-    showTimeoutRef.current = setTimeout(() => {
-      // When accordion is collapsed and height is set to 0
-      if (contentContainerRef.current && !isExpanded) {
+    animateExpansion();
+  };
+
+  const resizeOnWindowResize = useDebounce(() => {
+    // Check if node exists and it is visible
+    if (contentContainerRef.current) {
+      if (contentContainerRef.current.style.display !== "none") {
+        // Assign the new natural height of element as height property
         contentContainerRef.current.style.height =
           contentContainerRef.current.scrollHeight + "px";
-        setIsExpanded(true);
       }
-    }, 100);
-  };
+    }
+  }, 100);
 
   /**
    * Recalculate and adjust accordion content height
@@ -59,19 +69,7 @@ const Accordion = memo(function Accordion({
       // Check if the content is expanded
       if (contentContainerRef.current.style.display !== "none") {
         contentContainerRef.current.style.height = "auto"; // Set height to auto to make the content to be in its natural height
-        if (windowResizeTimeoutRef.current)
-          clearTimeout(windowResizeTimeoutRef.current); // Clear existing timer if any
-        windowResizeTimeoutRef.current = setTimeout(() => {
-          // Check if node exists and it is visible
-          if (contentContainerRef.current) {
-            if (contentContainerRef.current.style.display !== "none") {
-              // Assign the new natural height of element as height property
-              contentContainerRef.current.style.height =
-                contentContainerRef.current.scrollHeight + "px";
-            }
-            windowResizeTimeoutRef.current = null; // Set timeoutId ref to null to prevent unnecessary attempt of clearTimeout
-          }
-        }, 100);
+        resizeOnWindowResize();
       }
     }
   }, []);
