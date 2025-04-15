@@ -2,9 +2,10 @@ import { createRoot } from "react-dom/client";
 import { Button } from "./Button";
 import { GenerateImageButtonProps } from "../types/generateImageButton";
 import saveImageTemplate from "../assets/images/save_image_template.png";
-import { amountINRWithComma } from "../utils/display";
+import { currencyWithComma } from "../utils/display";
 import { useState } from "react";
 import ResultPieChart from "./ResultPieChart";
+import { useCurrencyLocale } from "../context/CurrencyContext";
 
 const GenerateImageButton = ({
   pieData,
@@ -15,6 +16,7 @@ const GenerateImageButton = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
@@ -81,7 +83,10 @@ const GenerateImageButton = ({
                 <div className="text-[44px] font-semibold mt-2 leading-none">
                   <span className="font-family-currency">₹</span>
                   <span className="invisible text-[0.75em]">.</span>
-                  {amountINRWithComma(amount.actualValue)}
+                  {currencyWithComma({
+                    amount: amount.actualValue,
+                    currencyLocale,
+                  })}
                 </div>
               </div>
               {/* Expected Return Rate */}
@@ -165,8 +170,14 @@ const GenerateImageButton = ({
                   <span className="font-family-currency">₹</span>
                   <span className="invisible text-[0.75em]">.</span>
                   {contribution === -1
-                    ? amountINRWithComma(investmentAndInterestTotal)
-                    : amountINRWithComma(contribution)}
+                    ? currencyWithComma({
+                        amount: investmentAndInterestTotal,
+                        currencyLocale,
+                      })
+                    : currencyWithComma({
+                        amount: contribution,
+                        currencyLocale,
+                      })}
                 </p>
               </div>
               <div>
@@ -176,7 +187,10 @@ const GenerateImageButton = ({
                 <p className="mt-2 leading-[47px] text-[34px] font-semibold">
                   <span className="font-family-currency">₹</span>
                   <span className="invisible text-[0.75em]">.</span>
-                  {amountINRWithComma(inflationAdjustedValue)}
+                  {currencyWithComma({
+                    amount: inflationAdjustedValue,
+                    currencyLocale,
+                  })}
                   <span className="font-normal text-[28px] ms-3 align-bottom">
                     at {inflation.actualValue.toFixed(2)}% annual inflation rate
                   </span>

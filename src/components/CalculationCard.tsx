@@ -20,15 +20,17 @@ import { ActionType } from "../types/investmentContext";
 import { InputValueType } from "../types/inputField";
 import { Errors } from "../types/errors";
 import { CalculationCardProps } from "../types/card";
-import { amountINRWithComma } from "../utils/display";
+import { currencyWithComma } from "../utils/display";
 import useIsMobile from "../hooks/useIsMobile";
 import { useCalculationCardDispatch } from "../context/CalculationCardContext";
 import { CalculationCardActionTypes } from "../types/calculationCardContext";
+import { useCurrencyLocale } from "../context/CurrencyContext";
 
 const CalculationCard = ({
   investmentState,
   cardRef,
 }: CalculationCardProps) => {
+  const [currencyLocale] = useCurrencyLocale();
   const isMobile = useIsMobile();
   const [errors, setErrors] = useState<Errors>({
     amount: "",
@@ -202,7 +204,10 @@ const CalculationCard = ({
             SLIDER_INPUT_METADATA.AMOUNT.tooltip[investmentMode.title]
           }
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
-          placeholder={amountINRWithComma(SLIDER_INPUT_METADATA.AMOUNT.min)}
+          placeholder={currencyWithComma({
+            amount: SLIDER_INPUT_METADATA.AMOUNT.min,
+            currencyLocale,
+          })}
           value={amount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleInputChange(e, ActionType.Amount);

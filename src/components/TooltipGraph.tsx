@@ -1,6 +1,6 @@
 import { useInvestmentState } from "../context/InvestmentContext";
 import { currencyInWords } from "../utils/display";
-import { RupeeIcon } from "./Icons";
+import { CurrencyIcon } from "./Icons";
 
 interface TooltipGraphProps {
   payload?: {
@@ -55,7 +55,7 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                       </span>
                       <div className="flex gap-0.75 items-center max-md:text-sm text-lg font-semibold leading-snug">
                         {/* Amount */}
-                        <RupeeIcon className="max-md:h-2.75 h-3.25" />
+                        <CurrencyIcon className="max-md:h-2.75 h-3.25" />
                         <p>
                           {data.value === 0
                             ? "0"
@@ -71,7 +71,7 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                   {/* Amount (inflation adjusted) */}
                   <div className="flex gap-0.5 items-center text-xs mt-1.5 leading-none text-gray-700">
                     <p className="font-normal">Inflation adjusted: </p>
-                    <RupeeIcon className="h-2.25 opacity-75" />
+                    <CurrencyIcon className="h-2.25 opacity-75" />
                     <p className="font-semibold">
                       {data.value === 0
                         ? "0"

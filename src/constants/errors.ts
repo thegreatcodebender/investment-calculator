@@ -1,4 +1,3 @@
-import { amountINRWithComma } from "../utils/display";
 import { INPUT_FIELD_METADATA, SLIDER_INPUT_METADATA } from "./input";
 
 interface INPUT_ERROR_MESSAGE_TYPE {
@@ -7,9 +6,7 @@ interface INPUT_ERROR_MESSAGE_TYPE {
 
 export const INPUT_ERROR_MESSAGE: INPUT_ERROR_MESSAGE_TYPE = {
   AMOUNT: {
-    rangeError: `Enter the amount between ${amountINRWithComma(
-      SLIDER_INPUT_METADATA.AMOUNT.min
-    )} - ${amountINRWithComma(SLIDER_INPUT_METADATA.AMOUNT.max)} rupees.`,
+    rangeError: `Enter the amount between ${SLIDER_INPUT_METADATA.AMOUNT.min} - ${SLIDER_INPUT_METADATA.AMOUNT.max}.`,
   },
   DURATION: {
     rangeError: `Enter the timeline between ${SLIDER_INPUT_METADATA.DURATION.min} - ${SLIDER_INPUT_METADATA.DURATION.max} years.`,

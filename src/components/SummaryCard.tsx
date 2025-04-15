@@ -1,8 +1,9 @@
 import { PropsWithChildren } from "react";
 import { SummaryCardContainerProps, SummaryCardProps } from "../types/card";
-import { amountINRWithComma } from "../utils/display";
-import { RupeeIcon } from "./Icons";
+import { currencyWithComma } from "../utils/display";
+import { CurrencyIcon } from "./Icons";
 import { useCalculationCardState } from "../context/CalculationCardContext";
+import { useCurrencyLocale } from "../context/CurrencyContext";
 
 const SummaryCardContainer: React.FC<
   PropsWithChildren<SummaryCardContainerProps>
@@ -45,6 +46,7 @@ const SummaryCard = ({
   const investmentNature = investmentState.investmentNature;
   const investmentMode = investmentState.mode;
 
+  const [currencyLocale] = useCurrencyLocale();
   const calculationCardState = useCalculationCardState();
   const isCalculationCardVisible =
     calculationCardState.isCalculationCardVisible;
@@ -83,10 +85,13 @@ const SummaryCard = ({
             {resultTitle}
           </p>
           <p className="opacity-80 my-1 text-sm flex gap-0.75 font-semibold items-center justify-center leading-none">
-            <RupeeIcon className="h-[10px]" />
+            <CurrencyIcon className="h-[10px]" />
             {contribution === -1
-              ? amountINRWithComma(investmentAndInterestTotal)
-              : amountINRWithComma(contribution)}
+              ? currencyWithComma({
+                  amount: investmentAndInterestTotal,
+                  currencyLocale,
+                })
+              : currencyWithComma({ amount: contribution, currencyLocale })}
           </p>
           <div className="text-center font-medium h-4 text-white bg-accent-purple">
             <span className="material-symbols-outlined !text-lg  !leading-none rotate-90">
@@ -106,8 +111,11 @@ const SummaryCard = ({
           </div>
           <div className="opacity-80 mt-1 text-sm text-nowrap text-center">
             <span className="capitalize flex gap-0.5 items-center justify-center">
-              {investmentMode.shortName}: <RupeeIcon className="h-[10px]" />
-              {amountINRWithComma(amount.actualValue)}
+              {investmentMode.shortName}: <CurrencyIcon className="h-[10px]" />
+              {currencyWithComma({
+                amount: amount.actualValue,
+                currencyLocale,
+              })}
             </span>
             {duration.actualValue} yrs <span className="text-gray-400">•</span>{" "}
             {interest.actualValue}% <span className="text-gray-400">•</span>{" "}

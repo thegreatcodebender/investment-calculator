@@ -1,6 +1,6 @@
 import Accordion from "./Accordion";
 import Card from "./Card";
-import { RupeeIcon } from "./Icons";
+import { CurrencyIcon } from "./Icons";
 import { TBODY, TD, TH, THEAD, TR } from "./Table";
 import calculationsImage from "/assets/images/calculations.svg";
 
@@ -47,14 +47,14 @@ const FAQCard = () => {
                       </TH>
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
-                          <RupeeIcon className="h-2.5" />
+                          <CurrencyIcon className="h-2.5" />
                           10L
                         </p>
                       </TD>
                       <TD>
                         <span className="flex gap-1 items-start leading-none justify-center">
                           <p className="flex gap-0.5 items-center justify-center">
-                            <RupeeIcon className="h-2.5" />
+                            <CurrencyIcon className="h-2.5" />
                             18.9L
                           </p>
                           <span className="text-primary text-xs font-semibold">
@@ -71,14 +71,14 @@ const FAQCard = () => {
                       </TH>
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
-                          <RupeeIcon className="h-2.5" />
+                          <CurrencyIcon className="h-2.5" />
                           5.74L
                         </p>
                       </TD>
                       <TD>
                         <span className="flex gap-1 items-start leading-none justify-center">
                           <p className="flex gap-0.5 items-center justify-center">
-                            <RupeeIcon className="h-2.5" />
+                            <CurrencyIcon className="h-2.5" />
                             10.45L
                           </p>
                           <span className="text-primary text-xs font-semibold">

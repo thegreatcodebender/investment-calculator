@@ -4,6 +4,7 @@ import { InvestmentProvider } from "./context/InvestmentContext";
 import Footer from "./components/Footer";
 import CalculationsAndResults from "./components/CalculationsAndResults";
 import FAQCard from "./components/FAQCard";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 const App = () => {
   return (
@@ -16,10 +17,12 @@ const App = () => {
         <p className="text-base">
           Fuel your investment journey by placing your expectations upfront!
         </p>
-        <InvestmentProvider>
-          <CalculationsAndResults />
-        </InvestmentProvider>
-        <FAQCard />
+        <CurrencyProvider>
+          <InvestmentProvider>
+            <CalculationsAndResults />
+          </InvestmentProvider>
+          <FAQCard />
+        </CurrencyProvider>
       </main>
       <Footer />
     </>

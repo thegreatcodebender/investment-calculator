@@ -1,6 +1,7 @@
-import rupeeIcon from "../assets/images/rupee.svg";
+import { useCurrencyLocale } from "../context/CurrencyContext";
 import { InputFieldProps, InputValueType } from "../types/inputField";
-import { amountINRWithComma, removeCommaFromString } from "../utils/display";
+import { currencyWithComma, removeCommaFromString } from "../utils/display";
+import { CurrencyIcon } from "./Icons";
 import Tooltip from "./Tooltip";
 
 const InputField = ({
@@ -17,6 +18,7 @@ const InputField = ({
   inputMode = "text",
   onChange,
 }: InputFieldProps) => {
+  const [currencyLocale] = useCurrencyLocale();
   const inputValue =
     typeof value === "object"
       ? value.inputValue === -1
@@ -55,7 +57,7 @@ const InputField = ({
               }`}
             >
               {isCurrency ? (
-                <img src={rupeeIcon} alt="Rupees" className="w-[10px]" />
+                <CurrencyIcon className="w-[10px]" />
               ) : (
                 <p className="leading-none select-none">
                   {isPercent ? "%" : isYear && "Years"}
@@ -73,7 +75,11 @@ const InputField = ({
                 isCurrency &&
                 !isNaN(Number(commaRemovedInputValue)) &&
                 noTrailingDecimalPoint // Trailing decimal point prevents user from typing decimal values when i18n is used
-                  ? amountINRWithComma(Number(commaRemovedInputValue), true)
+                  ? currencyWithComma({
+                      amount: Number(commaRemovedInputValue),
+                      showDecimal: true,
+                      currencyLocale,
+                    })
                   : inputValue
               }
               onChange={onChange}

@@ -1,17 +1,27 @@
+import { CurrencyLocales } from "../types/currencyContext";
+
 /**
  * Comma seperated amount in en-IN locale format
- * @param {number} amount Amount
+ * @param {Object} args Argument object
+ * @param {number} args.amount Amount
+ * @param {boolean} args.showDecimal Controls if decimal needs to shown
+ * @param {CurrencyLocales} args.currencyLocale Current currency locale
  * @returns {string} Comma seperated amount
  */
-export const amountINRWithComma = (
-  amount: number,
-  showDecimal = false
-): string => {
+export const currencyWithComma = ({
+  amount,
+  showDecimal = false,
+  currencyLocale = CurrencyLocales.IN,
+}: {
+  amount: number;
+  showDecimal?: boolean;
+  currencyLocale?: CurrencyLocales;
+}): string => {
   if (typeof amount !== "number" || isNaN(amount)) {
     throw new Error("Input must be a valid number.");
   }
   const isDecimal = amount.toString().includes(".");
-  const formattedAmount = new Intl.NumberFormat("en-IN", {
+  const formattedAmount = new Intl.NumberFormat(currencyLocale, {
     style: "currency",
     currency: "INR",
     currencyDisplay: "code",

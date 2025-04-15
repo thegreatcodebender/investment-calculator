@@ -1,12 +1,12 @@
 import Card from "./Card";
-import { RupeeIcon } from "./Icons";
+import { CurrencyIcon } from "./Icons";
 import { Button } from "./Button";
 import { calculateInflationAdjustedValue } from "../utils/calculations";
 import {
   INVESTMENT_MODES,
   INVESTMENT_NATURE_LIST,
 } from "../constants/investment";
-import { amountINRWithComma } from "../utils/display";
+import { currencyWithComma } from "../utils/display";
 import useInvestmentParams from "../hooks/useInvestmentParams";
 import { copyToClipboard } from "../utils/nativeActions";
 import { useState } from "react";
@@ -16,6 +16,7 @@ import { ResultCardProps } from "../types/card";
 import GenerateImageButton from "./GenerateImageButton";
 import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
+import { useCurrencyLocale } from "../context/CurrencyContext";
 
 const ResultCard = ({
   investmentState,
@@ -24,6 +25,8 @@ const ResultCard = ({
 }: ResultCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
+  const [currencyLocale] = useCurrencyLocale();
+
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -41,9 +44,10 @@ const ResultCard = ({
   const isMonthlySelected =
     investmentNature.actualValue === INVESTMENT_NATURE_LIST[0].title;
   // Get contribution value when it is available
-  const resultCommaSeperated = amountINRWithComma(
-    contribution === -1 ? investmentAndInterestTotal : contribution
-  );
+  const resultCommaSeperated = currencyWithComma({
+    amount: contribution === -1 ? investmentAndInterestTotal : contribution,
+    currencyLocale,
+  });
   // Result title to be shown according to the contribution type and investment nature
   const resultTitle = isGoalSelected
     ? `Required ${
@@ -61,19 +65,23 @@ const ResultCard = ({
           ? totalInvestment
           : contribution
         : totalInvestment,
-      valueCommaSeperated: amountINRWithComma(
-        isGoalSelected
+      valueCommaSeperated: currencyWithComma({
+        amount: isGoalSelected
           ? isMonthlySelected
             ? totalInvestment
             : contribution
-          : totalInvestment
-      ),
+          : totalInvestment,
+        currencyLocale,
+      }),
       fill: "var(--color-accent-green)",
     },
     {
       title: "Total Returns",
       value: totalInterest,
-      valueCommaSeperated: amountINRWithComma(totalInterest),
+      valueCommaSeperated: currencyWithComma({
+        amount: totalInterest,
+        currencyLocale,
+      }),
       fill: "var(--color-accent-purple)",
     },
   ];
@@ -87,9 +95,10 @@ const ResultCard = ({
     duration: duration.actualValue,
   });
 
-  const inflationAdjustedCommaSeperated = amountINRWithComma(
-    inflationAdjustedValue
-  );
+  const inflationAdjustedCommaSeperated = currencyWithComma({
+    amount: inflationAdjustedValue,
+    currencyLocale,
+  });
 
   /** Revery copy button text to original */
   const revertCopyText = useDebounce(() => {
@@ -134,7 +143,7 @@ const ResultCard = ({
                 <span>{pie.title}</span>
               </p>
               <p className="ps-7 flex gap-0.25 mt-2 items-center leading-none text-lg font-semibold">
-                <RupeeIcon className="h-3.25" />
+                <CurrencyIcon className="h-3.25" />
                 {pie.valueCommaSeperated}
               </p>
             </div>
@@ -146,7 +155,7 @@ const ResultCard = ({
             {resultTitle}
           </h2>
           <p className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none">
-            <RupeeIcon className="h-[18px]" />
+            <CurrencyIcon className="h-[18px]" />
             {resultCommaSeperated}
           </p>
           {/* Inflation projection*/}
@@ -155,7 +164,7 @@ const ResultCard = ({
             <Tooltip tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP} />
           </p>
           <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">
-            <RupeeIcon className="h-[12px]" />
+            <CurrencyIcon className="h-[12px]" />
             {inflationAdjustedCommaSeperated}
           </p>
         </div>

@@ -1,7 +1,7 @@
 import { InputValueType } from "../types/inputField";
 import { SliderWithInputProps } from "../types/sliderWithInput";
 import { currencyInWords } from "../utils/display";
-import { RupeeIcon } from "./Icons";
+import { CurrencyIcon } from "./Icons";
 import InputField from "./InputField";
 
 const SliderWithInput = ({
@@ -39,7 +39,7 @@ const SliderWithInput = ({
         return (
           <span className="flex gap-0.5 items-center">
             <span aria-hidden>
-              <RupeeIcon className="h-[10px] opacity-75" />
+              <CurrencyIcon className="h-[10px] opacity-75" />
             </span>
 
             {typeof legendValue === "number"
