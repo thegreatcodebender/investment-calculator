@@ -17,6 +17,7 @@ import GenerateImageButton from "./GenerateImageButton";
 import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrencyLocale } from "../context/CurrencyContext";
+import { useFeatureFlag } from "../hooks/useFeatureFlag";
 
 const ResultCard = ({
   investmentState,
@@ -26,6 +27,8 @@ const ResultCard = ({
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
   const [currencyLocale] = useCurrencyLocale();
+  const isSaveAsImageFeatureEnabled = useFeatureFlag("saveAsImage");
+  const isCopyLinkFeatureEnabled = useFeatureFlag("shareAsLink");
 
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
@@ -190,22 +193,26 @@ const ResultCard = ({
           Share your investment plan
         </h3>
         <div className="px-3 flex flex-wrap gap-3 items-center justify-center">
-          <GenerateImageButton
-            pieData={pieData}
-            investmentState={investmentState}
-            calculationResult={calculationResult}
-            resultTitle={resultTitle}
-            inflationAdjustedValue={inflationAdjustedValue}
-            isGoalSelected={isGoalSelected}
-          />
-          <Button
-            btnType="primary"
-            onClick={handleCopyLink}
-            isDisabled={isCopyBtnDisabled}
-            isFixedWidth
-          >
-            {copyBtnText}
-          </Button>
+          {isSaveAsImageFeatureEnabled && (
+            <GenerateImageButton
+              pieData={pieData}
+              investmentState={investmentState}
+              calculationResult={calculationResult}
+              resultTitle={resultTitle}
+              inflationAdjustedValue={inflationAdjustedValue}
+              isGoalSelected={isGoalSelected}
+            />
+          )}
+          {isCopyLinkFeatureEnabled && (
+            <Button
+              btnType="primary"
+              onClick={handleCopyLink}
+              isDisabled={isCopyBtnDisabled}
+              isFixedWidth
+            >
+              {copyBtnText}
+            </Button>
+          )}
         </div>
       </div>
     </Card>
