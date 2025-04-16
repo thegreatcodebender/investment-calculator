@@ -48,6 +48,9 @@ const GenerateImageButton = ({
       const todayInWords = new Intl.DateTimeFormat("en-IN", {
         dateStyle: "medium",
       }).format(today);
+      const fileNameSuffix = `${new Intl.DateTimeFormat(currencyLocale, {
+        dateStyle: "short",
+      }).format(today)}_${today.getTime()}`;
 
       // Create an offscreen container with explicit dimensions
       const offscreenDiv = document.createElement("div");
@@ -225,7 +228,7 @@ const GenerateImageButton = ({
             // Create download link
             const link = document.createElement("a");
             link.href = dataUrl;
-            link.download = `My Investment Plan - ${todayInWords}.png`;
+            link.download = `My_Investment_Plan_${fileNameSuffix}.png`;
             link.style.display = "none";
             document.body.appendChild(link);
             link.click();
