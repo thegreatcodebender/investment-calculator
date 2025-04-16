@@ -4,7 +4,10 @@ const Footer = () => {
       <div className="py-4 px-6 shadow-card rounded-2xl rounded-b-none border-[rgba(13,122,72,0.01)]">
         <p className="leading-none">
           Thanks for checking out this project! See more of my work in{" "}
-          <a href="/" className="py-2 inline-block text-primary font-semibold">
+          <a
+            href="https://iabhi.dev/?utm_source=icalc&utm_medium=footer&utm_campaign=projects"
+            className="py-2 inline-block text-primary font-semibold"
+          >
             my portfolio
           </a>
         </p>
