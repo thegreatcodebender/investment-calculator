@@ -1,6 +1,5 @@
-import { PropsWithChildren, useEffect, useRef } from "react";
+import { PropsWithChildren, useCallback, useEffect, useRef } from "react";
 import { ButtonProps } from "../types/button";
-import useDebounce from "../hooks/useDebounce";
 
 export const Button = ({
   className,
@@ -12,6 +11,7 @@ export const Button = ({
   isFixedWidth = false,
 }: PropsWithChildren<ButtonProps>) => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const isWidthUpdated = useRef(false);
   const btnTypeStyles =
     btnType === "primary"
       ? "text-white bg-primary"
@@ -20,18 +20,22 @@ export const Button = ({
   /**
    * Fix button height if `isFixedHeight` is true
    */
-  const fixBtnHeight = useDebounce(() => {
-    if (buttonRef.current) {
+  const fixBtnHeight = useCallback(() => {
+    if (buttonRef.current && isFixedWidth && !isWidthUpdated.current) {
       buttonRef.current.style.width =
         Math.ceil(buttonRef.current.scrollWidth + 1) + "px";
+      isWidthUpdated.current = true;
     }
-  });
+  }, [isWidthUpdated]);
 
   // To fix the width of buttons fixed to change texts without layout shift
   useEffect(() => {
-    if (isFixedWidth) {
-      fixBtnHeight();
-    }
+    buttonRef.current?.addEventListener("focus", fixBtnHeight);
+    buttonRef.current?.addEventListener("mouseover", fixBtnHeight);
+    return () => {
+      buttonRef.current?.removeEventListener("focus", fixBtnHeight);
+      buttonRef.current?.removeEventListener("mouseover", fixBtnHeight);
+    };
   }, [isFixedWidth]);
 
   return (
