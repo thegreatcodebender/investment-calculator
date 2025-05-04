@@ -232,7 +232,10 @@ const GenerateImageButton = ({
             link.style.display = "none";
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            // Remove link after 30s to avoid issues in iOS
+            setTimeout(() => {
+              document.body.removeChild(link);
+            }, 30000);
 
             // Clean up offscreen container
             root.unmount();

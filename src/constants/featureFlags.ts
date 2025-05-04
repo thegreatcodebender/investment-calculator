@@ -3,6 +3,6 @@ interface FEATURE_FLAGS {
 }
 
 export const FEATURE_FLAGS: FEATURE_FLAGS = {
-  saveAsImage: false,
+  saveAsImage: true,
   shareAsLink: true,
 };
