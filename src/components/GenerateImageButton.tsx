@@ -16,7 +16,6 @@ const GenerateImageButton = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<any>([]);
   const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -233,7 +232,10 @@ const GenerateImageButton = ({
             link.style.display = "none";
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            // Remove link after 30s to avoid issues in iOS
+            setTimeout(() => {
+              document.body.removeChild(link);
+            }, 30000);
 
             // Clean up offscreen container
             root.unmount();
@@ -242,37 +244,24 @@ const GenerateImageButton = ({
           })
           .catch((error) => {
             console.error("Error generating image:", error);
-            setErrors((prev: any) => [
-              ...prev,
-              `Error generating image: ${error}`,
-            ]);
-
             setIsLoading(false);
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
-      // Error logging
-      setErrors((prev: any) => [
-        ...prev,
-        `Error while importing html2canvas:${error}`,
-      ]);
       setIsLoading(false);
       console.error("Error while importing html2canvas", error);
     }
   };
 
   return (
-    <>
-      <Button
-        btnType="primary"
-        onClick={generateResultImage}
-        isDisabled={isLoading}
-        isFixedWidth
-      >
-        {isLoading ? "Saving..." : "Save as image"}
-      </Button>
-      {errors.length > 0 && JSON.stringify(errors)}
-    </>
+    <Button
+      btnType="primary"
+      onClick={generateResultImage}
+      isDisabled={isLoading}
+      isFixedWidth
+    >
+      {isLoading ? "Saving..." : "Save as image"}
+    </Button>
   );
 };
 
