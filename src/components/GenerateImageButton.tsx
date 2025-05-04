@@ -16,6 +16,7 @@ const GenerateImageButton = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<any>([]);
   const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -241,24 +242,36 @@ const GenerateImageButton = ({
           })
           .catch((error) => {
             console.error("Error generating image:", error);
+            setErrors((prev: any) => [
+              ...prev,
+              `Error generating image: ${error}`,
+            ]);
+
             setIsLoading(false);
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
+      setErrors((prev: any) => [
+        ...prev,
+        `Error while importing html2canvas:${error}`,
+      ]);
       setIsLoading(false);
       console.error("Error while importing html2canvas", error);
     }
   };
 
   return (
-    <Button
-      btnType="primary"
-      onClick={generateResultImage}
-      isDisabled={isLoading}
-      isFixedWidth
-    >
-      {isLoading ? "Saving..." : "Save as image"}
-    </Button>
+    <>
+      <Button
+        btnType="primary"
+        onClick={generateResultImage}
+        isDisabled={isLoading}
+        isFixedWidth
+      >
+        {isLoading ? "Saving..." : "Save as image"}
+      </Button>
+      {errors.length > 0 && JSON.stringify(errors)}
+    </>
   );
 };
 
