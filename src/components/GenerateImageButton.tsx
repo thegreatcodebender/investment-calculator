@@ -251,6 +251,7 @@ const GenerateImageButton = ({
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
+      // Error logging
       setErrors((prev: any) => [
         ...prev,
         `Error while importing html2canvas:${error}`,
