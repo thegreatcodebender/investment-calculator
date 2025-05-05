@@ -6,6 +6,7 @@ import { currencyWithComma } from "../utils/display";
 import { useState } from "react";
 import ResultPieChart from "./ResultPieChart";
 import { useCurrencyLocale } from "../context/CurrencyContext";
+import { CurrencyLocales } from "../types/currencyContext";
 
 const GenerateImageButton = ({
   pieData,
@@ -23,6 +24,12 @@ const GenerateImageButton = ({
   const investmentNature = investmentState.investmentNature;
   const inflation = investmentState.inflation;
   const { contribution, investmentAndInterestTotal } = calculationResult;
+  const currency =
+    currencyLocale === CurrencyLocales.IN ? (
+      <span className="font-family-currency">₹</span>
+    ) : (
+      <span className="font-family-currency text-[0.9em]">$</span>
+    );
 
   /**
    * Generate and download result image
@@ -54,13 +61,13 @@ const GenerateImageButton = ({
 
       // Create an offscreen container with explicit dimensions
       const offscreenDiv = document.createElement("div");
-      offscreenDiv.style.position = "absolute";
-      offscreenDiv.style.left = "-9999px";
+      // offscreenDiv.style.position = "absolute";
+      // offscreenDiv.style.left = "-9999px";
       offscreenDiv.style.width = "1080px";
       offscreenDiv.style.height = "1920px";
       offscreenDiv.style.backgroundColor = "white";
       document.body.appendChild(offscreenDiv);
-      // document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
+      document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
 
       const root = createRoot(offscreenDiv);
 
@@ -84,7 +91,7 @@ const GenerateImageButton = ({
                   {isGoalSelected ? "Goal" : "Investment Amount"}
                 </p>
                 <div className="text-[44px] font-semibold mt-2 leading-none">
-                  <span className="font-family-currency">₹</span>
+                  {currency}
                   <span className="invisible text-[0.75em]">.</span>
                   {currencyWithComma({
                     amount: amount.actualValue,
@@ -102,9 +109,9 @@ const GenerateImageButton = ({
             </div>
 
             <div className="flex gap-[144px] ms-1.5">
-              {/* Investment timeline */}
+              {/* Investment duration */}
               <div className="w-[350px]">
-                <p className="text-[34px]">Investment Timeline</p>
+                <p className="text-[34px]">Duration</p>
                 <p className="text-[44px] font-semibold mt-2 leading-none">
                   {duration.actualValue} years
                 </p>
@@ -154,7 +161,7 @@ const GenerateImageButton = ({
                         isPieAmountLarge ? "text-[42px]" : "text-5xl" // Reduce font size since the value causes overflow
                       } font-semibold`}
                     >
-                      <span className="font-family-currency">₹</span>
+                      {currency}
                       <span className="invisible text-[0.75em]">.</span>
                       <span>{pie.valueCommaSeperated}</span>
                     </p>
@@ -170,7 +177,7 @@ const GenerateImageButton = ({
                   {resultTitle}
                 </div>
                 <p className="leading-[87px] text-[63px] font-semibold">
-                  <span className="font-family-currency">₹</span>
+                  {currency}
                   <span className="invisible text-[0.75em]">.</span>
                   {contribution === -1
                     ? currencyWithComma({
@@ -188,7 +195,7 @@ const GenerateImageButton = ({
                   Inflation adjusted value {contribution !== -1 && "of goal"}
                 </p>
                 <p className="mt-2 leading-[47px] text-[34px] font-semibold">
-                  <span className="font-family-currency">₹</span>
+                  {currency}
                   <span className="invisible text-[0.75em]">.</span>
                   {currencyWithComma({
                     amount: inflationAdjustedValue,
@@ -238,8 +245,8 @@ const GenerateImageButton = ({
             }, 30000);
 
             // Clean up offscreen container
-            root.unmount();
-            document.body.removeChild(offscreenDiv);
+            // root.unmount();
+            // document.body.removeChild(offscreenDiv);
             setIsLoading(false);
           })
           .catch((error) => {

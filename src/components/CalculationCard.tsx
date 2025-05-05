@@ -200,9 +200,9 @@ const CalculationCard = ({
           max={SLIDER_INPUT_METADATA.AMOUNT.max}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
           label={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
-          tooltipText={
-            SLIDER_INPUT_METADATA.AMOUNT.tooltip[investmentMode.title]
-          }
+          tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[
+            investmentMode.title
+          ](currencyLocale)}
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
           placeholder={currencyWithComma({
             amount: SLIDER_INPUT_METADATA.AMOUNT.min,

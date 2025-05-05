@@ -192,6 +192,39 @@
     scrollbar-width: none;
     /* Firefox */
   }
+
+  .select-wrapper select {
+    -o-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .select-wrapper::before {
+    content: "chevron_right";
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    rotate: 90deg;
+    transform-origin: center center;
+    transform: translateX(-50%);
+    color: rgba(0, 0, 0, 0.4);
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    pointer-events: none;
+  }
 }
 
 @layer utilities {

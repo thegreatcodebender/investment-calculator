@@ -48,7 +48,7 @@ const InputField = ({
         <>
           <div className={`relative`}>
             <span
-              className={`absolute ${
+              className={`absolute pointer-events-none ${
                 isCurrency
                   ? "left-3 top-[14px]"
                   : isYear

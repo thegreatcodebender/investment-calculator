@@ -1,3 +1,5 @@
+import { CurrencyLocales } from "../types/currencyContext";
+import { CURRENCY } from "./currency";
 import { INVESTMENT_MODES } from "./investment";
 
 export const SLIDER_INPUT_METADATA = {
@@ -11,10 +13,10 @@ export const SLIDER_INPUT_METADATA = {
       [INVESTMENT_MODES[1].title]: "Investment Amount",
     },
     tooltip: {
-      [INVESTMENT_MODES[0].title]:
-        "Enter the total amount you want to achieve (e.g. INR 25,00,000)",
-      [INVESTMENT_MODES[1].title]:
-        "Enter the amount you plan to invest (e.g. INR 10,000)",
+      [INVESTMENT_MODES[0].title]: (currencyLocale: CurrencyLocales) =>
+        `Enter the total amount you want to achieve (e.g. ${CURRENCY[currencyLocale]} 25,00,000)`,
+      [INVESTMENT_MODES[1].title]: (currencyLocale: CurrencyLocales) =>
+        `Enter the amount you plan to invest (e.g. ${CURRENCY[currencyLocale]} 10,000)`,
     },
   },
   DURATION: {

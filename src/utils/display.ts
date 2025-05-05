@@ -56,6 +56,7 @@ interface CurrencyInWords {
   amount: number;
   decimalCount?: number;
   shortName?: boolean;
+  currencyLocale: CurrencyLocales;
 }
 
 /**
@@ -68,7 +69,9 @@ export const currencyInWords = ({
   amount,
   decimalCount = 0,
   shortName = false,
+  currencyLocale,
 }: CurrencyInWords): string => {
+  const isINR = currencyLocale === CurrencyLocales.IN;
   let inWords = "",
     shortWord = "",
     longWord = "",
@@ -76,23 +79,23 @@ export const currencyInWords = ({
 
   if (amount < 100000) {
     shortWord = "K";
-    longWord = "Thousand";
+    longWord = isINR ? "Thousand" : "Thousand";
     divisor = 1000;
   } else if (amount < 10000000) {
-    shortWord = "L";
-    longWord = "Lakhs";
+    shortWord = isINR ? "L" : "HK";
+    longWord = isINR ? "Lakhs" : "Hundred Thousand";
     divisor = 100000;
   } else if (amount < 10000000000) {
-    shortWord = "Cr";
-    longWord = "Crores";
+    shortWord = isINR ? "Cr" : "M";
+    longWord = isINR ? "Crores" : "Million";
     divisor = 10000000;
   } else if (amount < 1000000000000) {
-    shortWord = "KCr";
-    longWord = "Thousand Crores";
+    shortWord = isINR ? "KCr" : "TenB";
+    longWord = isINR ? "Thousand Crores" : "Ten Billion";
     divisor = 10000000000;
   } else {
-    shortWord = "LCr";
-    longWord = "Lakh Crores";
+    shortWord = isINR ? "LCr" : "T";
+    longWord = isINR ? "Lakh Crores" : "Trillion";
     divisor = 1000000000000;
   }
 
