@@ -61,13 +61,13 @@ const GenerateImageButton = ({
 
       // Create an offscreen container with explicit dimensions
       const offscreenDiv = document.createElement("div");
-      // offscreenDiv.style.position = "absolute";
-      // offscreenDiv.style.left = "-9999px";
+      offscreenDiv.style.position = "absolute";
+      offscreenDiv.style.left = "-9999px";
       offscreenDiv.style.width = "1080px";
       offscreenDiv.style.height = "1920px";
       offscreenDiv.style.backgroundColor = "white";
       document.body.appendChild(offscreenDiv);
-      document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
+      // document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
 
       const root = createRoot(offscreenDiv);
 
@@ -245,8 +245,8 @@ const GenerateImageButton = ({
             }, 30000);
 
             // Clean up offscreen container
-            // root.unmount();
-            // document.body.removeChild(offscreenDiv);
+            root.unmount();
+            document.body.removeChild(offscreenDiv);
             setIsLoading(false);
           })
           .catch((error) => {

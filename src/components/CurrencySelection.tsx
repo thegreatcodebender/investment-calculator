@@ -15,7 +15,7 @@ const CurrencySelection = () => {
           id={selectId}
           className="max-sm:w-full px-3.5 py-3.5 pe-7.5 shadow-card text-gray-600 font-medium leading-none"
           onChange={(e) => setCurrencyLocale(e.target.value as CurrencyLocales)}
-          defaultValue={currencyLocale}
+          value={currencyLocale}
         >
           <option value={CurrencyLocales.IN}>INR</option>
           <option value={CurrencyLocales.US}>USD</option>

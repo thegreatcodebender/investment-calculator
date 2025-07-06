@@ -4,8 +4,10 @@ import { INVESTMENT_MODES } from "./investment";
 
 export const SLIDER_INPUT_METADATA = {
   AMOUNT: {
-    min: 1000,
-    max: 10000000,
+    min: (currencyLocale: CurrencyLocales) =>
+      currencyLocale === CurrencyLocales.IN ? 1000 : 100,
+    max: (currencyLocale: CurrencyLocales) =>
+      currencyLocale === CurrencyLocales.IN ? 10000000 : 1000000,
     step: 500,
     id: "amount-input",
     label: {

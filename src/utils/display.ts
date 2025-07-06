@@ -77,27 +77,81 @@ export const currencyInWords = ({
     longWord = "",
     divisor = 1;
 
-  if (amount < 100000) {
-    shortWord = "K";
-    longWord = isINR ? "Thousand" : "Thousand";
-    divisor = 1000;
-  } else if (amount < 10000000) {
-    shortWord = isINR ? "L" : "HK";
-    longWord = isINR ? "Lakhs" : "Hundred Thousand";
-    divisor = 100000;
-  } else if (amount < 10000000000) {
-    shortWord = isINR ? "Cr" : "M";
-    longWord = isINR ? "Crores" : "Million";
-    divisor = 10000000;
-  } else if (amount < 1000000000000) {
-    shortWord = isINR ? "KCr" : "TenB";
-    longWord = isINR ? "Thousand Crores" : "Ten Billion";
-    divisor = 10000000000;
+  if (isINR) {
+    if (amount < 1000) {
+      shortWord = "H";
+      longWord = "Hundred";
+      divisor = 100;
+    } else if (amount < 100000) {
+      shortWord = "K";
+      longWord = "Thousand";
+      divisor = 1000;
+    } else if (amount < 10000000) {
+      shortWord = "L";
+      longWord = "Lakhs";
+      divisor = 100000;
+    } else if (amount < 10000000000) {
+      shortWord = "Cr";
+      longWord = "Crores";
+      divisor = 10000000;
+    } else if (amount < 1000000000000) {
+      shortWord = "KCr";
+      longWord = "Thousand Crores";
+      divisor = 10000000000;
+    } else {
+      shortWord = "LCr";
+      longWord = "Lakh Crores";
+      divisor = 1000000000000;
+    }
   } else {
-    shortWord = isINR ? "LCr" : "T";
-    longWord = isINR ? "Lakh Crores" : "Trillion";
-    divisor = 1000000000000;
+    if (amount < 1000) {
+      shortWord = "H";
+      longWord = "Hundred";
+      divisor = 100;
+    } else if (amount < 1000000) {
+      shortWord = "K";
+      longWord = "Thousand";
+      divisor = 1000;
+    } else if (amount < 10000000000) {
+      shortWord = "M";
+      longWord = "Million";
+      divisor = 1000000;
+    } else if (amount < 1000000000000) {
+      shortWord = "TenB";
+      longWord = "Ten Billion";
+      divisor = 10000000000;
+    } else {
+      shortWord = "T";
+      longWord = "Trillion";
+      divisor = 1000000000000;
+    }
   }
+
+  // if (amount < 1000) {
+  //   shortWord = "H";
+  //   longWord = isINR ? "Hundred" : "Hundred";
+  //   divisor = 100;
+  // } else if (amount < 100000) {
+  //   shortWord = "K";
+  //   longWord = isINR ? "Thousand" : "Thousand";
+  //   divisor = 1000;
+  // } else if (amount < 10000000) {
+  //   shortWord = isINR ? "L" : "HK";
+  //   longWord = isINR ? "Lakhs" : "Hundred Thousand";
+  //   divisor = 100000;
+  // } else if (amount < 10000000000) {
+  //   shortWord = isINR ? "Cr" : "M";
+  //   longWord = isINR ? "Crores" : "Million";
+  //   divisor = isINR ? 10000000 : 1000000;
+  // } else if (amount < 1000000000000) {
+  //   shortWord = isINR ? "KCr" : "TenB";
+  //   longWord = isINR ? "Thousand Crores" : "Ten Billion";
+  //   divisor = 10000000000;
+  // } else {
+  //   shortWord = isINR ? "LCr" : "T";
+  //   longWord = isINR ? "Lakh Crores" : "Trillion";
+  //   divisor = 1000000000000;
+  // }
 
   inWords = `${(amount / divisor).toFixed(decimalCount)} ${
     shortName ? shortWord : longWord

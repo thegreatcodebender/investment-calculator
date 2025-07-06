@@ -84,7 +84,7 @@ const Accordion = memo(function Accordion({
     <div className="not-last:mb-4">
       <h3>
         <button
-          className={`w-full p-3 pe-7 border-1 border-gray-300 text-start font-medium bg-gray-50 cursor-pointer motion-safe:transition-all ease-cubic-bezier relative ${
+          className={`w-full p-3 pe-7 border-1 border-gray-300 text-start font-medium bg-gray-50 cursor-pointer select-none motion-safe:transition-all ease-cubic-bezier relative ${
             isExpanded ? "rounded-t-md  border-b-transparent" : " rounded-md"
           }`}
           aria-expanded={true}

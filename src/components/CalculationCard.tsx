@@ -13,7 +13,7 @@ import {
   INPUT_FIELD_METADATA,
   SLIDER_INPUT_METADATA,
 } from "../constants/input";
-import { INPUT_ERROR_MESSAGE } from "../constants/errors";
+import { getInputErrorMessage } from "../utils/errors";
 import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
@@ -86,7 +86,7 @@ const CalculationCard = ({
     if (!isValid) {
       setErrors((prev) => ({
         ...prev,
-        [fieldNameLowerCase]: INPUT_ERROR_MESSAGE[fieldName].rangeError,
+        [fieldNameLowerCase]: getInputErrorMessage(fieldName, currencyLocale),
       }));
     } else {
       setErrors((prev) => ({
@@ -109,8 +109,8 @@ const CalculationCard = ({
       case ActionType.Amount:
         isValid = isValueInRange(
           inputVal,
-          SLIDER_INPUT_METADATA.AMOUNT.min,
-          SLIDER_INPUT_METADATA.AMOUNT.max
+          SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
+          SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)
         );
         break;
       case ActionType.Duration:
@@ -196,8 +196,8 @@ const CalculationCard = ({
         }}
       >
         <SliderWithInput
-          min={SLIDER_INPUT_METADATA.AMOUNT.min}
-          max={SLIDER_INPUT_METADATA.AMOUNT.max}
+          min={SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale)}
+          max={SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
           label={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
           tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[
@@ -205,7 +205,7 @@ const CalculationCard = ({
           ](currencyLocale)}
           id={SLIDER_INPUT_METADATA.AMOUNT.id}
           placeholder={currencyWithComma({
-            amount: SLIDER_INPUT_METADATA.AMOUNT.min,
+            amount: SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
             currencyLocale,
           })}
           value={amount}

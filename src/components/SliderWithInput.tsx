@@ -1,3 +1,4 @@
+import { useCurrencyLocale } from "../context/CurrencyContext";
 import { InputValueType } from "../types/inputField";
 import { SliderWithInputProps } from "../types/sliderWithInput";
 import { currencyInWords } from "../utils/display";
@@ -20,6 +21,7 @@ const SliderWithInput = ({
   tooltipText,
   onChange,
 }: SliderWithInputProps) => {
+  const [currencyLocale] = useCurrencyLocale();
   const inputValue = typeof value === "object" ? value.inputValue : value;
   const actualValue = typeof value === "object" ? value.actualValue : value;
 
@@ -43,7 +45,7 @@ const SliderWithInput = ({
             </span>
 
             {typeof legendValue === "number"
-              ? currencyInWords({ amount: legendValue })
+              ? currencyInWords({ amount: legendValue, currencyLocale })
               : "Error"}
           </span>
         );

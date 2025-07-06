@@ -164,6 +164,14 @@
     aspect-ratio: 1;
     animation: scale-in 300ms ease-out forwards 1;
   }
+
+  .recharts-layer path:focus {
+    outline: none;
+  }
+
+  .recharts-layer path:focus-visible {
+    outline: unset;
+  }
 }
 
 @keyframes scale-in {
