@@ -17,11 +17,11 @@ const App = () => {
             <div className="sm:flex gap-2 justify-between items-center">
               <div className="max-sm:mb-4">
                 <h1 className="text-3xl max-md:text-2xl tracking-[-1px] font-medium mb-1">
-                  Calculate returns for your investment
+                  Calculate Your Potential Returns
                 </h1>
-                <p className="text-base">
-                  Fuel your investment journey by placing your expectations
-                  upfront!
+                <p className="text-base mb-1">
+                  Plan your financial future with confidence. Estimate returns
+                  based on your goals, time horizon, and investment strategy.
                 </p>
               </div>
               <CurrencySelection />

@@ -28,7 +28,7 @@ export const INVESTMENT_MODES = [
       DEFAULT_INVESTMENT_AMOUNT[0].defaultValues[CurrencyLocales.IN],
   },
   {
-    title: "Project Your Investment",
+    title: "Calculate Future Value",
     shortName: "investment",
     defaultAmount:
       DEFAULT_INVESTMENT_AMOUNT[1].defaultValues[CurrencyLocales.IN],
