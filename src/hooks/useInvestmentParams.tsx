@@ -13,6 +13,9 @@ import {
   SLIDER_INPUT_METADATA,
 } from "../constants/input";
 import { ActionType } from "../types/investmentContext";
+import { useCurrencyLocale } from "../context/CurrencyContext";
+import { CurrencyLocales } from "../types/currencyContext";
+import { CURRENCY } from "../constants/currency";
 
 const investmentNatureShortNames = INVESTMENT_NATURE_LIST.map(
   ({ shortName }) => shortName
@@ -25,6 +28,7 @@ type InvestmentModeShortName = (typeof investmentModeShortNames)[number];
 
 const useInvestmentParams = () => {
   const searchParams = new URLSearchParams(window.location.search);
+  const [currencyLocale, setCurrencyLocale] = useCurrencyLocale();
   const investmentState = useInvestmentState();
   const dispatchInvestment = useInvestmentDispatch();
   const amount = investmentState.amount.actualValue;
@@ -51,6 +55,10 @@ const useInvestmentParams = () => {
     urlParams.set("mode", investmentMode.shortName ?? "");
     urlParams.set("age", age !== -1 ? age.toString() : "");
     urlParams.set("inflation", inflation ? inflation.toString() : "");
+    urlParams.set(
+      "currency",
+      CURRENCY[currencyLocale] ? CURRENCY[currencyLocale] : ""
+    );
     return urlParams;
   };
 
@@ -74,13 +82,30 @@ const useInvestmentParams = () => {
       const paramMode = params.mode as InvestmentModeShortName;
       const paramAge = Number(params.age);
       const paramInflation = Number(params.inflation);
+      const paramCurrencyLocale = params.currency;
 
+      let newCurrencyLocale = currencyLocale;
+      // Update Currency
+      if (
+        Object.values(CURRENCY).some(
+          (currencyLocale) => currencyLocale === paramCurrencyLocale
+        )
+      ) {
+        const currencyLocale =
+          Object.keys(CURRENCY)[
+            Object.values(CURRENCY).indexOf(paramCurrencyLocale)
+          ];
+        setCurrencyLocale(currencyLocale as CurrencyLocales);
+        newCurrencyLocale = currencyLocale as CurrencyLocales;
+      }
+
+      // Update Amount
       const isParamAmountInRange = isValueInRange(
         paramAmount,
-        SLIDER_INPUT_METADATA.AMOUNT.min,
-        SLIDER_INPUT_METADATA.AMOUNT.max
+        SLIDER_INPUT_METADATA.AMOUNT.min(newCurrencyLocale),
+        SLIDER_INPUT_METADATA.AMOUNT.max(newCurrencyLocale)
       );
-      // Update Amount
+
       if (isParamAmountInRange) {
         dispatchInvestment({
           type: ActionType.Amount,

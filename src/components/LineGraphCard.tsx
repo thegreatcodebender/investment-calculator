@@ -1,9 +1,12 @@
 import Card from "./Card";
 import useIsMobile from "../hooks/useIsMobile";
 import ProgressionLineGraph from "./ProgressionLineGraph";
+import { useCurrencyLocale } from "../context/CurrencyContext";
+import { CurrencyLocales } from "../types/currencyContext";
 
 const LineGraphCard = () => {
   const isMobile = useIsMobile();
+  const [currencyLocale] = useCurrencyLocale();
   return (
     <Card className="max-lg:mt-8 min-w-[300px] mt-6">
       <h3 className="mb-0.5 text-lg font-semibold leading-snug">
@@ -17,9 +20,11 @@ const LineGraphCard = () => {
       <div style={{ height: isMobile ? 350 : 300 }}>
         <ProgressionLineGraph height={isMobile ? 350 : 300} />
       </div>
-      <p className="text-xs text-gray-600">
-        KCr - Thousand Crores, LCr - Lakh Crores
-      </p>
+      {currencyLocale === CurrencyLocales.IN && (
+        <p className="text-xs text-gray-600">
+          KCr - Thousand Crores, LCr - Lakh Crores
+        </p>
+      )}
     </Card>
   );
 };

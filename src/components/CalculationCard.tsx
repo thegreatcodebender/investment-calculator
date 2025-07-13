@@ -13,7 +13,7 @@ import {
   INPUT_FIELD_METADATA,
   SLIDER_INPUT_METADATA,
 } from "../constants/input";
-import { INPUT_ERROR_MESSAGE } from "../constants/errors";
+import { getInputErrorMessage } from "../utils/errors";
 import { isValueInRange } from "../utils/validity";
 import TabGroup from "./TabGroup";
 import { ActionType } from "../types/investmentContext";
@@ -86,7 +86,7 @@ const CalculationCard = ({
     if (!isValid) {
       setErrors((prev) => ({
         ...prev,
-        [fieldNameLowerCase]: INPUT_ERROR_MESSAGE[fieldName].rangeError,
+        [fieldNameLowerCase]: getInputErrorMessage(fieldName, currencyLocale),
       }));
     } else {
       setErrors((prev) => ({
@@ -109,8 +109,8 @@ const CalculationCard = ({
       case ActionType.Amount:
         isValid = isValueInRange(
           inputVal,
-          SLIDER_INPUT_METADATA.AMOUNT.min,
-          SLIDER_INPUT_METADATA.AMOUNT.max
+          SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
+          SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)
         );
         break;
       case ActionType.Duration:
@@ -180,7 +180,7 @@ const CalculationCard = ({
         onClick={(modeObj) => {
           dispatchInvestment({
             type: ActionType.Mode,
-            payload: modeObj,
+            payload: { ...modeObj, currencyLocale },
           });
           // Reset the amount error since the mode change will replace the amount input value with the actual value
           modifyError(ActionType.Amount, true);
@@ -196,16 +196,15 @@ const CalculationCard = ({
         }}
       >
         <SliderWithInput
-          min={SLIDER_INPUT_METADATA.AMOUNT.min}
-          max={SLIDER_INPUT_METADATA.AMOUNT.max}
+          min={SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale)}
+          max={SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)}
           step={SLIDER_INPUT_METADATA.AMOUNT.step}
           label={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
-          tooltipText={
-            SLIDER_INPUT_METADATA.AMOUNT.tooltip[investmentMode.title]
-          }
-          id={SLIDER_INPUT_METADATA.AMOUNT.id}
+          tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[
+            investmentMode.title
+          ](currencyLocale)}
           placeholder={currencyWithComma({
-            amount: SLIDER_INPUT_METADATA.AMOUNT.min,
+            amount: SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
             currencyLocale,
           })}
           value={amount}
@@ -222,7 +221,6 @@ const CalculationCard = ({
           step={SLIDER_INPUT_METADATA.DURATION.step}
           label={SLIDER_INPUT_METADATA.DURATION.label}
           tooltipText={SLIDER_INPUT_METADATA.DURATION.tooltip}
-          id={SLIDER_INPUT_METADATA.DURATION.id}
           placeholder={SLIDER_INPUT_METADATA.DURATION.min.toString()}
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +237,6 @@ const CalculationCard = ({
           step={SLIDER_INPUT_METADATA.INTEREST_RATE.step}
           label={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           tooltipText={SLIDER_INPUT_METADATA.INTEREST_RATE.tooltip}
-          id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
           placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.min.toString()}
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +265,6 @@ const CalculationCard = ({
           <InputField
             label={INPUT_FIELD_METADATA.AGE.label}
             tooltipText={INPUT_FIELD_METADATA.AGE.tooltip}
-            id={INPUT_FIELD_METADATA.AGE.id}
             value={age}
             placeholder=""
             containerClassName="max-sm:mt-6"
@@ -281,8 +277,7 @@ const CalculationCard = ({
           />
           <InputField
             label={INPUT_FIELD_METADATA.INFLATION.label}
-            tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip}
-            id={INPUT_FIELD_METADATA.INFLATION.id}
+            tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip(currencyLocale)}
             value={inflation}
             placeholder={INPUT_FIELD_METADATA.INFLATION.min.toString()}
             containerClassName="max-sm:mt-6"

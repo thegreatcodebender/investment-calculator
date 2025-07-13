@@ -56,6 +56,7 @@ interface CurrencyInWords {
   amount: number;
   decimalCount?: number;
   shortName?: boolean;
+  currencyLocale: CurrencyLocales;
 }
 
 /**
@@ -68,32 +69,62 @@ export const currencyInWords = ({
   amount,
   decimalCount = 0,
   shortName = false,
+  currencyLocale,
 }: CurrencyInWords): string => {
+  const isINR = currencyLocale === CurrencyLocales.IN;
   let inWords = "",
     shortWord = "",
     longWord = "",
     divisor = 1;
 
-  if (amount < 100000) {
-    shortWord = "K";
-    longWord = "Thousand";
-    divisor = 1000;
-  } else if (amount < 10000000) {
-    shortWord = "L";
-    longWord = "Lakhs";
-    divisor = 100000;
-  } else if (amount < 10000000000) {
-    shortWord = "Cr";
-    longWord = "Crores";
-    divisor = 10000000;
-  } else if (amount < 1000000000000) {
-    shortWord = "KCr";
-    longWord = "Thousand Crores";
-    divisor = 10000000000;
+  if (isINR) {
+    if (amount < 1000) {
+      shortWord = "H";
+      longWord = "Hundred";
+      divisor = 100;
+    } else if (amount < 100000) {
+      shortWord = "K";
+      longWord = "Thousand";
+      divisor = 1000;
+    } else if (amount < 10000000) {
+      shortWord = "L";
+      longWord = "Lakhs";
+      divisor = 100000;
+    } else if (amount < 10000000000) {
+      shortWord = "Cr";
+      longWord = "Crores";
+      divisor = 10000000;
+    } else if (amount < 1000000000000) {
+      shortWord = "KCr";
+      longWord = "Thousand Crores";
+      divisor = 10000000000;
+    } else {
+      shortWord = "LCr";
+      longWord = "Lakh Crores";
+      divisor = 1000000000000;
+    }
   } else {
-    shortWord = "LCr";
-    longWord = "Lakh Crores";
-    divisor = 1000000000000;
+    if (amount < 1000) {
+      shortWord = "H";
+      longWord = "Hundred";
+      divisor = 100;
+    } else if (amount < 1000000) {
+      shortWord = "K";
+      longWord = "Thousand";
+      divisor = 1000;
+    } else if (amount < 1000000000) {
+      shortWord = "M";
+      longWord = "Million";
+      divisor = 1000000;
+    } else if (amount < 1000000000000) {
+      shortWord = "B";
+      longWord = "Billion";
+      divisor = 1000000000;
+    } else {
+      shortWord = "T";
+      longWord = "Trillion";
+      divisor = 1000000000000;
+    }
   }
 
   inWords = `${(amount / divisor).toFixed(decimalCount)} ${

@@ -6,9 +6,20 @@ const Footer = () => {
           Thanks for checking out this project! See more of my work in{" "}
           <a
             href="https://iabhi.dev/?utm_source=icalc&utm_medium=footer&utm_campaign=projects"
-            className="py-2 inline-block text-primary font-semibold"
+            className="py-2 inline-block text-primary font-semibold underline underline-offset-2"
           >
-            my portfolio
+            portfolio
+          </a>
+          .
+        </p>
+        <p className="text-sm text-gray-600">
+          Logo icon credit:{" "}
+          <a
+            href="https://www.flaticon.com/free-icons/investment"
+            title="investment icons"
+            className="font-medium underline underline-offset-2"
+          >
+            Investment icons created by Freepik - Flaticon
           </a>
         </p>
         <hr className="mt-1 mb-1.5 text-gray-300" />

@@ -1,3 +1,5 @@
+import { useCurrencyLocale } from "../context/CurrencyContext";
+import { CurrencyLocales } from "../types/currencyContext";
 import Accordion from "./Accordion";
 import Card from "./Card";
 import { CurrencyIcon } from "./Icons";
@@ -5,6 +7,9 @@ import { TBODY, TD, TH, THEAD, TR } from "./Table";
 import calculationsImage from "/assets/images/calculations.svg";
 
 const FAQCard = () => {
+  const [currencyLocale] = useCurrencyLocale();
+  const isINR = currencyLocale === CurrencyLocales.IN;
+  const currency = isINR ? "INR" : "USD";
   return (
     <Card className="max-lg:mt-8 min-w-[300px] mt-6">
       <h3 className="mb-0.5 text-lg font-semibold leading-snug">FAQs</h3>
@@ -20,8 +25,8 @@ const FAQCard = () => {
               </p>
               <p className="font-semibold mb-1">Example: </p>
               <p className="flex flex-wrap">
-                Invest INR 10L today at 6% return for 10 years, and inflation
-                rate is 5.7%. After 10 years:
+                Invest {currency} {isINR ? "10L" : "100K"} today at 6% return
+                for 10 years, and inflation rate is 5.7%. After 10 years:
               </p>
               <div className="overflow-x-auto no-scrollbar">
                 <table className="mt-3 mx-auto border-collapse max-sm:leading-none">
@@ -48,14 +53,14 @@ const FAQCard = () => {
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
                           <CurrencyIcon className="h-2.5" />
-                          10L
+                          {isINR ? "10L" : "100K"}
                         </p>
                       </TD>
                       <TD>
                         <span className="flex gap-1 items-start leading-none justify-center">
                           <p className="flex gap-0.5 items-center justify-center">
                             <CurrencyIcon className="h-2.5" />
-                            18.9L
+                            {isINR ? "18.9L" : "189K"}
                           </p>
                           <span className="text-primary text-xs font-semibold">
                             +89%
@@ -72,14 +77,14 @@ const FAQCard = () => {
                       <TD>
                         <p className="flex gap-0.5 items-center justify-center">
                           <CurrencyIcon className="h-2.5" />
-                          5.74L
+                          {isINR ? "5.74L" : "574K"}
                         </p>
                       </TD>
                       <TD>
                         <span className="flex gap-1 items-start leading-none justify-center">
                           <p className="flex gap-0.5 items-center justify-center">
                             <CurrencyIcon className="h-2.5" />
-                            10.45L
+                            {isINR ? "10.45L" : "1.04M"}
                           </p>
                           <span className="text-primary text-xs font-semibold">
                             +82%
@@ -92,9 +97,11 @@ const FAQCard = () => {
               </div>
               <p className="mt-3">
                 As you see, your money maintains its purchasing power. After 10
-                years, you can buy a car equivalent to today's INR 10L model,
-                NOT one worth INR 18.9L today. Without investing, that same INR
-                10L would shrink to INR 5.74L.
+                years, you can buy a car equivalent to today's {currency}{" "}
+                {isINR ? "10L" : "100K"} model, NOT one worth {currency}{" "}
+                {isINR ? "18.9L" : "189K"} today. Without investing, that same{" "}
+                {currency} {isINR ? "10L" : "100K"} would shrink to {currency}{" "}
+                {currency} {isINR ? "5.74L" : "574K"}.
               </p>
               <p className="mt-2">
                 Inflation-adjusted value is included not to demotivate you, but
@@ -115,15 +122,18 @@ const FAQCard = () => {
               <p className="mb-2">Compare:</p>
               <ul className="list-disc ps-8">
                 <li className="mb-1">
-                  Invest INR 10L (6% return, 6% inflation):
+                  Invest {currency} {isINR ? "10L" : "100K"} (6% return, 6%
+                  inflation):
                   <br />
-                  Future value: INR 18.19L → Real value: INR 10.45L (today's
+                  Future value: {currency} {isINR ? "18.19L" : "1.81M"} → Real
+                  value: {currency} {isINR ? "10.45L" : "1.04M"} (today's
                   money).
                 </li>
                 <li>
                   Don't invest:
                   <br />
-                  Future value: INR 10L → Real value: INR 5.74L (money rots due
+                  Future value: {currency} {isINR ? "10L" : "100K"} → Real
+                  value: {currency} {isINR ? "5.74L" : "574K"} (money rots due
                   to inflation).
                 </li>
               </ul>
