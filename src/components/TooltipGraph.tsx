@@ -1,3 +1,4 @@
+import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useInvestmentState } from "../context/InvestmentContext";
 import { currencyInWords } from "../utils/display";
 import { CurrencyIcon } from "./Icons";
@@ -25,6 +26,7 @@ interface TooltipGraphProps {
 
 const TooltipGraph = ({ payload }: TooltipGraphProps) => {
   const investmentState = useInvestmentState();
+  const [currencyLocale] = useCurrencyLocale();
   const age = investmentState.age.actualValue;
   const dataKeysToShow = ["withInvestment", "withoutInvestment"];
 
@@ -63,6 +65,7 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                                 amount: data.value,
                                 decimalCount: 2,
                                 shortName: true,
+                                currencyLocale,
                               })}
                         </p>
                       </div>
@@ -70,7 +73,12 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                   </div>
                   {/* Amount (inflation adjusted) */}
                   <div className="flex gap-0.5 items-center text-xs mt-1.5 leading-none text-gray-700">
-                    <p className="font-normal">Inflation adjusted: </p>
+                    {/* Legend color box */}
+                    {/* <div
+                      className="w-[1px] h-[10px] block border border-dashed"
+                      style={{ borderColor: `${data.stroke}` }}
+                    ></div> */}
+                    <p className="font-normal ms-0.5">Inflation adjusted: </p>
                     <CurrencyIcon className="h-2.25 opacity-75" />
                     <p className="font-semibold">
                       {data.value === 0
@@ -79,6 +87,7 @@ const TooltipGraph = ({ payload }: TooltipGraphProps) => {
                             amount: data.payload[`${data.dataKey}InflnAdj`],
                             decimalCount: 2,
                             shortName: true,
+                            currencyLocale,
                           })}
                     </p>
                   </div>
