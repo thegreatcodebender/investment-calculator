@@ -54,7 +54,9 @@ const Tooltip = memo(function ToolTip({
         className={`flex p-1 max-sm:p-2.25 sm:ms-1 leading-none text-gray-600 cursor-pointer${
           iconClassName ? ` ${iconClassName}` : ""
         }`}
-        aria-describedby={tooltipId ? `tooltip-${tooltipId}` : undefined}
+        aria-describedby={
+          isVisible && tooltipId ? `tooltip-${tooltipId}` : undefined
+        }
         type="button"
       >
         <span className="material-symbols-outlined !text-[18px]">info</span>
