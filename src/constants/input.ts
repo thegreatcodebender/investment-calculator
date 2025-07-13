@@ -1,7 +1,11 @@
 import { CurrencyLocales } from "../types/currencyContext";
 import { currencyWithComma } from "../utils/display";
 import { CURRENCY } from "./currency";
-import { DEFAULT_INVESTMENT_AMOUNT, INVESTMENT_MODES } from "./investment";
+import {
+  DEFAULT_INFLATION_RATES,
+  DEFAULT_INVESTMENT_AMOUNT,
+  INVESTMENT_MODES,
+} from "./investment";
 
 export const SLIDER_INPUT_METADATA = {
   AMOUNT: {
@@ -63,7 +67,7 @@ export const INPUT_FIELD_METADATA = {
     id: "inflation-rate",
     default: -1,
     label: "Expected Inflation Rate",
-    tooltip:
-      "Enter the expected annual inflation rate. Average inflation rate for the past 5 years: 5.7%",
+    tooltip: (currencyLocale: CurrencyLocales) =>
+      `Enter the expected annual inflation rate. Average inflation rate for the past 5 years: ${DEFAULT_INFLATION_RATES[currencyLocale]}%`,
   },
 };

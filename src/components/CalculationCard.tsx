@@ -277,7 +277,7 @@ const CalculationCard = ({
           />
           <InputField
             label={INPUT_FIELD_METADATA.INFLATION.label}
-            tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip}
+            tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip(currencyLocale)}
             value={inflation}
             placeholder={INPUT_FIELD_METADATA.INFLATION.min.toString()}
             containerClassName="max-sm:mt-6"
