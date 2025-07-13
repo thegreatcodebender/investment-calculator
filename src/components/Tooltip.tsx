@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, memo } from "react";
+import { useState, useRef, useEffect, memo, useId } from "react";
 import { createPortal } from "react-dom";
 import { TooltipProps } from "../types/tooltip";
 
@@ -8,20 +8,16 @@ const Tooltip = memo(function ToolTip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [tooltipIdRandom, setTooltipIdRandom] = useState<undefined | number>(
-    undefined
-  );
+  const tooltipId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const tooltipBodyWidth = 250;
 
   /** Show tooltip by setting the state to true */
   const showTooltip = () => {
-    setTooltipIdRandom(Math.round(Math.random() * 150));
     setIsVisible(true);
   };
   /** Hide tooltip by setting the state to false */
   const hideTooltip = () => {
-    setTooltipIdRandom(undefined);
     setIsVisible(false);
   };
   /** Place tooltip at required position */
@@ -58,9 +54,7 @@ const Tooltip = memo(function ToolTip({
         className={`flex p-1 max-sm:p-2.25 sm:ms-1 leading-none text-gray-600 cursor-pointer${
           iconClassName ? ` ${iconClassName}` : ""
         }`}
-        aria-describedby={
-          tooltipIdRandom ? `tooltip-${tooltipIdRandom}` : undefined
-        }
+        aria-describedby={tooltipId ? `tooltip-${tooltipId}` : undefined}
         type="button"
       >
         <span className="material-symbols-outlined !text-[18px]">info</span>
@@ -71,7 +65,7 @@ const Tooltip = memo(function ToolTip({
           <div
             className="motion-safe:animate-fade-in-fast absolute z-999 p-2.5 sm:p-3 text-xs text-gray-800 max-sm:min-w-[250px] max-w-60 bg-white rounded shadow-card border border-gray-200"
             role="tooltip"
-            id={`tooltip-${tooltipIdRandom}`}
+            id={`tooltip-${tooltipId}`}
             onMouseEnter={showTooltip}
             onMouseLeave={hideTooltip}
             style={{

@@ -180,7 +180,7 @@ const CalculationCard = ({
         onClick={(modeObj) => {
           dispatchInvestment({
             type: ActionType.Mode,
-            payload: modeObj,
+            payload: { ...modeObj, currencyLocale },
           });
           // Reset the amount error since the mode change will replace the amount input value with the actual value
           modifyError(ActionType.Amount, true);
@@ -203,7 +203,6 @@ const CalculationCard = ({
           tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[
             investmentMode.title
           ](currencyLocale)}
-          id={SLIDER_INPUT_METADATA.AMOUNT.id}
           placeholder={currencyWithComma({
             amount: SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
             currencyLocale,
@@ -222,7 +221,6 @@ const CalculationCard = ({
           step={SLIDER_INPUT_METADATA.DURATION.step}
           label={SLIDER_INPUT_METADATA.DURATION.label}
           tooltipText={SLIDER_INPUT_METADATA.DURATION.tooltip}
-          id={SLIDER_INPUT_METADATA.DURATION.id}
           placeholder={SLIDER_INPUT_METADATA.DURATION.min.toString()}
           value={duration}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +237,6 @@ const CalculationCard = ({
           step={SLIDER_INPUT_METADATA.INTEREST_RATE.step}
           label={SLIDER_INPUT_METADATA.INTEREST_RATE.label}
           tooltipText={SLIDER_INPUT_METADATA.INTEREST_RATE.tooltip}
-          id={SLIDER_INPUT_METADATA.INTEREST_RATE.id}
           placeholder={SLIDER_INPUT_METADATA.INTEREST_RATE.min.toString()}
           value={interest}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +265,6 @@ const CalculationCard = ({
           <InputField
             label={INPUT_FIELD_METADATA.AGE.label}
             tooltipText={INPUT_FIELD_METADATA.AGE.tooltip}
-            id={INPUT_FIELD_METADATA.AGE.id}
             value={age}
             placeholder=""
             containerClassName="max-sm:mt-6"
@@ -282,7 +278,6 @@ const CalculationCard = ({
           <InputField
             label={INPUT_FIELD_METADATA.INFLATION.label}
             tooltipText={INPUT_FIELD_METADATA.INFLATION.tooltip}
-            id={INPUT_FIELD_METADATA.INFLATION.id}
             value={inflation}
             placeholder={INPUT_FIELD_METADATA.INFLATION.min.toString()}
             containerClassName="max-sm:mt-6"

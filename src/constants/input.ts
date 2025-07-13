@@ -1,6 +1,7 @@
 import { CurrencyLocales } from "../types/currencyContext";
+import { currencyWithComma } from "../utils/display";
 import { CURRENCY } from "./currency";
-import { INVESTMENT_MODES } from "./investment";
+import { DEFAULT_INVESTMENT_AMOUNT, INVESTMENT_MODES } from "./investment";
 
 export const SLIDER_INPUT_METADATA = {
   AMOUNT: {
@@ -16,9 +17,17 @@ export const SLIDER_INPUT_METADATA = {
     },
     tooltip: {
       [INVESTMENT_MODES[0].title]: (currencyLocale: CurrencyLocales) =>
-        `Enter the total amount you want to achieve (e.g. ${CURRENCY[currencyLocale]} 25,00,000)`,
+        `Enter the total amount you want to achieve (e.g. ${
+          CURRENCY[currencyLocale]
+        } ${currencyWithComma({
+          amount: DEFAULT_INVESTMENT_AMOUNT[0].defaultValues[currencyLocale],
+        })})`,
       [INVESTMENT_MODES[1].title]: (currencyLocale: CurrencyLocales) =>
-        `Enter the amount you plan to invest (e.g. ${CURRENCY[currencyLocale]} 10,000)`,
+        `Enter the amount you plan to invest (e.g. ${
+          CURRENCY[currencyLocale]
+        } ${currencyWithComma({
+          amount: DEFAULT_INVESTMENT_AMOUNT[1].defaultValues[currencyLocale],
+        })})`,
     },
   },
   DURATION: {

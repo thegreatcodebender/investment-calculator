@@ -1,9 +1,14 @@
 import React, { createContext, ReactNode, useContext, useReducer } from "react";
 import {
+  DEFAULT_INFLATION_RATES,
+  DEFAULT_INVESTMENT_AMOUNT,
   INVESTMENT_INITIAL_STATE,
   INVESTMENT_MODES,
 } from "../constants/investment";
 import { Action, ActionType, State } from "../types/investmentContext";
+import { CurrencyLocales } from "../types/currencyContext";
+import { SLIDER_INPUT_METADATA } from "../constants/input";
+import { useCurrencyLocale } from "./CurrencyContext";
 
 const initialState: State = {
   amount: {
@@ -142,19 +147,27 @@ const investmentReducer = (state: State, action: Action): State => {
       const newPrevModeInvestmentNature =
         action.payload.prevModeInvestmentNature ??
         state.investmentNature.actualValue;
-      const { title, shortName, defaultAmount }: State["mode"] = action.payload;
+      const { title, shortName, currencyLocale }: State["mode"] =
+        action.payload;
+      const defaultAmount =
+        DEFAULT_INVESTMENT_AMOUNT.find(
+          (investMode) => investMode.shortName === shortName
+        )?.defaultValues[currencyLocale ?? CurrencyLocales.IN] ?? 1;
+      let updatedAmountValue = defaultAmount;
+      if (
+        existingPrevModeAmount !== -1 &&
+        existingPrevModeAmount <
+          SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale ?? CurrencyLocales.IN)
+      ) {
+        updatedAmountValue = existingPrevModeAmount;
+      }
+
       return {
         ...state,
         mode: { title, shortName, defaultAmount },
         amount: {
-          inputValue:
-            existingPrevModeAmount !== -1
-              ? existingPrevModeAmount
-              : action.payload.defaultAmount,
-          actualValue:
-            existingPrevModeAmount !== -1
-              ? existingPrevModeAmount
-              : action.payload.defaultAmount,
+          inputValue: updatedAmountValue,
+          actualValue: updatedAmountValue,
           prevModeAmount: newPrevModeAmount,
         },
         duration: {
@@ -185,6 +198,75 @@ const investmentReducer = (state: State, action: Action): State => {
       }
       return { ...state, inflation: action.payload };
     }
+    case ActionType.LocaleAmountInflation: {
+      if (!action.payload.currencyLocale) {
+        return state;
+      }
+      const investmentModeShortName: string = action.payload.modeShortName;
+      const currencyLocale: CurrencyLocales = action.payload.currencyLocale;
+      const currentAmount = state.amount.actualValue;
+      const existingPrevModeAmount = state.amount.prevModeAmount; // To get the existing prev mode amount for data persistence between modes
+
+      // Get current locale default values
+      const currentLocaleModeDefaultAmount = DEFAULT_INVESTMENT_AMOUNT.find(
+        (investMode) => investMode.shortName === investmentModeShortName
+      )?.defaultValues[
+        currencyLocale === CurrencyLocales.IN
+          ? CurrencyLocales.US
+          : CurrencyLocales.IN
+      ];
+      const currentLocaleNextModeDefaultAmount = DEFAULT_INVESTMENT_AMOUNT.find(
+        (investMode) => investMode.shortName !== investmentModeShortName
+      )?.defaultValues[
+        currencyLocale === CurrencyLocales.IN
+          ? CurrencyLocales.US
+          : CurrencyLocales.IN
+      ];
+
+      // Get new locale default values
+      const currentModeDefaultAmount =
+        DEFAULT_INVESTMENT_AMOUNT.find(
+          (investMode) => investMode.shortName === investmentModeShortName
+        )?.defaultValues[currencyLocale ?? CurrencyLocales.IN] ?? 1;
+      const nextModeDefaultAmount =
+        DEFAULT_INVESTMENT_AMOUNT.find(
+          (investMode) => investMode.shortName !== investmentModeShortName
+        )?.defaultValues[currencyLocale ?? CurrencyLocales.IN] ?? 1;
+
+      // Set current investment mode amount value of new locale
+      let updatedAmountValue = currentModeDefaultAmount;
+      if (
+        currentAmount !== -1 &&
+        currentAmount !== currentLocaleModeDefaultAmount &&
+        currentAmount < SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)
+      ) {
+        updatedAmountValue = currentAmount;
+      }
+
+      // Set next investment mode amount value of new locale
+      let updatedPrevAmountValue = nextModeDefaultAmount;
+      if (
+        existingPrevModeAmount !== -1 &&
+        existingPrevModeAmount !== currentLocaleNextModeDefaultAmount &&
+        existingPrevModeAmount <
+          SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)
+      ) {
+        updatedPrevAmountValue = existingPrevModeAmount;
+      }
+
+      return {
+        ...state,
+        amount: {
+          inputValue: updatedAmountValue,
+          actualValue: updatedAmountValue,
+          prevModeAmount: updatedPrevAmountValue,
+        },
+        inflation: {
+          inputValue: DEFAULT_INFLATION_RATES[currencyLocale],
+          actualValue: DEFAULT_INFLATION_RATES[currencyLocale],
+        },
+      };
+    }
     default: {
       throw new Error(`Unknown action type: ${action.type}`);
     }
@@ -199,7 +281,25 @@ const DispatchContext = createContext<React.Dispatch<Action> | undefined>(
 export const InvestmentProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [state, dispatch] = useReducer(investmentReducer, initialState);
+  const [currencyLocale] = useCurrencyLocale();
+  // Update initial state to adapt to the currency locale
+  const initialStateWithLocale = {
+    ...initialState,
+    amount: {
+      inputValue: DEFAULT_INVESTMENT_AMOUNT[0].defaultValues[currencyLocale],
+      actualValue: DEFAULT_INVESTMENT_AMOUNT[0].defaultValues[currencyLocale],
+      prevModeAmount:
+        DEFAULT_INVESTMENT_AMOUNT[1].defaultValues[currencyLocale],
+    },
+    inflation: {
+      inputValue: DEFAULT_INFLATION_RATES[currencyLocale],
+      actualValue: DEFAULT_INFLATION_RATES[currencyLocale],
+    },
+  };
+  const [state, dispatch] = useReducer(
+    investmentReducer,
+    initialStateWithLocale
+  );
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>

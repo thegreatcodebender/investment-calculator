@@ -1,3 +1,5 @@
+import { CurrencyLocales } from "./currencyContext";
+
 export interface InputAndActualValue {
   inputValue: number | string;
   actualValue: number;
@@ -24,6 +26,7 @@ interface Mode {
   title: string;
   shortName: string;
   defaultAmount: number;
+  currencyLocale?: CurrencyLocales;
 }
 
 export interface State {
@@ -49,4 +52,5 @@ export enum ActionType {
   Age = "SET_AGE",
   Mode = "SET_MODE",
   Inflation = "SET_INFLATION",
+  LocaleAmountInflation = "SET_AMOUNT_LOCALE_INFLATION",
 }

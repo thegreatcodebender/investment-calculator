@@ -11,7 +11,6 @@ export interface InputFieldProps {
   isLabelHidden?: boolean;
   containerClassName?: string;
   inputClassName?: string;
-  id: string;
   placeholder: string;
   value: string | number | InputAndActualValue;
   inputValueType?: InputValueType;

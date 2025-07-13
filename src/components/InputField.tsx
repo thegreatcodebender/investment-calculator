@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { InputFieldProps, InputValueType } from "../types/inputField";
 import { currencyWithComma, removeCommaFromString } from "../utils/display";
@@ -9,7 +10,6 @@ const InputField = ({
   isLabelHidden,
   containerClassName,
   inputClassName,
-  id,
   placeholder,
   value,
   inputValueType,
@@ -19,6 +19,7 @@ const InputField = ({
   onChange,
 }: InputFieldProps) => {
   const [currencyLocale] = useCurrencyLocale();
+  const inputId = useId();
   const inputValue =
     typeof value === "object"
       ? value.inputValue === -1
@@ -38,7 +39,7 @@ const InputField = ({
           className={`text-sm uppercase font-semibold inline-block ${
             tooltipText ? "leading-none" : ""
           } ${isLabelHidden ? "sr-only" : ""}`}
-          htmlFor={id}
+          htmlFor={inputId}
         >
           {label}
         </label>
@@ -66,8 +67,8 @@ const InputField = ({
             </span>
             <input
               type="text"
-              id={id}
-              name={id}
+              id={inputId}
+              name={inputId}
               placeholder={placeholder}
               inputMode={isYear ? "numeric" : "decimal"}
               autoComplete="off"
@@ -101,8 +102,8 @@ const InputField = ({
       ) : (
         <input
           type="text"
-          id={id}
-          name={id}
+          id={inputId}
+          name={inputId}
           placeholder={placeholder}
           inputMode={inputMode}
           autoComplete="off"

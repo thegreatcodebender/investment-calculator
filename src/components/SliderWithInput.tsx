@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { InputValueType } from "../types/inputField";
 import { SliderWithInputProps } from "../types/sliderWithInput";
@@ -12,7 +13,6 @@ const SliderWithInput = ({
   isLabelHidden,
   containerClassName,
   inputClassName,
-  id,
   label,
   placeholder,
   value,
@@ -21,6 +21,7 @@ const SliderWithInput = ({
   tooltipText,
   onChange,
 }: SliderWithInputProps) => {
+  const inputId = useId();
   const [currencyLocale] = useCurrencyLocale();
   const inputValue = typeof value === "object" ? value.inputValue : value;
   const actualValue = typeof value === "object" ? value.actualValue : value;
@@ -68,7 +69,6 @@ const SliderWithInput = ({
       >
         <InputField
           label={label}
-          id={id}
           placeholder={placeholder}
           value={inputValue}
           isLabelHidden={isLabelHidden}
@@ -83,12 +83,12 @@ const SliderWithInput = ({
         <div className="slider-wrapper">
           <input
             type="range"
-            name={id + "-slider"}
+            name={inputId + "-slider"}
             min={min}
             max={max}
             step={step}
             value={actualValue}
-            id={id + "-slider"}
+            id={inputId + "-slider"}
             onChange={handleSliderChange}
             className="slider"
           />
@@ -108,7 +108,7 @@ const SliderWithInput = ({
           {getLegend(min)}
           {getLegend(max)}
         </div>
-        <label htmlFor={id + "-slider"} className="sr-only">
+        <label htmlFor={inputId + "-slider"} className="sr-only">
           {label}
         </label>
       </div>
