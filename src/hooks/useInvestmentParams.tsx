@@ -84,12 +84,28 @@ const useInvestmentParams = () => {
       const paramInflation = Number(params.inflation);
       const paramCurrencyLocale = params.currency;
 
+      let newCurrencyLocale = currencyLocale;
+      // Update Currency
+      if (
+        Object.values(CURRENCY).some(
+          (currencyLocale) => currencyLocale === paramCurrencyLocale
+        )
+      ) {
+        const currencyLocale =
+          Object.keys(CURRENCY)[
+            Object.values(CURRENCY).indexOf(paramCurrencyLocale)
+          ];
+        setCurrencyLocale(currencyLocale as CurrencyLocales);
+        newCurrencyLocale = currencyLocale as CurrencyLocales;
+      }
+
+      // Update Amount
       const isParamAmountInRange = isValueInRange(
         paramAmount,
-        SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale),
-        SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)
+        SLIDER_INPUT_METADATA.AMOUNT.min(newCurrencyLocale),
+        SLIDER_INPUT_METADATA.AMOUNT.max(newCurrencyLocale)
       );
-      // Update Amount
+
       if (isParamAmountInRange) {
         dispatchInvestment({
           type: ActionType.Amount,
@@ -177,18 +193,6 @@ const useInvestmentParams = () => {
             prevModeAmount: -1,
           },
         });
-        // Update Currency
-        if (
-          Object.values(CURRENCY).some(
-            (currencyLocale) => currencyLocale === paramCurrencyLocale
-          )
-        ) {
-          const currencyLocale =
-            Object.keys(CURRENCY)[
-              Object.values(CURRENCY).indexOf(paramCurrencyLocale)
-            ];
-          setCurrencyLocale(currencyLocale as CurrencyLocales);
-        }
 
         // Remove query parameters and keep the subfolder path intact
         window.history.replaceState({}, "", window.location.pathname);
