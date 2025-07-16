@@ -236,17 +236,18 @@ const GenerateImageButton = ({
             const link = document.createElement("a");
             link.href = dataUrl;
             link.download = `My_Investment_Plan_${fileNameSuffix}.png`;
-            link.style.display = "none";
+            // link.style.display = "none";
+            link.style.position = "absolute";
+            link.style.left = "-9999px";
             document.body.appendChild(link);
             link.click();
             // Remove link after 30s to avoid issues in iOS
             setTimeout(() => {
               document.body.removeChild(link);
-            }, 30000);
-
-            // Clean up offscreen container
-            root.unmount();
-            document.body.removeChild(offscreenDiv);
+              // Clean up offscreen container
+              root.unmount();
+              document.body.removeChild(offscreenDiv);
+            }, 10000);
             setIsLoading(false);
           })
           .catch((error) => {
