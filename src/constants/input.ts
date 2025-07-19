@@ -13,7 +13,8 @@ export const SLIDER_INPUT_METADATA = {
       currencyLocale === CurrencyLocales.IN ? 1000 : 100,
     max: (currencyLocale: CurrencyLocales) =>
       currencyLocale === CurrencyLocales.IN ? 10000000 : 1000000,
-    step: 500,
+    step: (currencyLocale: CurrencyLocales) =>
+      currencyLocale === CurrencyLocales.IN ? 500 : 100,
     id: "amount-input",
     label: {
       [INVESTMENT_MODES[0].title]: "Goal Amount",
