@@ -5,7 +5,12 @@ import { useState } from "react";
 import { TabGroupProps } from "../types/tabGroup";
 import useDebounce from "../hooks/useDebounce";
 
-const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
+const TabGroup = ({
+  data,
+  activeTab,
+  ariaControls,
+  onClick,
+}: TabGroupProps) => {
   const [isScrollIntoViewActive, setIsScrollIntoViewActive] = useState(false); // To prevent scrollIntoView from firing on page load
   const isMobile = useIsMobile();
   /** Disable scroll to view in re-renders */
@@ -23,30 +28,33 @@ const TabGroup = ({ data, activeTab, onClick }: TabGroupProps) => {
     disableScrollTabToView();
   };
   return (
-    <nav
+    <ul
       className="flex text-base font-medium overflow-x-auto no-scrollbar"
       aria-label="I know my"
+      role="tablist"
     >
       {data.map((modeObj) => (
-        <Tab
-          isActive={activeTab === modeObj.title}
-          key={modeObj.title}
-          onClick={() => handleClick(modeObj)}
-          refFn={(node: HTMLButtonElement) => {
-            if (
-              activeTab === modeObj.title &&
-              node &&
-              isMobile &&
-              isScrollIntoViewActive
-            ) {
-              node.scrollIntoView({ behavior: "auto", inline: "start" });
-            }
-          }}
-        >
-          {modeObj.title}
-        </Tab>
+        <li key={modeObj.title} role="presentation">
+          <Tab
+            isActive={activeTab === modeObj.title}
+            onClick={() => handleClick(modeObj)}
+            ariaControls={ariaControls}
+            refFn={(node: HTMLButtonElement) => {
+              if (
+                activeTab === modeObj.title &&
+                node &&
+                isMobile &&
+                isScrollIntoViewActive
+              ) {
+                node.scrollIntoView({ behavior: "auto", inline: "start" });
+              }
+            }}
+          >
+            {modeObj.title}
+          </Tab>
+        </li>
       ))}
-    </nav>
+    </ul>
   );
 };
 
