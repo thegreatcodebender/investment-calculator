@@ -96,6 +96,7 @@ const InputField = ({
                   : isYear && "pe-15"
               }
                block mt-2 focus-visible:outline-primary`}
+              aria-invalid={errorText ? errorText.length > 0 : false}
             />
           </div>
         </>
@@ -114,7 +115,11 @@ const InputField = ({
           } border-1 border-input-border rounded-sm font-medium px-3 py-2 block mt-2 focus-visible:outline-primary`}
         />
       )}
-      {errorText && <p className="mt-2 text-xs text-red-500">{errorText}</p>}
+      {errorText && (
+        <p className="mt-2 text-xs text-red-500" aria-live="polite">
+          {errorText}
+        </p>
+      )}
     </div>
   );
 };
