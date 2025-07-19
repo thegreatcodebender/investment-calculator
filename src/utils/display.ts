@@ -88,19 +88,19 @@ export const currencyInWords = ({
       divisor = 1000;
     } else if (amount < 10000000) {
       shortWord = "L";
-      longWord = "Lakhs";
+      longWord = "Lakh";
       divisor = 100000;
     } else if (amount < 10000000000) {
       shortWord = "Cr";
-      longWord = "Crores";
+      longWord = "Crore";
       divisor = 10000000;
     } else if (amount < 1000000000000) {
       shortWord = "KCr";
-      longWord = "Thousand Crores";
+      longWord = "Thousand Crore";
       divisor = 10000000000;
     } else {
       shortWord = "LCr";
-      longWord = "Lakh Crores";
+      longWord = "Lakh Crore";
       divisor = 1000000000000;
     }
   } else {
