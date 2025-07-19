@@ -31,7 +31,6 @@ const App = () => {
           <FAQCard />
         </main>
       </CurrencyProvider>
-
       <Footer />
     </>
   );
