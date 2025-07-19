@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { Button } from "./Button";
 import { GenerateImageButtonProps } from "../types/generateImageButton";
-import saveImageTemplate from "../assets/images/save_image_template.png";
+import saveImageTemplate from "/assets/images/save_image_template.png";
 import { currencyWithComma } from "../utils/display";
 import { useState } from "react";
 import ResultPieChart from "./ResultPieChart";
