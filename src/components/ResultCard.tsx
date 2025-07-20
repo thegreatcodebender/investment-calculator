@@ -9,7 +9,7 @@ import {
 import { currencyWithComma } from "../utils/display";
 import useInvestmentParams from "../hooks/useInvestmentParams";
 import { copyToClipboard } from "../utils/nativeActions";
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
@@ -18,6 +18,7 @@ import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
+import { CurrencyLocales } from "../types/currencyContext";
 
 const ResultCard = ({
   investmentState,
@@ -26,6 +27,8 @@ const ResultCard = ({
 }: ResultCardProps) => {
   const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
+  const [announceValue, setAnnounceValue] = useState<string | null>(null);
+  const containerId = useId();
   const [currencyLocale] = useCurrencyLocale();
   const isSaveAsImageFeatureEnabled = useFeatureFlag("saveAsImage");
   const isCopyLinkFeatureEnabled = useFeatureFlag("shareAsLink");
@@ -121,14 +124,34 @@ const ResultCard = ({
     revertCopyText();
   };
 
+  /**
+   * Debounced function to update value to be announced when calculation parameters change
+   */
+  const debouncedUpdateAnnounceValue = useDebounce(() => {
+    const currency = currencyLocale === CurrencyLocales.IN ? "INR" : "USD";
+    const value = `Results are ${resultTitle}: ${currency} ${resultCommaSeperated} and
+                  Inflation-Adjusted ${
+                    isGoalSelected && "(Goal)"
+                  }: ${currency} ${inflationAdjustedCommaSeperated}.`;
+    setAnnounceValue(value);
+  }, 800);
+
+  // To handle a11y when calculation parameters change
+  useEffect(() => {
+    debouncedUpdateAnnounceValue();
+  }, [calculationResult]);
+
   return (
     <Card
       className="w-full min-lg:w-[40%] max-lg:mt-8 !px-0 flex flex-col justify-between"
       bgColor="bg-primary-light"
       cardRef={cardRef}
+      ariaLabelledBy={containerId}
     >
       {/* For screen readers accessibility */}
-      <p className="sr-only">Calculation results</p>
+      <p className="sr-only" id={containerId}>
+        Calculation results
+      </p>
       {/* Pie Chart */}
       <div className="overflow-x-clip">
         <div className="h-[175px]">
@@ -154,19 +177,36 @@ const ResultCard = ({
         </div>
         {/* Main result */}
         <div className="px-8 py-5 bg-white shadow-md">
-          <h2 className="text-lg font-medium mb-2 min-sm:leading-none">
+          {announceValue && (
+            <span className="sr-only" aria-live="polite" aria-atomic>
+              {announceValue}
+            </span>
+          )}
+          <h2
+            className="text-lg font-medium mb-2 min-sm:leading-none"
+            aria-hidden
+          >
             {resultTitle}
           </h2>
-          <p className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none">
+          <p
+            className="text-2xl font-semibold flex gap-0.5 mt-2 items-center leading-none"
+            aria-hidden
+          >
             <CurrencyIcon className="h-[18px]" />
             {resultCommaSeperated}
           </p>
           {/* Inflation projection*/}
-          <p className="text-sm font-normal flex flex-wrap mt-4 opacity-80 items-center">
+          <p
+            className="text-sm font-normal flex flex-wrap mt-4 opacity-80 items-center"
+            aria-hidden
+          >
             Inflation-Adjusted {isGoalSelected && "(Goal)"}
             <Tooltip tooltipContent={INFLATION_ADJUSTED_VALUE_TOOLTIP} />
           </p>
-          <p className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none">
+          <p
+            className="opacity-80 mt-1 text-md flex gap-0.75 font-semibold items-center leading-none"
+            aria-hidden
+          >
             <CurrencyIcon className="h-[12px]" />
             {inflationAdjustedCommaSeperated}
           </p>

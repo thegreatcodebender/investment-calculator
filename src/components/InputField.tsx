@@ -97,6 +97,11 @@ const InputField = ({
               }
                block mt-2 focus-visible:outline-primary`}
               aria-invalid={errorText ? errorText.length > 0 : false}
+              aria-describedby={
+                errorText && errorText.length > 0
+                  ? inputId + "-error"
+                  : undefined
+              }
             />
           </div>
         </>
@@ -113,10 +118,18 @@ const InputField = ({
           className={`${errorText ? "border-red-500" : ""} ${
             inputClassName ?? ""
           } border-1 border-input-border rounded-sm font-medium px-3 py-2 block mt-2 focus-visible:outline-primary`}
+          aria-invalid={errorText ? errorText.length > 0 : false}
+          aria-describedby={
+            errorText && errorText.length > 0 ? inputId + "-error" : undefined
+          }
         />
       )}
       {errorText && (
-        <p className="mt-2 text-xs text-red-500" aria-live="polite">
+        <p
+          className="mt-2 text-xs text-red-500"
+          aria-live="polite"
+          id={inputId + "-error"}
+        >
           {errorText}
         </p>
       )}

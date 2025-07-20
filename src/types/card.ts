@@ -6,6 +6,7 @@ export interface CardProps {
   className?: string;
   cardRef?: Ref<HTMLDivElement>;
   ariaHidden?: boolean;
+  ariaLabelledBy?: string;
 }
 
 export interface ResultCardProps extends InvestmentState {
