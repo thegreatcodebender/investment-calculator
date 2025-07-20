@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { Button } from "./Button";
 import { GenerateImageButtonProps } from "../types/generateImageButton";
-import saveImageTemplate from "../assets/images/save_image_template.png";
+import saveImageTemplate from "/assets/images/save_image_template.png";
 import { currencyWithComma } from "../utils/display";
 import { useState } from "react";
 import ResultPieChart from "./ResultPieChart";
@@ -227,11 +227,13 @@ const GenerateImageButton = ({
         html2canvas(offscreenDiv, {
           backgroundColor: "white",
           scale: 1,
+          useCORS: true,
           logging: true, // Enable logging for debugging
         })
           .then((canvas) => {
             // Convert canvas to data URL
             const dataUrl = canvas.toDataURL("image/png");
+            const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             // Create download link
             const link = document.createElement("a");
             link.href = dataUrl;
@@ -240,8 +242,17 @@ const GenerateImageButton = ({
             link.style.position = "absolute";
             link.style.left = "-9999px";
             document.body.appendChild(link);
-            link.click();
-            // Remove link after 30s to avoid issues in iOS
+
+            if (iOS) {
+              // If iOS open link using window.open
+              setTimeout(() => {
+                window.open(dataUrl, "_top");
+              }, 0);
+            } else {
+              link.click(); // Else trigger click
+            }
+
+            // Remove link after a delay to avoid issues in iOS
             setTimeout(() => {
               document.body.removeChild(link);
               // Clean up offscreen container
@@ -258,6 +269,7 @@ const GenerateImageButton = ({
     } catch (error) {
       setIsLoading(false);
       console.error("Error while importing html2canvas", error);
+      throw new Error(`Error while importing html2canvas. Error: ${error}`);
     }
   };
 

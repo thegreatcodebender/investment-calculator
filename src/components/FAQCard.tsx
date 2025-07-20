@@ -5,6 +5,7 @@ import Card from "./Card";
 import { CurrencyIcon } from "./Icons";
 import { TBODY, TD, TH, THEAD, TR } from "./Table";
 import calculationsImage from "/assets/images/calculations.svg";
+import calculationsImagePNG from "/assets/images/calculations.png";
 
 const FAQCard = () => {
   const [currencyLocale] = useCurrencyLocale();
@@ -149,7 +150,7 @@ const FAQCard = () => {
           content={
             <>
               <a
-                href="/assets/images/calculations.png"
+                href={calculationsImagePNG}
                 target="_blank"
                 rel="noopener noreferrer"
               >
