@@ -3,4 +3,5 @@ export interface TabProps {
   isActive?: boolean;
   onClick?: () => void;
   refFn: (node: HTMLButtonElement) => void;
+  ariaControls: string;
 }

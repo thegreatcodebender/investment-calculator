@@ -5,6 +5,7 @@ const Tab = ({
   children,
   onClick,
   isActive,
+  ariaControls,
   refFn,
 }: PropsWithChildren<TabProps>) => {
   return (
@@ -17,6 +18,9 @@ const Tab = ({
       type="button"
       onClick={onClick}
       ref={refFn}
+      role="tab"
+      aria-selected={isActive}
+      aria-controls={ariaControls}
     >
       {children}
     </button>

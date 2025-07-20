@@ -154,9 +154,25 @@ const FAQCard = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <span className="sr-only">
+                  Monthly Contribution equals Target Amount multiplied by
+                  Monthly Interest, divided by open parenthesis one plus Monthly
+                  Interest, close parenthesis raised to the power of Months
+                  Count, minus one.
+                  <br />
+                  Future Value equals Investment Amount multiplied by open
+                  parenthesis one plus Monthly Interest, close parenthesis
+                  raised to the power of Months Count, minus one, divided by
+                  Monthly Interest.
+                  <br />
+                  Inflation Adjusted Value equals Future Value divided by open
+                  parenthesis one plus Inflation Rate, close parenthesis raised
+                  to the power of Years Count.
+                </span>
                 <img
                   src={calculationsImage}
                   alt="equations used for calculating the result values"
+                  aria-hidden="true"
                   loading="lazy"
                   className="block max-sm:w-full aspect-[605/225]"
                 />

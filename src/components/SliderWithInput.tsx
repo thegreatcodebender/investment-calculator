@@ -61,7 +61,7 @@ const SliderWithInput = ({
 
   return (
     <fieldset className={containerClassName}>
-      <legend className="sr-only">{label}</legend>
+      {/* <legend className="sr-only">{label}</legend> */}
       <div
         className={`${
           inputValueType ? "flex max-md:flex-col gap-3 min-md:items-end" : ""
@@ -109,7 +109,7 @@ const SliderWithInput = ({
           {getLegend(max)}
         </div>
         <label htmlFor={inputId + "-slider"} className="sr-only">
-          {label}
+          {label + " (Slider)"}
         </label>
       </div>
     </fieldset>

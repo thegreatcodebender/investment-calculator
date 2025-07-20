@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import Card from "./Card";
 import SliderWithInput from "./SliderWithInput";
 import RadioGroup from "./RadioGroup";
@@ -30,6 +30,7 @@ const CalculationCard = ({
   investmentState,
   cardRef,
 }: CalculationCardProps) => {
+  const containerId = useId();
   const [currencyLocale] = useCurrencyLocale();
   const isMobile = useIsMobile();
   const [errors, setErrors] = useState<Errors>({
@@ -177,6 +178,7 @@ const CalculationCard = ({
       <TabGroup
         data={INVESTMENT_MODES}
         activeTab={investmentMode.title}
+        ariaControls={containerId}
         onClick={(modeObj) => {
           dispatchInvestment({
             type: ActionType.Mode,
@@ -189,6 +191,7 @@ const CalculationCard = ({
       {/* Input fields */}
       <div
         className="mt-6"
+        id={containerId}
         ref={(node) => {
           if (node && observerRef.current) {
             observerRef.current.observe(node);
@@ -198,7 +201,7 @@ const CalculationCard = ({
         <SliderWithInput
           min={SLIDER_INPUT_METADATA.AMOUNT.min(currencyLocale)}
           max={SLIDER_INPUT_METADATA.AMOUNT.max(currencyLocale)}
-          step={SLIDER_INPUT_METADATA.AMOUNT.step}
+          step={SLIDER_INPUT_METADATA.AMOUNT.step(currencyLocale)}
           label={SLIDER_INPUT_METADATA.AMOUNT.label[investmentMode.title]}
           tooltipText={SLIDER_INPUT_METADATA.AMOUNT.tooltip[
             investmentMode.title
