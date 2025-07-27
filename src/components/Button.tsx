@@ -26,7 +26,7 @@ export const Button = ({
         Math.ceil(buttonRef.current.scrollWidth + 1) + "px";
       isWidthUpdated.current = true;
     }
-  }, [isWidthUpdated]);
+  }, [isWidthUpdated, children]);
 
   // To fix the width of buttons fixed to change texts without layout shift
   useEffect(() => {
@@ -35,8 +35,9 @@ export const Button = ({
     return () => {
       buttonRef.current?.removeEventListener("focus", fixBtnHeight);
       buttonRef.current?.removeEventListener("mouseover", fixBtnHeight);
+      isWidthUpdated.current = false; // To handle width change when the button text (children) changes
     };
-  }, [isFixedWidth]);
+  }, [isFixedWidth, children]);
 
   return (
     <button

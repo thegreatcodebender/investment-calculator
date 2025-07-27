@@ -116,12 +116,17 @@ const ResultCard = ({
    * Copy the shareable link to clipboard and show copied text for a short period
    */
   const handleCopyLink = async () => {
-    const isCopied = await copyToClipboard(getShareableLink());
-    if (isCopied) {
-      setCopyBtnText("Copied!");
-      setIsCopyBtnDisabled(true);
+    try {
+      const isCopied = await copyToClipboard(getShareableLink());
+      if (isCopied) {
+        setCopyBtnText("Copied!");
+        setIsCopyBtnDisabled(true);
+      }
+    } catch (e) {
+      console.error("Error while copying link", e);
+    } finally {
+      revertCopyText();
     }
-    revertCopyText();
   };
 
   /**
