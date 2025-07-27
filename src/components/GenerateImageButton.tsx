@@ -7,6 +7,7 @@ import { useState } from "react";
 import ResultPieChart from "./ResultPieChart";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { CurrencyLocales } from "../types/currencyContext";
+import useIsMobileUserAgent from "../hooks/useIsMobileUserAgent";
 
 const GenerateImageButton = ({
   pieData,
@@ -17,6 +18,7 @@ const GenerateImageButton = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const isMobileUserAgent = useIsMobileUserAgent();
   const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
@@ -30,6 +32,24 @@ const GenerateImageButton = ({
     ) : (
       <span className="font-family-currency text-[0.9em]">$</span>
     );
+  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent); // Check if devices is iOS to find the compatibility of image share
+  const supportsShare = !!navigator.share; // Check if native share is available
+  const isBtnVisible = !(iOS && !supportsShare); // Hide button if navigator support not available in iOS (eg. in Firefox)
+  // To show dynamic button text according to the screen size and share compatibility
+  let buttonText = "Save as image";
+  if (isMobileUserAgent && supportsShare) {
+    if (isLoading) {
+      buttonText = "Sharing...";
+    } else {
+      buttonText = "Share as image";
+    }
+  } else {
+    if (isLoading) {
+      buttonText = "Saving...";
+    } else {
+      buttonText = "Save as image";
+    }
+  }
 
   /**
    * Generate and download result image
@@ -233,55 +253,73 @@ const GenerateImageButton = ({
           .then((canvas) => {
             // Convert canvas to data URL
             const dataUrl = canvas.toDataURL("image/png");
-            const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            // Create download link
-            const link = document.createElement("a");
-            link.href = dataUrl;
-            link.download = `My_Investment_Plan_${fileNameSuffix}.png`;
-            // link.style.display = "none";
-            link.style.position = "absolute";
-            link.style.left = "-9999px";
-            document.body.appendChild(link);
+            const fileName = `My_Investment_Plan_${fileNameSuffix}.png`;
 
-            if (iOS) {
-              // If iOS open link using window.open
-              setTimeout(() => {
-                window.open(dataUrl, "_top");
-              }, 0);
+            const handleShareImage = async () => {
+              const response = await fetch(dataUrl);
+              const blob = await response.blob();
+              const file = new File([blob], fileName, {
+                type: "image/png",
+              });
+
+              try {
+                await navigator.share({
+                  files: [file],
+                  title: `Found my investment plan! \n\nGet yours at iabhi.dev/icalc`,
+                });
+              } catch (e) {
+                console.error("Share as image failed:", e);
+                window.open(dataUrl, "_blank");
+              }
+            };
+
+            if (supportsShare && isMobileUserAgent) {
+              handleShareImage();
             } else {
+              // Create download link
+              const link = document.createElement("a");
+              link.href = dataUrl;
+              link.download = fileName;
+              // link.style.display = "none";
+              link.style.position = "absolute";
+              link.style.left = "-9999px";
+              document.body.appendChild(link);
               link.click(); // Else trigger click
-            }
 
-            // Remove link after a delay to avoid issues in iOS
-            setTimeout(() => {
-              document.body.removeChild(link);
-              // Clean up offscreen container
-              root.unmount();
-              document.body.removeChild(offscreenDiv);
-            }, 10000);
-            setIsLoading(false);
+              // Remove link after a delay
+              setTimeout(() => {
+                document.body.removeChild(link);
+                // Clean up offscreen container
+                root.unmount();
+                document.body.removeChild(offscreenDiv);
+              }, 2000);
+            }
           })
           .catch((error) => {
             console.error("Error generating image:", error);
-            setIsLoading(false);
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
-      setIsLoading(false);
       console.error("Error while importing html2canvas", error);
       throw new Error(`Error while importing html2canvas. Error: ${error}`);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     }
   };
 
   return (
-    <Button
-      btnType="primary"
-      onClick={generateResultImage}
-      isDisabled={isLoading}
-      isFixedWidth
-    >
-      {isLoading ? "Saving..." : "Save as image"}
-    </Button>
+    isBtnVisible && (
+      <Button
+        btnType="primary"
+        onClick={generateResultImage}
+        isDisabled={isLoading}
+        isFixedWidth
+      >
+        {buttonText}
+      </Button>
+    )
   );
 };
 
