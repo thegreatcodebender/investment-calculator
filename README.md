@@ -2,6 +2,8 @@
 
 Simple investment calculator that helps you figure out your financial goals. Share your calculations with others or just use it to plan ahead.
 
+**[Try it live →](https://iabhi.dev/project/investment-calculator?utm_source=github&utm_medium=repo_readme&utm_campaign=social_media)**
+
 ![Calculator](.github/images/app-screen.png)
 
 ## What it does
