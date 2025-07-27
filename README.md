@@ -1,79 +1,27 @@
-# Investment Calculator with Shareable Results 🚀
+# Investment Calculator
 
-A powerful and user-friendly investment calculator that helps you plan your financial future. Generate and share investment scenarios with others through unique URLs and downloadable images.
+Simple investment calculator that helps you figure out your financial goals. Share your calculations with others or just use it to plan ahead.
 
-<!-- ![Investment Calculator Demo](https://via.placeholder.com/800x400) -->
+![Calculator](.github/images/app-screen.png)
 
-## ✨ Features
+## What it does
 
-### 📊 Flexible Calculation Modes
+- **Two calculation modes**: Figure out how much to invest monthly to hit a target, or see what your current plan might get you
+- **Inflation adjustment**: Shows real purchasing power of your returns
+- **Currency support**: Switch between INR and USD
+- **Progress tracking**: See how your investment grows over time with charts
+- **Easy sharing**: Send your calculations via URL or download results as images
+- **Clean interface**: Works on desktop and mobile
 
-- Calculate required periodic investments based on your target amount
-- Determine potential returns based on your planned investment amount
-- Support for both compound interest and lump sum calculations
-- Real-time updates as you adjust parameters
+Built with React, Tailwind CSS, and Recharts for the graphs.
 
-### 🔗 Easy Sharing
-
-- Share your investment scenarios through URL parameters
-<!-- - Generate and download calculation results as images -->
-- Perfect for financial advisors and individuals planning their investments
-
-### 💫 User Experience
-
-- Clean and intuitive interface
-- Mobile-responsive design
-- Interactive charts and visualizations
-- Real-time calculation updates
-
-## 🛠️ Tech Stack
-
-- **Framework:** React.js
-- **Styling:** Tailwind CSS
-- **State Management:** Context API
-- **Charts:** Recharts
-  <!-- - **Image Generation:** html-to-image -->
-  <!-- - **Deployment:** [To be added] -->
-
-## 🚀 Getting Started
-
-### Installation
+## Setup
 
 ```bash
-# Clone the repository
 git clone https://github.com/thegreatcodebender/investment-calculator.git
-
-# Navigate to project directory
 cd investment-calculator
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-## 🔧 Usage
-
-1. Select your calculation mode:
-
-   - Compound Interest
-   - Lump Sum Investment
-
-2. Input your parameters:
-
-   - Initial investment amount
-   - Time period
-   - Expected return rate
-
-3. View your results and share:
-   - Copy the generated URL
-   <!-- - Download the result as an image -->
-
-<!-- ## 📸 Screenshots -->
-
-<!-- ### Dashboard -->
-<!-- ![Dashboard](https://via.placeholder.com/400x300) -->
-
-<!-- ### Results Page -->
-<!-- ![Results](https://via.placeholder.com/400x300) -->
+That's it. Pick your numbers, see the results, share if you want.
