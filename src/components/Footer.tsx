@@ -2,7 +2,7 @@ import gitHubLogo from "/assets/images/github-logo.svg";
 
 const Footer = () => {
   return (
-    <footer className="md:px-4 pb-0 max-w-[1100px] mt-8 mx-auto">
+    <footer className="absolute bottom-0 left-[50%] translate-x-[-50%] w-full md:px-4 pb-0 max-w-[1100px] mt-8 mx-auto">
       <div className="p-4 md:px-6 shadow-card md:rounded-2xl md:rounded-b-none border-[rgba(13,122,72,0.01)]">
         <div className="flex max-md:flex-col-reverse justify-between md:items-center gap-2">
           <div>

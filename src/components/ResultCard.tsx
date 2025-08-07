@@ -13,12 +13,13 @@ import { useEffect, useId, useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
-import GenerateImageButton from "./GenerateImageButton";
+// import GenerateImageButton from "./GenerateImageButton";
 import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
 import { CurrencyLocales } from "../types/currencyContext";
+import GenerateImageButtonV2 from "./GenerateImageButtonV2";
 
 const ResultCard = ({
   investmentState,
@@ -239,7 +240,7 @@ const ResultCard = ({
         </h3>
         <div className="px-3 flex flex-wrap gap-3 items-center justify-center">
           {isSaveAsImageFeatureEnabled && (
-            <GenerateImageButton
+            <GenerateImageButtonV2
               pieData={pieData}
               investmentState={investmentState}
               calculationResult={calculationResult}
