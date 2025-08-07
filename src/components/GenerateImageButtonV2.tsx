@@ -92,8 +92,6 @@ const GenerateImageButtonV2 = ({
       // document.body.insertBefore(offscreenDiv, document.getElementById("root")); // For testing
 
       const root = createRoot(offscreenDiv);
-      const htmlElemScrollTop = document.querySelector("html")?.scrollTop;
-      console.log("before share", htmlElemScrollTop);
 
       // Render result to offscreen container
       root.render(
@@ -264,17 +262,9 @@ const GenerateImageButtonV2 = ({
                   files: [file],
                   title: `Found my investment plan! \n\nGet yours at iabhi.dev/icalc`,
                 });
-                const htmlElem = document.querySelector("html");
-                console.log("after share", htmlElemScrollTop);
                 // Clean up offscreen container
                 root.unmount();
                 document.body.removeChild(offscreenDiv);
-                setTimeout(() => {
-                  if (htmlElem) {
-                    htmlElem.scrollTop = htmlElemScrollTop ?? 0;
-                    console.log("after set scrollTop", htmlElem.scrollTop);
-                  }
-                }, 200);
               } catch (e) {
                 console.error("Share as image failed:", e);
                 window.open(dataUrl, "_blank");
@@ -300,12 +290,6 @@ const GenerateImageButtonV2 = ({
                 // Clean up offscreen container
                 root.unmount();
                 document.body.removeChild(offscreenDiv);
-                const htmlElem = document.querySelector("html");
-                console.log("after share", htmlElemScrollTop);
-
-                if (htmlElem) {
-                  htmlElem.scrollTop = htmlElemScrollTop ?? 0;
-                }
               }, 1);
             }
           })
