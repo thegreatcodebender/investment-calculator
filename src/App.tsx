@@ -9,7 +9,7 @@ import CurrencySelection from "./components/CurrencySelection";
 
 const App = () => {
   return (
-    <>
+    <div className="pb-[232px] relative min-h-[1920px]">
       <Header />
       <CurrencyProvider>
         <main className="max-w-[1100px] mt-4 md:mt-8 mx-auto px-4">
@@ -32,7 +32,7 @@ const App = () => {
         </main>
       </CurrencyProvider>
       <Footer />
-    </>
+    </div>
   );
 };
 
