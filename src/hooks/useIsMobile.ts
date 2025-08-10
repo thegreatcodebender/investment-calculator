@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { MOBILE_SCREEN_WIDTH } from "../constants/screen";
 import useDebounce from "./useDebounce";
 
@@ -9,7 +9,7 @@ const useIsMobile = () => {
   };
   const debouncedCheckScreenWidth = useDebounce(checkScreenWidth);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     debouncedCheckScreenWidth();
     window.addEventListener("resize", debouncedCheckScreenWidth);
     return () =>

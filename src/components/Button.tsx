@@ -26,7 +26,7 @@ export const Button = ({
         Math.ceil(buttonRef.current.scrollWidth + 1) + "px";
       isWidthUpdated.current = true;
     }
-  }, [isWidthUpdated, children]);
+  }, [isWidthUpdated.current, children]);
 
   // To fix the width of buttons fixed to change texts without layout shift
   useEffect(() => {

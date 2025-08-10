@@ -8,16 +8,18 @@ import { CurrencyProvider } from "./context/CurrencyContext";
 import CurrencySelection from "./components/CurrencySelection";
 import { useEffect, useState } from "react";
 import useDebounce from "./hooks/useDebounce";
+import useIsAppleDevice from "./hooks/useIsApple";
+import { BODY_HEIGHT_FOR_SHARE_IMAGE } from "./constants/screen";
 
 const App = () => {
   const [isFooterAbsolute, setIsFooterAbsolute] = useState(false); // For footer absolute behaviour
+  const isAppleDevice = useIsAppleDevice(); // To show absolute footer in Apple devices only
 
-  /** To make footer absolute for #root height below 1920px (to accodomodate chart image) */
+  /** To make footer absolute for body height below 1920px (to prevent flicker when image sharing node is inserted) */
   const handleWindowResize = useDebounce(() => {
     const bodyElem = document.querySelector("body");
-    if (bodyElem) {
-      setIsFooterAbsolute(bodyElem.scrollHeight < 1920);
-      console.log(bodyElem.scrollHeight);
+    if (bodyElem && isAppleDevice) {
+      setIsFooterAbsolute(bodyElem.scrollHeight < BODY_HEIGHT_FOR_SHARE_IMAGE);
     }
   });
 
