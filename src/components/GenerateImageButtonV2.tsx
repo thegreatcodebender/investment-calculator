@@ -8,7 +8,6 @@ import ResultPieChart from "./ResultPieChart";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { CurrencyLocales } from "../types/currencyContext";
 import useIsMobileUserAgent from "../hooks/useIsMobileUserAgent";
-import { domToPng } from "modern-screenshot";
 
 const GenerateImageButtonV2 = ({
   pieData,
@@ -19,6 +18,7 @@ const GenerateImageButtonV2 = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isShareLoading, setIsShareLoading] = useState(false);
   const isMobileUserAgent = useIsMobileUserAgent();
   const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
@@ -33,39 +33,26 @@ const GenerateImageButtonV2 = ({
     ) : (
       <span className="font-family-currency text-[0.9em]">$</span>
     );
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent); // Check if devices is iOS to find the compatibility of image share
   const supportsShare = !!navigator.share; // Check if native share is available
-  const isBtnVisible = !(iOS && !supportsShare); // Hide button if navigator support not available in iOS (eg. in Firefox)
-  // To show dynamic button text according to the screen size and share compatibility
-  let buttonText = "Save as image";
-  if (isMobileUserAgent && supportsShare) {
-    if (isLoading) {
-      buttonText = "Sharing...";
-    } else {
-      buttonText = "Share as image";
-    }
-  } else {
-    if (isLoading) {
-      buttonText = "Saving...";
-    } else {
-      buttonText = "Save as image";
-    }
-  }
+  const isShareAvailable = isMobileUserAgent && supportsShare;
 
   /**
-   * Generate and download result image
+   * Generate and download/share result image
+   * @param isShareable Boolean to control button behaviour
    */
-  const generateResultImage = async () => {
+  const generateResultImage = async ({ isShareable = false }) => {
     // Validate pieData
     if (!pieData || pieData.length === 0) {
       console.error("No data provided for pie chart");
       return;
     }
-    setIsLoading(true);
+
+    setIsLoading(!isShareable);
+    setIsShareLoading(isShareable);
 
     try {
-      // const html2canvasModule = await import("html2canvas");
-      // const html2canvas = html2canvasModule.default;
+      const modernScreenshotModule = await import("modern-screenshot");
+      const { domToPng } = modernScreenshotModule;
 
       // Check if the pie data is large enough to overflow
       const isPieAmountLarge = pieData.some(
@@ -244,7 +231,7 @@ const GenerateImageButtonV2 = ({
         </div>
       );
 
-      // Use html2canvas to convert div to image
+      // Use modern-screenshot to convert div to image
       setTimeout(() => {
         domToPng(offscreenDiv)
           .then(async (dataUrl) => {
@@ -259,7 +246,7 @@ const GenerateImageButtonV2 = ({
             link.style.left = "-9999px";
             document.body.appendChild(link);
 
-            if (supportsShare && isMobileUserAgent) {
+            const handleShareImage = async () => {
               const response = await fetch(dataUrl);
               const blob = await response.blob();
               const file = new File([blob], fileName, {
@@ -271,51 +258,73 @@ const GenerateImageButtonV2 = ({
                   files: [file],
                   title: `Found my investment plan! \n\nGet yours at iabhi.dev/icalc`,
                 });
+              } catch (e) {
+                console.error("Share as image failed:", e);
+                link.click(); // Else trigger click
+              }
+            };
+
+            if (isShareable) {
+              handleShareImage();
+            } else {
+              link.click(); // Else trigger click
+
+              // Remove link after a delay
+              setTimeout(() => {
+                document.body.removeChild(link);
                 // Clean up offscreen container
                 root.unmount();
                 document.body.removeChild(offscreenDiv);
-              } catch (e) {
-                console.error("Share as image failed:", e);
-                // window.open(dataUrl, "_blank");
-                link.click(); // Else trigger click
-              }
-            } else {
-              link.click(); // Else trigger click
+              }, 2000);
             }
-
-            // Remove link after a delay
-            setTimeout(() => {
-              document.body.removeChild(link);
-              // Clean up offscreen container
-              root.unmount();
-              offscreenDiv.remove();
-            }, 1);
           })
           .catch((error) => {
             console.error("Error generating image:", error);
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
-      console.error("Error while importing html2canvas", error);
-      throw new Error(`Error while importing html2canvas. Error: ${error}`);
+      console.error("Error while importing modern-screenshot", error);
+      throw new Error(
+        `Error while importing modern-screenshot. Error: ${error}`
+      );
     } finally {
       setTimeout(() => {
         setIsLoading(false);
+        setIsShareLoading(false);
       }, 2000);
     }
   };
 
   return (
-    isBtnVisible && (
+    <div className="flex grow-1 justify-center">
       <Button
         btnType="primary"
-        onClick={generateResultImage}
-        isDisabled={isLoading}
-        isFixedWidth
+        onClick={() => generateResultImage({ isShareable: false })}
+        isDisabled={isLoading || isShareLoading}
+        className={`${
+          isShareAvailable
+            ? "rounded-r-none rounded-br-none max-sm:!w-full"
+            : ""
+        }`}
       >
-        {buttonText}
+        Save as image
       </Button>
-    )
+      {isShareAvailable && (
+        <Button
+          btnType="primary"
+          onClick={() => generateResultImage({ isShareable: true })}
+          isDisabled={isShareLoading || isLoading}
+          className={`${
+            !isShareAvailable
+              ? "!py-0 !px-3.5 h-12 rounded-l-none rounded-bl-none border-[#8ad8b4] border-l-2"
+              : ""
+          }`}
+        >
+          <span className="material-symbols-outlined !leading-12">share</span>
+          <span className="sr-only">Share as Image</span>
+        </Button>
+      )}
+    </div>
   );
 };
 

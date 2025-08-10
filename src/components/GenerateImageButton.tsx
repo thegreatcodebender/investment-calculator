@@ -18,6 +18,7 @@ const GenerateImageButton = ({
   isGoalSelected,
 }: GenerateImageButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isShareLoading, setIsShareLoading] = useState(false);
   const isMobileUserAgent = useIsMobileUserAgent();
   const [currencyLocale] = useCurrencyLocale();
   const amount = investmentState.amount;
@@ -32,35 +33,22 @@ const GenerateImageButton = ({
     ) : (
       <span className="font-family-currency text-[0.9em]">$</span>
     );
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent); // Check if devices is iOS to find the compatibility of image share
   const supportsShare = !!navigator.share; // Check if native share is available
-  const isBtnVisible = !(iOS && !supportsShare); // Hide button if navigator support not available in iOS (eg. in Firefox)
-  // To show dynamic button text according to the screen size and share compatibility
-  let buttonText = "Save as image";
-  if (isMobileUserAgent && supportsShare) {
-    if (isLoading) {
-      buttonText = "Sharing...";
-    } else {
-      buttonText = "Share as image";
-    }
-  } else {
-    if (isLoading) {
-      buttonText = "Saving...";
-    } else {
-      buttonText = "Save as image";
-    }
-  }
+  const isShareAvailable = isMobileUserAgent && supportsShare;
 
   /**
-   * Generate and download result image
+   * Generate and download/share result image
+   * @param isShareable Boolean to control button behaviour
    */
-  const generateResultImage = async () => {
+  const generateResultImage = async ({ isShareable = false }) => {
     // Validate pieData
     if (!pieData || pieData.length === 0) {
       console.error("No data provided for pie chart");
       return;
     }
-    setIsLoading(true);
+
+    setIsLoading(!isShareable);
+    setIsShareLoading(isShareable);
 
     try {
       const html2canvasModule = await import("html2canvas");
@@ -255,6 +243,15 @@ const GenerateImageButton = ({
             const dataUrl = canvas.toDataURL("image/png");
             const fileName = `My_Investment_Plan_${fileNameSuffix}.png`;
 
+            // Create download link
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = fileName;
+            // link.style.display = "none";
+            link.style.position = "absolute";
+            link.style.left = "-9999px";
+            document.body.appendChild(link);
+
             const handleShareImage = async () => {
               const response = await fetch(dataUrl);
               const blob = await response.blob();
@@ -269,21 +266,13 @@ const GenerateImageButton = ({
                 });
               } catch (e) {
                 console.error("Share as image failed:", e);
-                window.open(dataUrl, "_blank");
+                link.click(); // Else trigger click
               }
             };
 
-            if (supportsShare && isMobileUserAgent) {
+            if (isShareable) {
               handleShareImage();
             } else {
-              // Create download link
-              const link = document.createElement("a");
-              link.href = dataUrl;
-              link.download = fileName;
-              // link.style.display = "none";
-              link.style.position = "absolute";
-              link.style.left = "-9999px";
-              document.body.appendChild(link);
               link.click(); // Else trigger click
 
               // Remove link after a delay
@@ -305,21 +294,41 @@ const GenerateImageButton = ({
     } finally {
       setTimeout(() => {
         setIsLoading(false);
+        setIsShareLoading(false);
       }, 2000);
     }
   };
 
   return (
-    isBtnVisible && (
+    <div className="flex grow-1 justify-center">
       <Button
         btnType="primary"
-        onClick={generateResultImage}
-        isDisabled={isLoading}
-        isFixedWidth
+        onClick={() => generateResultImage({ isShareable: false })}
+        isDisabled={isLoading || isShareLoading}
+        className={`${
+          isShareAvailable
+            ? "rounded-r-none rounded-br-none max-sm:!w-full"
+            : ""
+        }`}
       >
-        {buttonText}
+        Save as image
       </Button>
-    )
+      {isShareAvailable && (
+        <Button
+          btnType="primary"
+          onClick={() => generateResultImage({ isShareable: true })}
+          isDisabled={isShareLoading || isLoading}
+          className={`${
+            !isShareAvailable
+              ? "!py-0 !px-3.5 h-12 rounded-l-none rounded-bl-none border-[#8ad8b4] border-l-2"
+              : ""
+          }`}
+        >
+          <span className="material-symbols-outlined !leading-12">share</span>
+          <span className="sr-only">Share as Image</span>
+        </Button>
+      )}
+    </div>
   );
 };
 

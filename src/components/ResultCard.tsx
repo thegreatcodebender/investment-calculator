@@ -13,22 +13,20 @@ import { useEffect, useId, useState } from "react";
 import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
-// import GenerateImageButton from "./GenerateImageButton";
+import GenerateImageButton from "./GenerateImageButton";
+import GenerateImageButtonV2 from "./GenerateImageButtonV2";
 import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
 import { CurrencyLocales } from "../types/currencyContext";
-import GenerateImageButton from "./GenerateImageButton";
-import GenerateImageButtonV2 from "./GenerateImageButtonV2";
-import useIsAppleDevice from "../hooks/useIsApple";
+import useIsAppleDevice from "../hooks/useIsAppleDevice";
 
 const ResultCard = ({
   investmentState,
   calculationResult,
   cardRef,
 }: ResultCardProps) => {
-  const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
   const [announceValue, setAnnounceValue] = useState<string | null>(null);
   const containerId = useId();
@@ -111,8 +109,7 @@ const ResultCard = ({
   });
 
   /** Revery copy button text to original */
-  const revertCopyText = useDebounce(() => {
-    setCopyBtnText("Copy Link");
+  const revertDisableState = useDebounce(() => {
     setIsCopyBtnDisabled(false);
   }, 1500);
 
@@ -123,13 +120,12 @@ const ResultCard = ({
     try {
       const isCopied = await copyToClipboard(getShareableLink());
       if (isCopied) {
-        setCopyBtnText("Copied!");
         setIsCopyBtnDisabled(true);
       }
     } catch (e) {
       console.error("Error while copying link", e);
     } finally {
-      revertCopyText();
+      revertDisableState();
     }
   };
 
@@ -241,7 +237,7 @@ const ResultCard = ({
         <h3 className="mb-3 text-sm uppercase font-semibold inline-block leading-none">
           Share your investment plan
         </h3>
-        <div className="px-3 flex flex-wrap gap-3 items-center justify-center">
+        <div className="px-3 flex flex-wrap gap-3 items-center justify-center max-sm:!w-full">
           {/* Save button for non-Apple devices */}
           {isSaveAsImageFeatureEnabled && !isAppleDevice && (
             <GenerateImageButton
@@ -267,11 +263,12 @@ const ResultCard = ({
           {isCopyLinkFeatureEnabled && (
             <Button
               btnType="primary"
+              className="max-sm:!w-full"
               onClick={handleCopyLink}
               isDisabled={isCopyBtnDisabled}
               isFixedWidth
             >
-              {copyBtnText}
+              Copy Link
             </Button>
           )}
         </div>

@@ -8,7 +8,7 @@ import { CurrencyProvider } from "./context/CurrencyContext";
 import CurrencySelection from "./components/CurrencySelection";
 import { useEffect, useState } from "react";
 import useDebounce from "./hooks/useDebounce";
-import useIsAppleDevice from "./hooks/useIsApple";
+import useIsAppleDevice from "./hooks/useIsAppleDevice";
 import { BODY_HEIGHT_FOR_SHARE_IMAGE } from "./constants/screen";
 
 const App = () => {
