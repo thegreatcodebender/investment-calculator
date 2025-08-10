@@ -5,4 +5,5 @@ interface FEATURE_FLAGS {
 export const FEATURE_FLAGS: FEATURE_FLAGS = {
   saveAsImage: true,
   shareAsLink: true,
+  shareAsImage: false,
 };

@@ -9,6 +9,7 @@ import { useCurrencyLocale } from "../context/CurrencyContext";
 import { CurrencyLocales } from "../types/currencyContext";
 import useIsMobileUserAgent from "../hooks/useIsMobileUserAgent";
 import { useToast } from "../hooks/useToast";
+import { useFeatureFlag } from "../hooks/useFeatureFlag";
 
 const GenerateImageButtonV2 = ({
   pieData,
@@ -23,6 +24,7 @@ const GenerateImageButtonV2 = ({
   const isMobileUserAgent = useIsMobileUserAgent();
   const [currencyLocale] = useCurrencyLocale();
   const { showToast } = useToast();
+  const isShareAsImageEnabled = useFeatureFlag("shareAsImage");
   const amount = investmentState.amount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
@@ -36,7 +38,8 @@ const GenerateImageButtonV2 = ({
       <span className="font-family-currency text-[0.9em]">$</span>
     );
   const supportsShare = !!navigator.share; // Check if native share is available
-  const isShareAvailable = isMobileUserAgent && supportsShare;
+  const isShareAvailable =
+    isShareAsImageEnabled && isMobileUserAgent && supportsShare;
 
   /**
    * Generate and download/share result image
@@ -263,7 +266,7 @@ const GenerateImageButtonV2 = ({
                 showToast({ text: "Image shared! as image!" });
               } catch (e) {
                 console.error("Share as image failed:", e);
-                link.click(); // Else trigger click
+                // link.click(); // Else trigger click
               }
             };
 
@@ -317,7 +320,7 @@ const GenerateImageButtonV2 = ({
           onClick={() => generateResultImage({ isShareable: true })}
           isDisabled={isShareLoading || isLoading}
           className={`${
-            !isShareAvailable
+            isShareAvailable
               ? "!py-0 !px-3.5 h-12 rounded-l-none rounded-bl-none border-[#8ad8b4] border-l-2"
               : ""
           }`}
