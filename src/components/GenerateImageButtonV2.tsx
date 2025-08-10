@@ -247,10 +247,19 @@ const GenerateImageButtonV2 = ({
       // Use html2canvas to convert div to image
       setTimeout(() => {
         domToPng(offscreenDiv)
-          .then((dataUrl) => {
+          .then(async (dataUrl) => {
             const fileName = `My_Investment_Plan_${fileNameSuffix}.png`;
 
-            const handleShareImage = async () => {
+            // Create download link
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = fileName;
+            // link.style.display = "none";
+            link.style.position = "absolute";
+            link.style.left = "-9999px";
+            document.body.appendChild(link);
+
+            if (supportsShare && isMobileUserAgent) {
               const response = await fetch(dataUrl);
               const blob = await response.blob();
               const file = new File([blob], fileName, {
@@ -267,31 +276,20 @@ const GenerateImageButtonV2 = ({
                 document.body.removeChild(offscreenDiv);
               } catch (e) {
                 console.error("Share as image failed:", e);
-                window.open(dataUrl, "_blank");
+                // window.open(dataUrl, "_blank");
+                link.click(); // Else trigger click
               }
-            };
-
-            if (supportsShare && isMobileUserAgent) {
-              handleShareImage();
             } else {
-              // Create download link
-              const link = document.createElement("a");
-              link.href = dataUrl;
-              link.download = fileName;
-              // link.style.display = "none";
-              link.style.position = "absolute";
-              link.style.left = "-9999px";
-              document.body.appendChild(link);
               link.click(); // Else trigger click
-
-              // Remove link after a delay
-              setTimeout(() => {
-                document.body.removeChild(link);
-                // Clean up offscreen container
-                root.unmount();
-                document.body.removeChild(offscreenDiv);
-              }, 1);
             }
+
+            // Remove link after a delay
+            setTimeout(() => {
+              document.body.removeChild(link);
+              // Clean up offscreen container
+              root.unmount();
+              offscreenDiv.remove();
+            }, 1);
           })
           .catch((error) => {
             console.error("Error generating image:", error);

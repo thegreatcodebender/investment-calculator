@@ -6,10 +6,34 @@ import CalculationsAndResults from "./components/CalculationsAndResults";
 import FAQCard from "./components/FAQCard";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import CurrencySelection from "./components/CurrencySelection";
+import { useEffect, useState } from "react";
+import useDebounce from "./hooks/useDebounce";
 
 const App = () => {
+  const [isFooterAbsolute, setIsFooterAbsolute] = useState(false); // For footer absolute behaviour
+
+  /** To make footer absolute for #root height below 1920px (to accodomodate chart image) */
+  const handleWindowResize = useDebounce(() => {
+    const bodyElem = document.querySelector("body");
+    if (bodyElem) {
+      setIsFooterAbsolute(bodyElem.scrollHeight < 1920);
+      console.log(bodyElem.scrollHeight);
+    }
+  });
+
+  // To handle window resize events
+  useEffect(() => {
+    handleWindowResize();
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
+
   return (
-    <div className="pb-[232px] relative min-h-[1920px]">
+    <div
+      className={`${
+        isFooterAbsolute ? "pb-[232px] relative min-h-[1920px]" : ""
+      }`}
+    >
       <Header />
       <CurrencyProvider>
         <main className="max-w-[1100px] mt-4 md:mt-8 mx-auto px-4">
@@ -31,7 +55,7 @@ const App = () => {
           <FAQCard />
         </main>
       </CurrencyProvider>
-      <Footer />
+      <Footer isAbsolute={isFooterAbsolute} />
     </div>
   );
 };
