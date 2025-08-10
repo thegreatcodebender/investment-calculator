@@ -21,6 +21,7 @@ import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
 import { CurrencyLocales } from "../types/currencyContext";
 import useIsAppleDevice from "../hooks/useIsAppleDevice";
+import { useToast } from "../hooks/useToast";
 
 const ResultCard = ({
   investmentState,
@@ -34,6 +35,7 @@ const ResultCard = ({
   const isSaveAsImageFeatureEnabled = useFeatureFlag("saveAsImage");
   const isCopyLinkFeatureEnabled = useFeatureFlag("shareAsLink");
   const isAppleDevice = useIsAppleDevice();
+  const { showToast } = useToast();
 
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
@@ -121,6 +123,7 @@ const ResultCard = ({
       const isCopied = await copyToClipboard(getShareableLink());
       if (isCopied) {
         setIsCopyBtnDisabled(true);
+        showToast({ text: "Link copied!" });
       }
     } catch (e) {
       console.error("Error while copying link", e);
@@ -266,7 +269,6 @@ const ResultCard = ({
               className="max-sm:!w-full"
               onClick={handleCopyLink}
               isDisabled={isCopyBtnDisabled}
-              isFixedWidth
             >
               Copy Link
             </Button>

@@ -8,6 +8,7 @@ import ResultPieChart from "./ResultPieChart";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { CurrencyLocales } from "../types/currencyContext";
 import useIsMobileUserAgent from "../hooks/useIsMobileUserAgent";
+import { useToast } from "../hooks/useToast";
 
 const GenerateImageButton = ({
   pieData,
@@ -21,6 +22,7 @@ const GenerateImageButton = ({
   const [isShareLoading, setIsShareLoading] = useState(false);
   const isMobileUserAgent = useIsMobileUserAgent();
   const [currencyLocale] = useCurrencyLocale();
+  const { showToast } = useToast();
   const amount = investmentState.amount;
   const duration = investmentState.duration;
   const interest = investmentState.interestRate;
@@ -264,6 +266,7 @@ const GenerateImageButton = ({
                   files: [file],
                   title: `Found my investment plan! \n\nGet yours at iabhi.dev/icalc`,
                 });
+                showToast({ text: "Image shared! as image!" });
               } catch (e) {
                 console.error("Share as image failed:", e);
                 link.click(); // Else trigger click
@@ -274,6 +277,7 @@ const GenerateImageButton = ({
               handleShareImage();
             } else {
               link.click(); // Else trigger click
+              showToast({ text: "Image saved!" });
 
               // Remove link after a delay
               setTimeout(() => {
