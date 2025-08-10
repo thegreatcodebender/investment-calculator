@@ -309,10 +309,8 @@ const GenerateImageButton = ({
         btnType="primary"
         onClick={() => generateResultImage({ isShareable: false })}
         isDisabled={isLoading || isShareLoading}
-        className={`${
-          isShareAvailable
-            ? "rounded-r-none rounded-br-none max-sm:!w-full"
-            : ""
+        className={`max-sm:!w-full ${
+          isShareAvailable ? "rounded-r-none rounded-br-none" : ""
         }`}
       >
         Save as image
