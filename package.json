@@ -11,8 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@sentry/react": "^9.40.0",
     "html2canvas": "^1.4.1",
+    "modern-screenshot": "^4.6.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "recharts": "^2.15.2"

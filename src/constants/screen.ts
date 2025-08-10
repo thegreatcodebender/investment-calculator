@@ -1,1 +1,2 @@
 export const MOBILE_SCREEN_WIDTH = 640;
+export const BODY_HEIGHT_FOR_SHARE_IMAGE = 1920;

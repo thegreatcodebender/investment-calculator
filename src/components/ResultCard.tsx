@@ -14,24 +14,28 @@ import Tooltip from "./Tooltip";
 import { INFLATION_ADJUSTED_VALUE_TOOLTIP } from "../constants/result";
 import { ResultCardProps } from "../types/card";
 import GenerateImageButton from "./GenerateImageButton";
+import GenerateImageButtonV2 from "./GenerateImageButtonV2";
 import ResultPieChart from "./ResultPieChart";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrencyLocale } from "../context/CurrencyContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
 import { CurrencyLocales } from "../types/currencyContext";
+import useIsAppleDevice from "../hooks/useIsAppleDevice";
+import { useToast } from "../hooks/useToast";
 
 const ResultCard = ({
   investmentState,
   calculationResult,
   cardRef,
 }: ResultCardProps) => {
-  const [copyBtnText, setCopyBtnText] = useState("Copy Link");
   const [isCopyBtnDisabled, setIsCopyBtnDisabled] = useState(false);
   const [announceValue, setAnnounceValue] = useState<string | null>(null);
   const containerId = useId();
   const [currencyLocale] = useCurrencyLocale();
   const isSaveAsImageFeatureEnabled = useFeatureFlag("saveAsImage");
   const isCopyLinkFeatureEnabled = useFeatureFlag("shareAsLink");
+  const isAppleDevice = useIsAppleDevice();
+  const { showToast } = useToast();
 
   const { getShareableLink } = useInvestmentParams();
   const amount = investmentState.amount;
@@ -107,8 +111,7 @@ const ResultCard = ({
   });
 
   /** Revery copy button text to original */
-  const revertCopyText = useDebounce(() => {
-    setCopyBtnText("Copy Link");
+  const revertDisableState = useDebounce(() => {
     setIsCopyBtnDisabled(false);
   }, 1500);
 
@@ -119,13 +122,13 @@ const ResultCard = ({
     try {
       const isCopied = await copyToClipboard(getShareableLink());
       if (isCopied) {
-        setCopyBtnText("Copied!");
         setIsCopyBtnDisabled(true);
+        showToast({ text: "Link copied!" });
       }
     } catch (e) {
       console.error("Error while copying link", e);
     } finally {
-      revertCopyText();
+      revertDisableState();
     }
   };
 
@@ -237,9 +240,21 @@ const ResultCard = ({
         <h3 className="mb-3 text-sm uppercase font-semibold inline-block leading-none">
           Share your investment plan
         </h3>
-        <div className="px-3 flex flex-wrap gap-3 items-center justify-center">
-          {isSaveAsImageFeatureEnabled && (
+        <div className="px-3 flex flex-wrap gap-3 items-center justify-center max-sm:!w-full">
+          {/* Save button for non-Apple devices */}
+          {isSaveAsImageFeatureEnabled && !isAppleDevice && (
             <GenerateImageButton
+              pieData={pieData}
+              investmentState={investmentState}
+              calculationResult={calculationResult}
+              resultTitle={resultTitle}
+              inflationAdjustedValue={inflationAdjustedValue}
+              isGoalSelected={isGoalSelected}
+            />
+          )}
+          {/* Save button for Apple devices */}
+          {isSaveAsImageFeatureEnabled && isAppleDevice && (
+            <GenerateImageButtonV2
               pieData={pieData}
               investmentState={investmentState}
               calculationResult={calculationResult}
@@ -251,11 +266,11 @@ const ResultCard = ({
           {isCopyLinkFeatureEnabled && (
             <Button
               btnType="primary"
+              className="max-sm:!w-full"
               onClick={handleCopyLink}
               isDisabled={isCopyBtnDisabled}
-              isFixedWidth
             >
-              {copyBtnText}
+              Copy Link
             </Button>
           )}
         </div>

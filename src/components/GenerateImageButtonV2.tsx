@@ -10,7 +10,7 @@ import { CurrencyLocales } from "../types/currencyContext";
 import useIsMobileUserAgent from "../hooks/useIsMobileUserAgent";
 import { useToast } from "../hooks/useToast";
 
-const GenerateImageButton = ({
+const GenerateImageButtonV2 = ({
   pieData,
   investmentState,
   calculationResult,
@@ -53,8 +53,8 @@ const GenerateImageButton = ({
     setIsShareLoading(isShareable);
 
     try {
-      const html2canvasModule = await import("html2canvas");
-      const html2canvas = html2canvasModule.default;
+      const modernScreenshotModule = await import("modern-screenshot");
+      const { domToPng } = modernScreenshotModule;
 
       // Check if the pie data is large enough to overflow
       const isPieAmountLarge = pieData.some(
@@ -72,7 +72,8 @@ const GenerateImageButton = ({
       // Create an offscreen container with explicit dimensions
       const offscreenDiv = document.createElement("div");
       offscreenDiv.style.position = "absolute";
-      offscreenDiv.style.left = "-9999px";
+      offscreenDiv.style.left = "0";
+      offscreenDiv.style.top = "0";
       offscreenDiv.style.width = "1080px";
       offscreenDiv.style.height = "1920px";
       offscreenDiv.style.backgroundColor = "white";
@@ -93,7 +94,7 @@ const GenerateImageButton = ({
             lineHeight: "1 !important",
           }}
         >
-          <div className="absolute top-[200px] left-[52px]">
+          <div className="absolute top-[212px] left-[52px]">
             <div className="flex gap-[144px] mb-[60px] ms-1.5">
               {/* Amount */}
               <div className="w-[350px]">
@@ -145,14 +146,14 @@ const GenerateImageButton = ({
                   innerRadius={80}
                 />
               </div>
-              <div className="absolute left-[456px] top-0 h-90 w-125">
+              <div className="absolute left-[456px] top-[17px] h-90 w-125">
                 {pieData.map((pie) => (
                   <div
                     key={pie.title}
                     className={`absolute top-14 last:top-auto last:bottom-15 not-last:mb-12 h-24 min-w-140`}
                   >
                     <div
-                      className="absolute w-10.5 h-10.5 rounded-[6px]"
+                      className="absolute top-[-16px] w-10.5 h-10.5 rounded-[6px]"
                       style={{ backgroundColor: `${pie.fill}` }}
                     ></div>
                     <p
@@ -181,7 +182,7 @@ const GenerateImageButton = ({
             </div>
 
             {/* Main result */}
-            <div className="mt-27.5 ms-2.5 p-14">
+            <div className="mt-29.5 ms-2.5 p-14">
               <div className="mb-18">
                 <div className="font-semibold text-[44px] leading-none">
                   {resultTitle}
@@ -232,17 +233,10 @@ const GenerateImageButton = ({
         </div>
       );
 
-      // Use html2canvas to convert div to image
+      // Use modern-screenshot to convert div to image
       setTimeout(() => {
-        html2canvas(offscreenDiv, {
-          backgroundColor: "white",
-          scale: 1,
-          useCORS: true,
-          logging: true, // Enable logging for debugging
-        })
-          .then((canvas) => {
-            // Convert canvas to data URL
-            const dataUrl = canvas.toDataURL("image/png");
+        domToPng(offscreenDiv)
+          .then(async (dataUrl) => {
             const fileName = `My_Investment_Plan_${fileNameSuffix}.png`;
 
             // Create download link
@@ -293,8 +287,10 @@ const GenerateImageButton = ({
           });
       }, 300); // Increased timeout for rendering
     } catch (error) {
-      console.error("Error while importing html2canvas", error);
-      throw new Error(`Error while importing html2canvas. Error: ${error}`);
+      console.error("Error while importing modern-screenshot", error);
+      throw new Error(
+        `Error while importing modern-screenshot. Error: ${error}`
+      );
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -334,4 +330,4 @@ const GenerateImageButton = ({
   );
 };
 
-export default GenerateImageButton;
+export default GenerateImageButtonV2;
