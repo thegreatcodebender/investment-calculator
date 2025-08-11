@@ -281,7 +281,7 @@ const GenerateImageButton = ({
               handleShareImage();
             } else {
               link.click(); // Else trigger click
-              showToast({ text: "Image saved!" });
+              showToast({ text: "Download started!" });
 
               // Remove link after a delay
               setTimeout(() => {
